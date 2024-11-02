@@ -28,8 +28,11 @@
                         <div class="col-md-6">
                             <select class="form-select" name="cargo">
                                 <option value="T">Todos</option>
-                                 <option value="True" {% if request.GET.cargo == "True" %} selected{% endif %}>Activo</option>
-                                <option value="False" {% if request.GET.cargo == "False"%} selected{% endif %}>Inactivo</option>
+                                <option value="True" {% if request.GET.cargo == "True" %} selected{% endif %}>Activo
+                                </option>
+                                <option value="False" {% if request.GET.cargo == "False" %} selected{% endif %}>
+                                    Inactivo
+                                </option>
                             </select>
                         </div>
                     </form>
@@ -41,10 +44,58 @@
                 <div class="table-responsive">
 
                     <!-- Tabla -->
+                    {#                    <table class="table table-hover align-middle text-center">#}
+                    {#                        <thead class="table-light">#}
+                    {#                        <tr>#}
+                    {#                            <th><i class="fa-solid fa-hashtag fa-lg"></i></th>#}
+                    {#                            <th>Cargo</th>#}
+                    {#                            <th>Descripción</th>#}
+                    {#                            <th>Estado</th>#}
+                    {#                            <th>Acciones</th>#}
+                    {#                        </tr>#}
+                    {#                        </thead>#}
+                    {#                        <tbody>#}
+                    {#                        {% for item in cargos %}#}
+                    {#                            <tr>#}
+                    {#                                <th scope="row">{{ forloop.counter }}</th>#}
+                    {#                                <td>{{ item.nombre }}</td>#}
+                    {#                                <td>{{ item.descripcion | striptags | truncatechars:100 }}</td>#}
+                    {#                                <td>#}
+                    {#                                    {% if item.activo %}#}
+                    {#                                        <i class="fa-solid fa-circle-check" style="color: #3cff3c;"></i>#}
+                    {#                                    {% else %}#}
+                    {#                                        <i class="fa-solid fa-circle-xmark" style="color: red;"></i>#}
+                    {#                                    {% endif %}#}
+                    {#                                </td>#}
+                    {#                                <td>#}
+                    {#                                    <div class="botones right" style="margin-left: 100px">#}
+                    {#                                        <div class="action-buttons d-flex gap-2">#}
+                    {#                                            <button class="btn btn-info btn-sm" title="Detalle Cargo"#}
+                    {#                                                    onclick="verDetalle('{{ item.id }}')">#}
+                    {#                                                <i class="fas fa-eye"></i>#}
+                    {#                                            </button>#}
+                    {##}
+                    {#                                            <a href="{% url 'core:cargo_update' item.id %}"#}
+                    {#                                               class="btn btn-info btn-sm text-white" title="Editar">#}
+                    {#                                                <i class="fas fa-edit"></i>#}
+                    {#                                            </a>#}
+                    {##}
+                    {#                                            {% with id=item.id name=item.nombre msg="Esta seguro de eliminar este Cargo:" %}#}
+                    {#                                                <button class="btn btn-danger"#}
+                    {#                                                        onclick="confirmDelete('{{ id }}','{{ name }}','{{ msg|escapejs }}');">#}
+                    {#                                                    <i class="fa-solid fa-trash"></i></button>#}
+                    {#                                            {% endwith %}#}
+                    {##}
+                    {#                                        </div>#}
+                    {#                                    </div>#}
+                    {#                                </td>#}
+                    {#                            </tr>#}
+                    {#                        {% endfor %}#}
+                    {#                        </tbody>#}
+                    {#                    </table>#}
                     <table class="table table-hover align-middle text-center">
                         <thead class="table-light">
                         <tr>
-                            {#                            <th><i class="fa-solid fa-hashtag fa-lg"></i></th>#}
                             <th>Cargo</th>
                             <th>Descripción</th>
                             <th>Estado</th>
@@ -54,9 +105,8 @@
                         <tbody>
                         {% for item in cargos %}
                             <tr>
-                                {#                                <th scope="row">{{ forloop.counter }}</th>#}
                                 <td>{{ item.nombre }}</td>
-                                <td>{{ item.descripcion | striptags | truncatechars:100 }}</td>
+                                <td>{{ item.descripcion|striptags|truncatechars:100 }}</td>
                                 <td>
                                     {% if item.activo %}
                                         <i class="fa-solid fa-circle-check" style="color: #3cff3c;"></i>
@@ -77,11 +127,19 @@
                                                 <i class="fas fa-edit"></i>
                                             </a>
 
-                                            {% with id=item.id name=item.nombre msg="Esta seguro de eliminar este Cargo:" %}
-                                                <button class="btn btn-danger"
-                                                        onclick="confirmDelete('{{ id }}','{{ name }}','{{ msg|escapejs }}');">
-                                                    <i class="fa-solid fa-trash"></i></button>
-                                            {% endwith %}
+                                            {% if item.cargos.exists %}
+                                                <button class="btn btn-danger btn-sm" disabled  onclick="relacionadoConsole()">
+                                                    <i class="fa-solid fa-trash"
+                                                       title="No se puede eliminar Cargo Relacionado."></i>
+                                                </button>
+                                            {% else %}
+                                                {% with id=item.id name=item.nombre msg="¿Está seguro de eliminar este Cargo?" %}
+                                                    <button class="btn btn-danger btn-sm"
+                                                            onclick="confirmDelete('{{ id }}', '{{ name }}', '{{ msg|escapejs }}');">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                {% endwith %}
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </td>
@@ -89,6 +147,9 @@
                         {% endfor %}
                         </tbody>
                     </table>
+                    <script>
+
+                    </script>
                 </div>
 
                 <!-- Pagination -->
@@ -145,5 +206,10 @@
                     alert('Error al cargar los datos del cargo');
                 });
         }
+
+        function relacionadoConsole() {
+            alert('Cargo Relacionado')
+        }
     </script>
+
 {% endblock content %}

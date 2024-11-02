@@ -6,6 +6,7 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView, D
 
 from aplication.core.forms.categoryType import CategoryTypeForm
 from aplication.core.models import TipoCategoria
+from doctor.utils import save_audit
 
 
 class CategoryTypeListView(ListView):
@@ -51,12 +52,19 @@ class CategoryTypeCreateView(CreateView):
         return context
 
     def form_valid(self, form):
-        if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-            form.instance.usuario = self.request.user
-        else:
-            form.instance.usuario = None
-        messages.success(self.request, "Éxito al crear el Tipo de Examen.")
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        objAudit = self.object
+        save_audit(self.request, objAudit, action='A')
+        messages.success(self.request, f"Éxito al Crear el Tipo Categoria {objAudit.nombre}.")
+        return response
+
+    # def form_valid(self, form):
+    #     if hasattr(self.request, 'user') and self.request.user.is_authenticated:
+    #         form.instance.usuario = self.request.user
+    #     else:
+    #         form.instance.usuario = None
+    #     messages.success(self.request, "Éxito al crear el Tipo de Examen.")
+    #     return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.error(self.request, "Error al enviar el formulario. Corrige los errores.")
@@ -78,13 +86,11 @@ class CategoryTypeUpdateView(UpdateView):
         return context
 
     def form_valid(self, form):
-        tipo_categoria = self.object
-        if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-            form.instance.usuario = self.request.user
-        else:
-            form.instance.usuario = None
-        messages.success(self.request, f"Éxito al modificar el Tipo de Examen {tipo_categoria.nombre}.")
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        objAudit = self.object
+        save_audit(self.request, objAudit, action='M')
+        messages.success(self.request, f"Éxito al Modificar el Tipo Categoria {objAudit.nombre}.")
+        return response
 
     def form_invalid(self, form):
         messages.error(self.request, "Error al modificar el formulario. Corrige los errores.")

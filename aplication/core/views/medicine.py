@@ -1,12 +1,13 @@
 from django.contrib import messages
 from django.db.models import Q
-from django.templatetags.static import static
 from django.http import JsonResponse
+from django.templatetags.static import static
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 
 from aplication.core.forms.medicine import MedicineForm
 from aplication.core.models import Medicamento
+from doctor.utils import save_audit
 
 
 class MedicineListView(ListView):
@@ -24,18 +25,17 @@ class MedicineListView(ListView):
 
     # Filtrado por nombre o descripción
     if search_query:
-        self.query.add(Q(nombre__icontains=search_query) | Q(descripcion__icontains=search_query), Q.AND)
+      self.query.add(Q(nombre__icontains=search_query) | Q(descripcion__icontains=search_query), Q.AND)
 
     # Filtrado por el campo 'comercial'
     if is_commercial in ["True", "False"]:
-        self.query.add(Q(comercial=(is_commercial == "True")), Q.AND)
+      self.query.add(Q(comercial=(is_commercial == "True")), Q.AND)
 
     # Filtrado por el campo 'activo'
     if is_active in ["True", "False"]:
-        self.query.add(Q(activo=(is_active == "True")), Q.AND)
+      self.query.add(Q(activo=(is_active == "True")), Q.AND)
 
     return self.model.objects.filter(self.query).order_by('nombre')
-
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
@@ -59,12 +59,19 @@ class MedicineCreateView(CreateView):
     return context
 
   def form_valid(self, form):
-    if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-      form.instance.usuario = self.request.user
-    else:
-      form.instance.usuario = None
-    messages.success(self.request, f"Éxito al crear el Medicamento {form.instance.nombre}.")
-    return super().form_valid(form)
+    response = super().form_valid(form)
+    objAudit = self.object
+    save_audit(self.request, objAudit, action='A')
+    messages.success(self.request, f"Éxito al Crear el Medicamento {objAudit.nombre}.")
+    return response
+
+  # def form_valid(self, form):
+  #   if hasattr(self.request, 'user') and self.request.user.is_authenticated:
+  #     form.instance.usuario = self.request.user
+  #   else:
+  #     form.instance.usuario = None
+  #   messages.success(self.request, f"Éxito al crear el Medicamento {form.instance.nombre}.")
+  #   return super().form_valid(form)
 
   def form_invalid(self, form):
     messages.error(self.request, "Error al enviar el formulario. Corrige los errores.")
@@ -87,12 +94,19 @@ class MedicineUpdateView(UpdateView):
     return context
 
   def form_valid(self, form):
-    if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-      form.instance.usuario = self.request.user
-    else:
-      form.instance.usuario = None
-    messages.success(self.request, f"Éxito al modificar el Medicamento {form.instance.nombre}.")
-    return super().form_valid(form)
+    response = super().form_valid(form)
+    objAudit = self.object
+    save_audit(self.request, objAudit, action='M')
+    messages.success(self.request, f"Éxito al Modificar el Medicamento {objAudit.nombre}.")
+    return response
+
+  # def form_valid(self, form):
+  #   if hasattr(self.request, 'user') and self.request.user.is_authenticated:
+  #     form.instance.usuario = self.request.user
+  #   else:
+  #     form.instance.usuario = None
+  #   messages.success(self.request, f"Éxito al modificar el Medicamento {form.instance.nombre}.")
+  #   return super().form_valid(form)
 
   def form_invalid(self, form):
     messages.error(self.request, "Error al actualizar el formulario. Corrige los errores.")
@@ -124,16 +138,16 @@ class MedicineDetailView(DetailView):
   def get(self, request, *args, **kwargs):
     medicamento = self.get_object()
     data = {
-        'id': medicamento.id,
-        'image': medicamento.get_image(),
-        'tipo': medicamento.tipo.nombre,
-        'marca_medicamento': medicamento.marca_medicamento.nombre,
-        'nombre': medicamento.nombre,
-        'descripcion': medicamento.descripcion,
-        'concentracion': medicamento.concentracion,
-        'cantidad': medicamento.cantidad,
-        'precio': float(medicamento.precio),
-        'comercial': medicamento.comercial,
-        'activo': medicamento.activo,
+      'id': medicamento.id,
+      'image': medicamento.get_image(),
+      'tipo': medicamento.tipo.nombre,
+      'marca_medicamento': medicamento.marca_medicamento.nombre,
+      'nombre': medicamento.nombre,
+      'descripcion': medicamento.descripcion,
+      'concentracion': medicamento.concentracion,
+      'cantidad': medicamento.cantidad,
+      'precio': float(medicamento.precio),
+      'comercial': medicamento.comercial,
+      'activo': medicamento.activo,
     }
     return JsonResponse(data)

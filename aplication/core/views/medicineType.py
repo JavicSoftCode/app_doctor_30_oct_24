@@ -6,6 +6,7 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView, D
 
 from aplication.core.forms.medicineType import MedicineTypeForm
 from aplication.core.models import TipoMedicamento
+from doctor.utils import save_audit
 
 
 class MedicineTypeListView(ListView):
@@ -51,23 +52,22 @@ class MedicineTypeCreateView(CreateView):
     context['back_url'] = self.success_url
     return context
 
-  # def form_valid(self, form):
-  #   # print("entro al form_valid")
-  #   response = super().form_valid(form)
-  #   specialty = self.object
-  #   save_audit(self.request, specialty, action='A')
-  #   messages.success(self.request, f"Éxito al crear la Especialidad {specialty.nombre}.")
-  #   return response
-
   def form_valid(self, form):
-    if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-      form.instance.usuario = self.request.user
-    else:
-      # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
-      form.instance.usuario = None  # O el valor que consideres adecuado
-      messages.success(self.request, f"Éxito al Crear el Tipo de Medicamento.")
+    response = super().form_valid(form)
+    objAudit = self.object
+    save_audit(self.request, objAudit, action='A')
+    messages.success(self.request, f"Éxito al Crear el Tipo Medicamento {objAudit.nombre}.")
+    return response
 
-    return super().form_valid(form)
+  # def form_valid(self, form):
+  #   if hasattr(self.request, 'user') and self.request.user.is_authenticated:
+  #     form.instance.usuario = self.request.user
+  #   else:
+  #     # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
+  #     form.instance.usuario = None  # O el valor que consideres adecuado
+  #     messages.success(self.request, f"Éxito al Crear el Tipo de Medicamento.")
+  #
+  #   return super().form_valid(form)
 
   def form_invalid(self, form):
     messages.error(self.request, "Error al enviar el formulario. Corrige los errores.")
@@ -88,23 +88,23 @@ class MedicineTypeUpdateView(UpdateView):
     context['back_url'] = self.success_url
     return context
 
-  # def form_valid(self, form):
-  #   response = super().form_valid(form)
-  #   specialty = self.object
-  #   save_audit(self.request, specialty, action='M')
-  #   messages.success(self.request, f"Éxito al Modificar la Especialidad {specialty.nombre}.")
-  #   print("mande mensaje")
-  #   return response
   def form_valid(self, form):
-    medicineType = self.object
-    if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-      form.instance.usuario = self.request.user
-    else:
-      # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
-      form.instance.usuario = None  # O el valor que consideres adecuado
-      messages.success(self.request, f"Éxito al Modificar el Tipo de Medicamento {medicineType.nombre}.")
+    response = super().form_valid(form)
+    objAudit = self.object
+    save_audit(self.request, objAudit, action='M')
+    messages.success(self.request, f"Éxito al Modificar el Tipo Medicamento {objAudit.nombre}.")
+    return response
 
-    return super().form_valid(form)
+  # def form_valid(self, form):
+  #   medicineType = self.object
+  #   if hasattr(self.request, 'user') and self.request.user.is_authenticated:
+  #     form.instance.usuario = self.request.user
+  #   else:
+  #     # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
+  #     form.instance.usuario = None  # O el valor que consideres adecuado
+  #     messages.success(self.request, f"Éxito al Modificar el Tipo de Medicamento {medicineType.nombre}.")
+  #
+  #   return super().form_valid(form)
 
   def form_invalid(self, form):
     messages.error(self.request, "Error al Modificar el formulario. Corrige los errores.")
@@ -124,12 +124,23 @@ class MedicineTypeDeleteView(DeleteView):
 
   def delete(self, request, *args, **kwargs):
     self.object = self.get_object()
-    success_message = f"Éxito al eliminar lógicamente el Tipo de Medicamento {self.object.nombre}."
+    # Aquí verificamos si hay empleados asociados
+    if self.object.tipos_medicamentos.exists():  # related_name
+      messages.error(self.request, "No se puede eliminar el tipo medicamento porque está en uso.")
+      return self.get(request, *args, **kwargs)
+
+    success_message = f"Éxito al eliminar lógicamente el Tipo Medicamento {self.object.nombre}."
     messages.success(self.request, success_message)
-    # Cambiar el estado de eliminado lógico
-    # self.object.deleted = True
-    # self.object.save()
     return super().delete(request, *args, **kwargs)
+
+  # def delete(self, request, *args, **kwargs):
+  #   self.object = self.get_object()
+  #   success_message = f"Éxito al eliminar lógicamente el Tipo de Medicamento {self.object.nombre}."
+  #   messages.success(self.request, success_message)
+  #   # Cambiar el estado de eliminado lógico
+  #   # self.object.deleted = True
+  #   # self.object.save()
+  #   return super().delete(request, *args, **kwargs)
 
 
 class MedicineTypeDetailView(DetailView):

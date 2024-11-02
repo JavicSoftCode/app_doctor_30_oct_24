@@ -28,8 +28,12 @@
                         <div class="col-md-6">
                             <select class="form-select" name="tipoMedicina">
                                 <option value="T">Todos</option>
-                                 <option value="True" {% if request.GET.tipoMedicina == "True" %} selected{% endif %}>Activo</option>
-                                <option value="False" {% if request.GET.tipoMedicina == "False"%} selected{% endif %}>Inactivo</option>
+                                <option value="True" {% if request.GET.tipoMedicina == "True" %} selected{% endif %}>
+                                    Activo
+                                </option>
+                                <option value="False" {% if request.GET.tipoMedicina == "False" %} selected{% endif %}>
+                                    Inactivo
+                                </option>
                             </select>
                         </div>
                     </form>
@@ -74,11 +78,26 @@
                                             <i class="fas fa-edit"></i>
                                         </a>
 
-                                        {% with id=item.id name=item.nombre msg="Esta seguro de eliminar este Tipo de Medicina:" %}
-                                            <button class="btn btn-danger"
-                                                    onclick="confirmDelete('{{ id }}','{{ name }}','{{ msg|escapejs }}');">
-                                                <i class="fa-solid fa-trash"></i></button>
-                                        {% endwith %}
+                                        {% if item.tipos_medicamentos.exists %}
+                                            {#                                    related name#}
+                                            <button class="btn btn-danger btn-sm" disabled
+                                                    onclick="relacionadoConsole()">
+                                                <i class="fa-solid fa-trash"
+                                                   title="No se puede eliminar Tipo Medicamento Relacionado."></i>
+                                            </button>
+                                        {% else %}
+                                            {% with id=item.id name=item.nombre msg="¿Está seguro de eliminar este Tipo Medicamento?" %}
+                                                <button class="btn btn-danger btn-sm"
+                                                        onclick="confirmDelete('{{ id }}', '{{ name }}', '{{ msg|escapejs }}');">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            {% endwith %}
+                                        {% endif %}
+                                        {#                                        {% with id=item.id name=item.nombre msg="Esta seguro de eliminar este Tipo de Medicina:" %}#}
+                                        {#                                            <button class="btn btn-danger"#}
+                                        {#                                                    onclick="confirmDelete('{{ id }}','{{ name }}','{{ msg|escapejs }}');">#}
+                                        {#                                                <i class="fa-solid fa-trash"></i></button>#}
+                                        {#                                        {% endwith %}#}
                                     </div>
                                 </td>
                             </tr>
