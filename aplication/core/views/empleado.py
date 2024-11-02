@@ -151,6 +151,7 @@ class EmpleadoDetailView(DetailView):
       'apellidos': empleado.apellidos,
       'cedula': empleado.cedula,
       'fecha_nacimiento': empleado.fecha_nacimiento.isoformat() if empleado.fecha_nacimiento else None,
+      'edad': empleado.calcular_edad(empleado.fecha_nacimiento),
       'direccion': empleado.direccion,
       'latitud': str(empleado.latitud) if empleado.latitud is not None else None,
       'longitud': str(empleado.longitud) if empleado.longitud is not None else None,

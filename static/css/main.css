@@ -50,7 +50,10 @@ html::-webkit-scrollbar {
     background: #f8f9fa;
 }
 
+
 .card {
+    margin-left: 233px;
+    width: 103%;
     border: none;
     border-radius: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -67,6 +70,8 @@ html::-webkit-scrollbar {
 }
 
 .navbar {
+    margin-left: 233px;
+    width: 103%;
     background: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -266,3 +271,14 @@ html::-webkit-scrollbar {
 .uploaded {
     color: green; /* Cambiar color de icono a verde */
 }
+
+
+  .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #0b5ed7;
+            color: white;
+            padding: 5px 0;
+            text-align: center;
+        }

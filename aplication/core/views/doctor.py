@@ -152,6 +152,7 @@ class DoctorDetailView(DetailView):
       'apellidos': doctor.apellidos,
       'cedula': doctor.cedula,
       'fecha_nacimiento': doctor.fecha_nacimiento.isoformat() if doctor.fecha_nacimiento else None,
+      'edad': doctor.calcular_edad(doctor.fecha_nacimiento),
       'direccion': doctor.direccion,
       'latitud': str(doctor.latitud) if doctor.latitud is not None else None,
       'longitud': str(doctor.longitud) if doctor.longitud is not None else None,

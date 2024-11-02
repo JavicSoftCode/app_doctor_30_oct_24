@@ -28,8 +28,12 @@
                         <div class="col-md-6">
                             <select class="form-select" name="empleado">
                                 <option value="T">Todos</option>
-                                 <option value="True" {% if request.GET.empleado == "True" %} selected{% endif %}>Activo</option>
-                                <option value="False" {% if request.GET.empleado == "False"%} selected{% endif %}>Inactivo</option>
+                                <option value="True" {% if request.GET.empleado == "True" %} selected{% endif %}>
+                                    Activo
+                                </option>
+                                <option value="False" {% if request.GET.empleado == "False" %} selected{% endif %}>
+                                    Inactivo
+                                </option>
                             </select>
                         </div>
                     </form>
@@ -71,11 +75,11 @@
                                 <td>{{ item.nombres }}</td>
                                 <td>{{ item.apellidos }}</td>
                                 <td>{{ item.cargo.nombre }}</td>
-{#                                <td>#}
-{#                                    {% for cargo in item.cargo.all %}#}
-{#                                        {{ cargo.nombre }}{% if not forloop.last %}, {% endif %}#}
-{#                                    {% endfor %}#}
-{#                                </td>#}
+                                {#                                <td>#}
+                                {#                                    {% for cargo in item.cargo.all %}#}
+                                {#                                        {{ cargo.nombre }}{% if not forloop.last %}, {% endif %}#}
+                                {#                                    {% endfor %}#}
+                                {#                                </td>#}
                                 <td>{{ item.direccion }}</td>
                                 <td>
                                     <a href="tel:{{ item.telefonos }}" class="phone-icon"
@@ -171,6 +175,7 @@
                     document.getElementById('empleado-apellidos').textContent = data.apellidos;
                     document.getElementById('empleado-cedula').textContent = data.cedula;
                     document.getElementById('empleado-fecha-nacimiento').textContent = data.fecha_nacimiento;
+                    document.getElementById('empleado-edad').textContent = `${data.edad} años`;
                     document.getElementById('empleado-direccion').textContent = data.direccion;
                     document.getElementById('empleado-latitud').textContent = data.latitud;
                     document.getElementById('empleado-longitud').textContent = data.longitud;

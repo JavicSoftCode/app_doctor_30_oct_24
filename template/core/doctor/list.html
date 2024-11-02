@@ -28,8 +28,11 @@
                         <div class="col-md-6">
                             <select class="form-select" name="doctor">
                                 <option value="T">Todos</option>
-                                <option value="True" {% if request.GET.doctor == "True" %} selected{% endif %}>Activo</option>
-                                <option value="False" {% if request.GET.doctor == "False"%} selected{% endif %}>Inactivo</option>
+                                <option value="True" {% if request.GET.doctor == "True" %} selected{% endif %}>Activo
+                                </option>
+                                <option value="False" {% if request.GET.doctor == "False" %} selected{% endif %}>
+                                    Inactivo
+                                </option>
                             </select>
                         </div>
                     </form>
@@ -183,6 +186,7 @@
                     document.getElementById('doctor-apellidos').textContent = data.apellidos;
                     document.getElementById('doctor-cedula').textContent = data.cedula;
                     document.getElementById('doctor-fecha-nacimiento').textContent = data.fecha_nacimiento;
+                    document.getElementById('doctor-edad').textContent = `${data.edad} años`;
                     document.getElementById('doctor-direccion').textContent = data.direccion;
                     document.getElementById('doctor-latitud').textContent = data.latitud;
                     document.getElementById('doctor-longitud').textContent = data.longitud;
