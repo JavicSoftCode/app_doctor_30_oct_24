@@ -53,9 +53,9 @@ class Paciente(models.Model):
   cedula = models.CharField(max_length=10, verbose_name="Cédula", validators=[valida_cedula])
 
   # Fecha de nacimiento del paciente
-  fecha_nacimiento = models.DateField(verbose_name="Fecha de Nacimiento")
+  fecha_nacimiento = models.DateField(verbose_name="Fecha de Nacimiento", validators=[validate_birth_date])
   # Número de teléfono de contacto del paciente
-  telefono = models.CharField(max_length=20, verbose_name="Teléfono(s)", validators=[phone_regex])
+  telefono = models.CharField(max_length=20, verbose_name="Teléfono(s)", validators=[phone_regex], unique=True)
   # Correo electrónico del paciente, puede ser nulo o estar vacío
   email = models.EmailField(verbose_name="Correo", null=True, blank=True, unique=True)
   # Sexo del paciente (Masculino o Femenino)
@@ -111,7 +111,7 @@ class Paciente(models.Model):
     if self.foto:
       return self.foto.url
     else:
-      return '/static/img/usuario_anonimo.png'
+      return '/static/img/paciente_avatar.png'
 
   # Método estático para calcular la edad del paciente
   @staticmethod
@@ -203,6 +203,15 @@ class Doctor(models.Model):
       # return '/static/img/doctor_avatar.png'
       return '/static/img/doctor_avatar.webp'
 
+  @staticmethod
+  def calcular_edad(fecha_nacimiento):
+    today = date.today()  # Obtener la fecha actual
+    edad = today.year - fecha_nacimiento.year  # Calcular la diferencia de años
+    # Ajustar la edad si el cumpleaños de este año no ha ocurrido aún
+    if (today.month, today.day) < (fecha_nacimiento.month, fecha_nacimiento.day):
+      edad -= 1  # Restar un año si el cumpleaños no ha pasado
+    return edad
+
   def __str__(self):
     return f"{self.apellidos}"
 
@@ -273,6 +282,15 @@ class Empleado(models.Model):
     else:
       # return '/static/img/doctor_avatar.png'
       return '/static/img/avatar_empleado.png'
+
+  @staticmethod
+  def calcular_edad(fecha_nacimiento):
+    today = date.today()  # Obtener la fecha actual
+    edad = today.year - fecha_nacimiento.year  # Calcular la diferencia de años
+    # Ajustar la edad si el cumpleaños de este año no ha ocurrido aún
+    if (today.month, today.day) < (fecha_nacimiento.month, fecha_nacimiento.day):
+      edad -= 1  # Restar un año si el cumpleaños no ha pasado
+    return edad
 
   def __str__(self):
     return f"{self.apellidos}"

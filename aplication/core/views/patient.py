@@ -1,8 +1,9 @@
 from django.contrib import messages
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
+from django.templatetags.static import static
 
 from aplication.core.forms.patient import PatientForm
 from aplication.core.models import Paciente
@@ -14,7 +15,7 @@ class PatientListView(ListView):
   model = Paciente
   context_object_name = 'pacientes'
   query = None
-  paginate_by = 2
+  paginate_by = 5
 
   def get_queryset(self):
     self.query = Q()
@@ -46,6 +47,8 @@ class PatientCreateView(CreateView):
     context = super().get_context_data()
     context['title1'] = 'Crear Paciente?'
     context['grabar'] = 'Grabar Paciente'
+    context['default_image_url'] = static('img/paciente_avatar.png')
+
     context['back_url'] = self.success_url
     return context
 
@@ -73,7 +76,10 @@ class PatientUpdateView(UpdateView):
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data()
-    context['grabar'] = 'Actualizar Proveedor'
+    context['title1'] = 'Actualizar Paciente'
+    context['grabar'] = 'Actualizar Paciente'
+    context['default_image_url'] = static('img/paciente_avatar.png')
+    context['current_image_url'] = self.object.foto.url if self.object.foto else static('img/paciente_avatar.png')
     context['back_url'] = self.success_url
     return context
 
@@ -117,17 +123,32 @@ class PatientDetailView(DetailView):
   model = Paciente
 
   def get(self, request, *args, **kwargs):
-    pacient = self.get_object()
-    data = {
-      'id': pacient.id,
-      'nombres': pacient.nombres,
-      'apellidos': pacient.apellidos,
-      'foto': pacient.get_image(),
-      'fecha_nac': pacient.fecha_nacimiento,
-      'edad': pacient.calcular_edad(pacient.fecha_nacimiento),
-      'dni': pacient.cedula,
-      'telefono': pacient.telefono,
-      'direccion': pacient.direccion,
-      # Añade más campos según tu modelo
-    }
-    return JsonResponse(data)
+    try:
+      pacient = self.get_object()
+      data = {
+        'id': pacient.id,
+        'nombres': pacient.nombres,
+        'apellidos': pacient.apellidos,
+        'foto': pacient.get_image(),
+        'fecha_nacimiento': pacient.fecha_nacimiento,
+        'edad': pacient.calcular_edad(pacient.fecha_nacimiento),
+        'cedula': pacient.cedula,
+        'telefono': pacient.telefono,
+        'email': pacient.email,
+        'sexo': pacient.get_sexo_display() if pacient.sexo else None,
+        'estado_civil': pacient.get_estado_civil_display() if pacient.estado_civil else None,
+        'direccion': pacient.direccion,
+        'latitud': pacient.latitud,
+        'longitud': pacient.longitud,
+        'tipo_sangre': pacient.tipo_sangre.tipo if pacient.tipo_sangre else None,
+        'alergias': pacient.alergias,
+        'enfermedades_cronicas': pacient.enfermedades_cronicas,
+        'medicacion_actual': pacient.medicacion_actual,
+        'cirugias_previas': pacient.cirugias_previas,
+        'antecedentes_personales': pacient.antecedentes_personales,
+        'antecedentes_familiares': pacient.antecedentes_familiares,
+        'activo': pacient.activo,
+      }
+      return JsonResponse(data)
+    except Paciente.DoesNotExist:
+      raise Http404("Paciente no encontrado")
