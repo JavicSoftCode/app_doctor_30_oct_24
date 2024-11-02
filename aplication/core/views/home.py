@@ -9,5 +9,5 @@ class HomeTemplateView(TemplateView):
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
     context = {"title1": "SaludSync", "title2": "Sistema Medico", "can_paci": Paciente.cantidad_pacientes()}
-    print(context["can_paci"])
+    # print(context["can_paci"])
     return context
