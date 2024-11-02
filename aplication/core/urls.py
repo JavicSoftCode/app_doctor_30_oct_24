@@ -2,15 +2,16 @@ from django.urls import path
 
 from aplication.core.views.bloodType import *
 from aplication.core.views.cargo import *
+from aplication.core.views.categoryExamen import *
+from aplication.core.views.categoryType import *
+from aplication.core.views.diagnosis import *
 from aplication.core.views.doctor import *
 from aplication.core.views.empleado import *
 from aplication.core.views.home import HomeTemplateView
+from aplication.core.views.medicine import *
 from aplication.core.views.medicineType import *
 from aplication.core.views.patient import *
 from aplication.core.views.specialty import *
-from aplication.core.views.medicine import *
-from aplication.core.views.diagnosis import *
-from aplication.core.views.categoryExamen import *
 
 app_name = 'core'
 urlpatterns = [
@@ -87,4 +88,11 @@ urlpatterns = [
   path('categoryExamen_update/<int:pk>/', CategoryExamenUpdateView.as_view(), name='categoryExamen_update'),
   path('categoryExamen_delete/<int:pk>/', CategoryExamenDeleteView.as_view(), name='categoryExamen_delete'),
   path('categoryExamen_detail/<int:pk>/', CategoryExamenDetailView.as_view(), name='categoryExamen_detail'),
+
+  # URLs de tipo categoria
+  path('categoryType_list/', CategoryTypeListView.as_view(), name="categoryType_list"),
+  path('categoryType_create/', CategoryTypeCreateView.as_view(), name="categoryType_create"),
+  path('categoryType_update/<int:pk>/', CategoryTypeUpdateView.as_view(), name='categoryType_update'),
+  path('categoryType_delete/<int:pk>/', CategoryTypeDeleteView.as_view(), name='categoryType_delete'),
+  path('categoryType_detail/<int:pk>/', CategoryTypeDetailView.as_view(), name='categoryType_detail'),
 ]
