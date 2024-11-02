@@ -29,8 +29,8 @@
                         <div class="col-md-6">
                             <select class="form-select" name="sex">
                                 <option value="T">Todos</option>
-                                <option value="M">Masculino</option>
-                                <option value="F">Femenino</option>
+                                 <option value="M" {% if request.GET.sex == "M" %} selected{% endif %}>Masculino</option>
+                                <option value="F" {% if request.GET.sex == "F"%} selected{% endif %}>Femenino</option>
                             </select>
                         </div>
                     </form>

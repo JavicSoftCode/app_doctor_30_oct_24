@@ -28,8 +28,8 @@
                         <div class="col-md-6">
                             <select class="form-select" name="activo">
                                 <option value="T">Todos</option>
-                                <option value="True">Activo</option>
-                                <option value="False">Inactivo</option>
+                                 <option value="True" {% if request.GET.activo == "True" %} selected{% endif %}>Activo</option>
+                                <option value="False" {% if request.GET.activo == "False"%} selected{% endif %}>Inactivo</option>
                             </select>
                         </div>
                     </form>

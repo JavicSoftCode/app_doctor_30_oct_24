@@ -2,11 +2,11 @@ from django.contrib import admin
 
 from aplication.core.models import (
   TipoSangre, Paciente, Especialidad, Doctor, Cargo, Empleado, TipoMedicamento,
-  Medicamento, Diagnostico, CategoriaExamen, TipoCategoria, MarcaMedicamento
+  Medicamento, Diagnostico, CategoriaExamen, TipoCategoria, MarcaMedicamento, AuditUser
 )
 
 
-# admin.site.register(MarcaMedicamento)
+admin.site.register(AuditUser)
 
 
 # @admin.register(MarcaMedicamento)
