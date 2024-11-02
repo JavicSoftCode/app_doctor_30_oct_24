@@ -5,7 +5,8 @@ from django.db import models
 
 from doctor.const import CIVIL_CHOICES, SEX_CHOICES, SANGRE_TYPE_CHOICES
 from doctor.utils import valida_cedula, phone_regex, validate_full_name, validate_birth_date, \
-  validate_and_format_cell_number, validate_codigo_unico_doctor, validate_sueldo, validate_cantidad, validate_precio, generate_valid_diagnosis_code
+  validate_and_format_cell_number, validate_codigo_unico_doctor, validate_sueldo, validate_cantidad, validate_precio, \
+  generate_valid_diagnosis_code
 
 """Modelo que representa los diferentes tipos de sangre.
 Se gestiona como un modelo separado para mantener flexibilidad
@@ -173,8 +174,6 @@ class Doctor(models.Model):
                                        validators=[validate_codigo_unico_doctor])
   # Relación con el modelo Especialidad, permite asociar una o varias especialidades al doctor
   especialidad = models.ManyToManyField(Especialidad, verbose_name="Especialidades", related_name="especialidades")
-  # especialidad = models.ManyToManyField(Especialidad, on_delete=models.PROTECT, verbose_name="Especialidades", related_name="especialidades")
-  # especialidad = models.ManyToManyField(Especialidad, verbose_name="Especialidades", related_name="especialidades")
 
   # Número de teléfono de contacto del doctor
   telefonos = models.CharField(max_length=20, verbose_name="Teléfonos", unique=True,
@@ -186,13 +185,11 @@ class Doctor(models.Model):
   # tiempo de atencion en minutos
   duracion_cita = models.IntegerField(verbose_name="Tiempo de Atencion(minutos)", default=30)
   # Curriculum vitae del doctor en formato de archivo
-  curriculum = models.FileField(upload_to='curriculums/', verbose_name="Curriculum Vitae", null=True, blank=True)
-  # Firma digital del doctor (imagen o archivo)
   firmaDigital = models.ImageField(upload_to='firmas/', verbose_name="Firma Digital", null=True, blank=True)
-  # Fotografía del doctor
   foto = models.ImageField(upload_to='doctores/', verbose_name="Foto", null=True, blank=True)
-  # Imagen que se utilizará en las recetas firmadas por el doctor
   imagen_receta = models.ImageField(upload_to='recetas/', verbose_name="Imagen para Recetas", null=True, blank=True)
+  curriculum = models.FileField(upload_to='curriculums/', verbose_name="Curriculum Vitae", null=True, blank=True)
+
   activo = models.BooleanField(default=True, verbose_name="Activo")
 
   @property
@@ -368,7 +365,8 @@ class Medicamento(models.Model):
 # Incluye un código único, descripción y un campo adicional para información relevante.
 class Diagnostico(models.Model):
   # Código único del diagnóstico (ej. CIE-10, ICD-10, etc.)
-  codigo = models.CharField(max_length=20, unique=True, verbose_name="Código del Diagnóstico", default=generate_valid_diagnosis_code)
+  codigo = models.CharField(max_length=20, unique=True, verbose_name="Código del Diagnóstico",
+                            default=generate_valid_diagnosis_code)
   # Descripción detallada del diagnóstico
   descripcion = models.CharField(max_length=100, verbose_name="Descripción del Diagnóstico")
   # Campo adicional para información relevante sobre el diagnóstico (opcional)

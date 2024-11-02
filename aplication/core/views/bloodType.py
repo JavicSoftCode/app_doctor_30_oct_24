@@ -45,22 +45,23 @@ class BloodTypeCreateView(CreateView):
     context['back_url'] = self.success_url
     return context
 
-  # def form_valid(self, form):
-  #   # print("entro al form_valid")
-  #   response = super().form_valid(form)
-  #   bloodType = self.object
-  #   save_audit(self.request, bloodType, action='A')
-  #   messages.success(self.request, f"Éxito al crear el Tipo de Sangre {bloodType.tipo}.")
-  #   return response
   def form_valid(self, form):
-    if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-      form.instance.usuario = self.request.user
-    else:
-      # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
-      form.instance.usuario = None  # O el valor que consideres adecuado
-      messages.success(self.request, f"Éxito al Crear el Tipo de Sangre.")
+    # print("entro al form_valid")
+    response = super().form_valid(form)
+    bloodType = self.object
+    save_audit(self.request, bloodType, action='A')
+    messages.success(self.request, f"Éxito al crear el Tipo de Sangre {bloodType.tipo}.")
+    return response
 
-    return super().form_valid(form)
+    # def form_valid(self, form):
+    #   if hasattr(self.request, 'user') and self.request.user.is_authenticated:
+    #     form.instance.usuario = self.request.user
+    #   else:
+    #     # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
+    #     form.instance.usuario = None  # O el valor que consideres adecuado
+    #     messages.success(self.request, f"Éxito al Crear el Tipo de Sangre.")
+
+    # return super().form_valid(form)
 
   def form_invalid(self, form):
     messages.error(self.request, "Error al enviar el formulario. Corrige los errores.")
@@ -81,23 +82,24 @@ class BloodTypeUpdateView(UpdateView):
     context['back_url'] = self.success_url
     return context
 
-  # def form_valid(self, form):
-  #   response = super().form_valid(form)
-  #   bloodType = self.object
-  #   save_audit(self.request, bloodType, action='M')
-  #   messages.success(self.request, f"Éxito al Modificar el Tipo de Sangre {bloodType.tipo}.")
-  #   print("mande mensaje")
-  #   return response
   def form_valid(self, form):
+    response = super().form_valid(form)
     bloodType = self.object
-    if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-      form.instance.usuario = self.request.user
-    else:
-      # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
-      form.instance.usuario = None  # O el valor que consideres adecuado
-      messages.success(self.request, f"Éxito al Modificar el Tipo de Sangre {bloodType.tipo}.")
+    save_audit(self.request, bloodType, action='M')
+    messages.success(self.request, f"Éxito al Modificar el Tipo de Sangre {bloodType.tipo}.")
+    print("mande mensaje")
+    return response
 
-    return super().form_valid(form)
+  # def form_valid(self, form):
+  #   bloodType = self.object
+  #   if hasattr(self.request, 'user') and self.request.user.is_authenticated:
+  #     form.instance.usuario = self.request.user
+  #   else:
+  #     # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
+  #     form.instance.usuario = None  # O el valor que consideres adecuado
+  #     messages.success(self.request, f"Éxito al Modificar el Tipo de Sangre {bloodType.tipo}.")
+  #
+  #   return super().form_valid(form)
 
   def form_invalid(self, form):
     messages.error(self.request, "Error al Modificar el formulario. Corrige los errores.")
@@ -122,7 +124,7 @@ class BloodTypeDeleteView(DeleteView):
     # Cambiar el estado de eliminado lógico
     # self.object.deleted = True
     # self.object.save()
-    return super().delete(request, *args, **kwargs)
+    return super().delete(request, *args, **kwargs), bloodType
 
 
 class BloodTypeDetailView(DetailView):

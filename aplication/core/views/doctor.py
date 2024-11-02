@@ -7,6 +7,7 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView, D
 
 from aplication.core.forms.doctor import DoctorForm
 from aplication.core.models import Doctor
+from doctor.utils import save_audit
 
 
 class DoctorListView(ListView):
@@ -53,22 +54,22 @@ class DoctorCreateView(CreateView):
     context['back_url'] = self.success_url
     return context
 
-  # def form_valid(self, form):
-  #   # print("entro al form_valid")
-  #   response = super().form_valid(form)
-  #   bloodType = self.object
-  #   save_audit(self.request, bloodType, action='A')
-  #   messages.success(self.request, f"Éxito al crear el Tipo de Sangre {bloodType.tipo}.")
-  #   return response
   def form_valid(self, form):
-    if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-      form.instance.usuario = self.request.user
-    else:
-      # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
-      form.instance.usuario = None  # O el valor que consideres adecuado
-      messages.success(self.request, f"Éxito al Crear al Doctor.")
+    response = super().form_valid(form)
+    objAudit = self.object
+    save_audit(self.request, objAudit, action='A')
+    messages.success(self.request, f"Éxito al Crear al Doctor {objAudit.nombre_completo}.")
+    return response
 
-    return super().form_valid(form)
+  # def form_valid(self, form):
+  #   if hasattr(self.request, 'user') and self.request.user.is_authenticated:
+  #     form.instance.usuario = self.request.user
+  #   else:
+  #     # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
+  #     form.instance.usuario = None  # O el valor que consideres adecuado
+  #     messages.success(self.request, f"Éxito al Crear al Doctor.")
+  #
+  #   return super().form_valid(form)
 
   def form_invalid(self, form):
     messages.error(self.request, "Error al enviar el formulario. Corrige los errores.")
@@ -93,23 +94,23 @@ class DoctorUpdateView(UpdateView):
     context['back_url'] = self.success_url
     return context
 
-  # def form_valid(self, form):
-  #   response = super().form_valid(form)
-  #   bloodType = self.object
-  #   save_audit(self.request, bloodType, action='M')
-  #   messages.success(self.request, f"Éxito al Modificar el Tipo de Sangre {bloodType.tipo}.")
-  #   print("mande mensaje")
-  #   return response
   def form_valid(self, form):
-    doctor = self.object
-    if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-      form.instance.usuario = self.request.user
-    else:
-      # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
-      form.instance.usuario = None  # O el valor que consideres adecuado
-      messages.success(self.request, f"Éxito al Modificar al Doctor {doctor.nombre_completo}.")
+    response = super().form_valid(form)
+    objAudit = self.object
+    save_audit(self.request, objAudit, action='M')
+    messages.success(self.request, f"Éxito al Modificar al Doctor {objAudit.nombre_completo}.")
+    return response
 
-    return super().form_valid(form)
+  # def form_valid(self, form):
+  #   doctor = self.object
+  #   if hasattr(self.request, 'user') and self.request.user.is_authenticated:
+  #     form.instance.usuario = self.request.user
+  #   else:
+  #     # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
+  #     form.instance.usuario = None  # O el valor que consideres adecuado
+  #     messages.success(self.request, f"Éxito al Modificar al Doctor {doctor.nombre_completo}.")
+  #
+  #   return super().form_valid(form)
 
   def form_invalid(self, form):
     messages.error(self.request, "Error al Modificar el formulario. Corrige los errores.")
