@@ -28,16 +28,16 @@
                         <div class="col-md-4">
                             <select class="form-select" name="comercial" id="comercial-select">
                                 <option value="T">Todos los Tipos de Medicamentos</option>
-                                <option value="True">Comercial</option>
-                                <option value="False">Genérico</option>
+                                 <option value="True" {% if request.GET.comercial == "True" %} selected{% endif %}>Comercial</option>
+                                <option value="False" {% if request.GET.comercial == "False"%} selected{% endif %}>Generico</option>
                             </select>
                         </div>
 
                         <div class="col-md-4">
                             <select class="form-select" name="activo" id="activo-select">
                                 <option value="T">Todos los Estados del Medicamento</option>
-                                <option value="True">Activo</option>
-                                <option value="False">Inactivo</option>
+                                 <option value="True" {% if request.GET.activo == "True" %} selected{% endif %}>Activo</option>
+                                <option value="False" {% if request.GET.activo == "False"%} selected{% endif %}>Inactivo</option>
                             </select>
                         </div>
 

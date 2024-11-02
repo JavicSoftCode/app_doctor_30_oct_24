@@ -12,6 +12,7 @@ from aplication.core.views.medicine import *
 from aplication.core.views.medicineType import *
 from aplication.core.views.patient import *
 from aplication.core.views.specialty import *
+from aplication.core.views.auditUser import *
 
 app_name = 'core'
 urlpatterns = [
@@ -95,4 +96,8 @@ urlpatterns = [
   path('categoryType_update/<int:pk>/', CategoryTypeUpdateView.as_view(), name='categoryType_update'),
   path('categoryType_delete/<int:pk>/', CategoryTypeDeleteView.as_view(), name='categoryType_delete'),
   path('categoryType_detail/<int:pk>/', CategoryTypeDetailView.as_view(), name='categoryType_detail'),
+
+  # URLs de auditoria user
+  path('auditUser_list/', AuditUserListView.as_view(), name="auditUser_list"),
+  path('auditUser_detail/<int:pk>/', AuditUserDetailView.as_view(), name='auditUser_detail'),
 ]

@@ -28,8 +28,8 @@
                         <div class="col-md-6">
                             <select class="form-select" name="tip">
                                 <option value="T">Todos</option>
-                                <option value="+">Positivo</option>
-                                <option value="-">Negativo</option>
+                                <option value="+" {% if request.GET.tip == "+" %} selected{% endif %}>Positivo</option>
+                                <option value="-" {% if request.GET.tip == "-" %} selected{% endif %}>Negativo</option>
                             </select>
                         </div>
                     </form>
