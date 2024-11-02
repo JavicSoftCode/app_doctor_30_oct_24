@@ -1,0 +1,224 @@
+{% extends 'components/dasboard.html' %}
+{% block content %}
+    {% load static %}
+
+    <!-- Main Content -->
+    <div class="col-md-9 col-lg-10 px-md-4 main-content">
+
+        <!-- Top Navbar -->
+        {% include 'includes/top.html' %}
+
+        <!-- Mensajes de ERRORES -->
+        {% include 'includes/errorsList.html' %}
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="card-title mb-0">{{ title1 }}</h5>
+                </div>
+
+                <!-- Search and Filter -->
+                <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between g-3 mb-4">
+                    <form method="GET" action="{% url 'core:empleado_list' %}"
+                          class="d-flex flex-column flex-md-row gap-3 align-items-md-center">
+                        <div class="col-md-6">
+                            <input type="text" name="q" class="form-control search-box" value="{{ request.GET.q }}"
+                                   placeholder="Buscar empleado...">
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-select" name="empleado">
+                                <option value="T">Todos</option>
+                                <option value="True">Activo</option>
+                                <option value="False">Inactivo</option>
+                            </select>
+                        </div>
+                    </form>
+                    <a class="btn btn-primary mt-3 mt-md-0" href="{% url 'core:empleado_create' %}">
+                        <i class="fas fa-plus me-2"></i>{{ title2 }}
+                    </a>
+                </div>
+
+                <div class="table-responsive">
+
+                    <!-- Tabla -->
+                    <table class="table table-hover align-middle text-center">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Foto</th>
+                            <th>Cédula</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Cargo</th>
+                            <th>Dirección</th>
+                            <th>Teléfonos</th>
+                            <th>Correo</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in empleados %}
+                            <tr>
+                                <td><img src="{{ item.get_image }}" class="rounded-circle" width="50px" alt="">
+                                </td>
+                                <td>
+    <span class="reveal-cedula" onclick="revealCedula(this)">
+        <i class="fa-solid fa-id-card fa-lg" style="cursor: pointer; color: #3498DB" title="{{ item.cedula }}"></i>
+    </span>
+                                    <span class="cedula-hidden"
+                                          style="display: none;">{{ item.cedula }}</span>
+                                </td>
+                                <td>{{ item.nombres }}</td>
+                                <td>{{ item.apellidos }}</td>
+                                <td>{{ item.cargo.nombre }}</td>
+{#                                <td>#}
+{#                                    {% for cargo in item.cargo.all %}#}
+{#                                        {{ cargo.nombre }}{% if not forloop.last %}, {% endif %}#}
+{#                                    {% endfor %}#}
+{#                                </td>#}
+                                <td>{{ item.direccion }}</td>
+                                <td>
+                                    <a href="tel:{{ item.telefonos }}" class="phone-icon"
+                                       title="Llamar por teléfono {{ item.telefonos }}">
+                                        <i class="fa-solid fa-square-phone fa-lg" style="color: #3498DB"></i>
+                                    </a>
+                                    <a href="whatsapp://send?phone={{ item.telefonos }}"
+                                       title="Llamar por WhatsApp {{ item.telefonos }}" class="phone-icon">
+                                        <i class="fa-brands fa-square-whatsapp fa-lg" style="color: #3498DB"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="https://mail.google.com/mail/?view=cm&to={{ item.email }}"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       title="{{ item.email }}">
+                                        <i class="fas fa-envelope fa-lg" style="color: #3498DB"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    {% if item.activo %}
+                                        <i class="fa-solid fa-circle-check" style="color: #3cff3c;"></i>
+                                    {% else %}
+                                        <i class="fa-solid fa-circle-xmark" style="color: red;"></i>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="action-buttons d-flex gap-2">
+                                        <button class="btn btn-info btn-sm" title="Detalle Empleado"
+                                                onclick="verDetalle('{{ item.id }}')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+
+                                        <a href="{% url 'core:empleado_update' item.id %}"
+                                           class="btn btn-info btn-sm text-white" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+
+                                        {% with id=item.id name=item.nombre_completo msg="¿Está seguro de eliminar a este Empleado?" %}
+                                            <button class="btn btn-danger"
+                                                    onclick="confirmDelete('{{ id }}', '{{ name }}', '{{ msg|escapejs }}');">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        {% endwith %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <!-- Pagination -->
+                {% include 'includes/paginations.html' %}
+
+            </div>
+        </div>
+    </div>
+
+    <!-- llama al modal generico de eliminacion -->
+    {% include 'includes/confirm_delete_modal.html' %}
+
+    <!-- llama al modal de mostrar datos del detalle -->
+    {% include 'includes/empleado_datail.html' %}
+
+    <script>
+
+        /* funciones del modal eliminar*/
+        function confirmDelete(id, name, msg) {
+            document.getElementById('modalMessage').innerText = `${msg} ${name}`;
+            const form = document.getElementById('deleteForm');
+            form.action = `/empleado_delete/${id}/`; // Ajusta la URL según tu configuración
+            const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            modal.show();
+        }
+
+        function closeModal() {
+            const modalElement = document.getElementById('confirmDeleteModal');
+            const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            if (modalInstance) {
+                modalInstance.hide();
+            }
+        }
+
+        /* funciones del mode¿al detalle */
+        function verDetalle(id) {
+            fetch(`/empleado_detail/${id}/`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('empleado-id').textContent = data.id;
+                    document.getElementById('empleado-nombres').textContent = data.nombres;
+                    document.getElementById('empleado-apellidos').textContent = data.apellidos;
+                    document.getElementById('empleado-cedula').textContent = data.cedula;
+                    document.getElementById('empleado-fecha-nacimiento').textContent = data.fecha_nacimiento;
+                    document.getElementById('empleado-direccion').textContent = data.direccion;
+                    document.getElementById('empleado-latitud').textContent = data.latitud;
+                    document.getElementById('empleado-longitud').textContent = data.longitud;
+                    document.getElementById('empleado-cargo').textContent = data.cargo
+                    document.getElementById('empleado-sueldo').textContent = data.sueldo
+                    document.getElementById('empleado-telefonos').textContent = data.telefonos;
+                    document.getElementById('empleado-email').textContent = data.email;
+                    document.getElementById('empleado-curriculum').innerHTML = data.curriculum ? `<a href="${data.curriculum}" target="_blank"><i class="fa-solid fa-eye me-2"></i></a>` : '<i class="fa-solid fa-circle-xmark" style="color: red;"></i>';
+                    document.getElementById('empleado-firma_digital').innerHTML = data.firma_digital ? `<a href="${data.firma_digital}" target="_blank"><i class="fa-solid fa-eye me-2"></i></a>` : '<i class="fa-solid fa-circle-xmark" style="color: red;"></i>';
+                    document.getElementById('empleado-foto').src = data.foto;
+
+                    // Estado activo
+                    if (data.activo) {
+                        document.getElementById('empleado-activo').innerHTML = '<i class="fa-solid fa-circle-check" style="color: #3cff3c;"></i>';
+                    } else {
+                        document.getElementById('empleado-activo').innerHTML = '<i class="fa-solid fa-circle-xmark" style="color: red;"></i>';
+                    }
+
+                    const modal = new bootstrap.Modal(document.getElementById('modal'));
+                    modal.show();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al cargar los datos del empleado');
+                });
+        }
+    </script>
+
+    <script>
+        function revealCedula(icon) {
+            let cedulaElement = icon.nextElementSibling; // Obtenemos el siguiente elemento (el que contiene el código único)
+            let cedula = cedulaElement.innerText; // Obtenemos el texto del código único
+
+            // Copiar al portapapeles
+            navigator.clipboard.writeText(cedula).then(function () {
+                console.log('Código único copiado al portapapeles: ' + cedula);
+            }).catch(function (err) {
+                console.error('Error al copiar al portapapeles: ', err);
+            });
+
+            cedulaElement.style.display = 'inline'; // Mostramos el código único
+            icon.style.display = 'none'; // Ocultamos el icono
+
+            setTimeout(function () {
+                cedulaElement.style.display = 'none'; // Ocultamos el código único después de 5 segundos
+                icon.style.display = 'inline'; // Mostramos nuevamente el icono
+            }, 5000);
+        }
+    </script>
+
+{% endblock content %}
