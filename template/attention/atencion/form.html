@@ -1,0 +1,166 @@
+{% extends 'components/dasboard.html' %}
+{% block content %}
+    {% load static %}
+
+    <div class="col-md-9 col-lg-10 px-md-4 main-content">
+        {% include 'includes/top.html' %}
+        {% include 'includes/errosForms.html' %}
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data" id="atencionForm">
+                    {% csrf_token %}
+
+                    <h1 class="text-center text-primary mb-4" style="font-weight: bold;font-size: 25px">
+                        {{ title1 }}
+                    </h1>
+
+                    <div class="row mb-12">
+                        <div class="col-md-3 form-group">
+                            <label for="{{ form.paciente.id_for_label }}"
+                                   class="form-label fw-bold">{{ form.paciente.label }}</label>
+                            {{ form.paciente }}
+                            {{ form.paciente.errors }}
+                        </div>
+                        <div class="col-md-2 form-group">
+                            <label for="{{ form.motivo_consulta.id_for_label }}"
+                                   class="form-label fw-bold">{{ form.motivo_consulta.label }}</label>
+                            {{ form.motivo_consulta }}
+                            {{ form.motivo_consulta.errors }}
+                        </div>
+                        <div class="col-md-2 form-group">
+                            <label for="{{ form.tratamiento.id_for_label }}"
+                                   class="form-label fw-bold">{{ form.tratamiento.label }}</label>
+                            {{ form.tratamiento }}
+                            {{ form.tratamiento.errors }}
+                        </div>
+                        <div class="col-md-2 form-group">
+                            <label for="{{ form.comentario.id_for_label }}"
+                                   class="form-label fw-bold">{{ form.comentario.label }}</label>
+                            {{ form.comentario }}
+                            {{ form.comentario.errors }}
+                        </div>
+                        <div class="col-md-3 form-group">
+                            <label for="{{ form.diagnostico.id_for_label }}"
+                                   class="form-label fw-bold">{{ form.diagnostico.label }}</label>
+                            <div class="especialidadMultiple" style="max-height: 200px; overflow-y: auto;">
+                                {{ form.diagnostico }}
+                            </div>
+                            {{ form.diagnostico.errors }}
+                        </div>
+                    </div>
+
+                    <div class="contenedorTABLA" style="width: 74%; margin-top: -15%">
+                        <div class="table-responsive">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h1 style="font-weight: bold; font-size: 20px">Detalles de Atención</h1>
+                                <button type="button" class="btn btn-success btn-sm" id="addDetail">
+                                    <i class="fas fa-plus"></i> Agregar Detalle
+                                </button>
+                            </div>
+
+                            {{ formset.management_form }}
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Medicamento</th>
+                                    <th>Cantidad</th>
+                                    <th>Prescripción</th>
+                                    <th>Duración (días)</th>
+                                    <th width="50">Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody id="detallesContainer">
+                                {% for form in formset %}
+                                    <tr class="detalle-item">
+                                        <td>
+                                            {{ form.medicamento }}
+                                            {{ form.medicamento.errors }}
+                                        </td>
+                                        <td>
+                                            {{ form.cantidad }}
+                                            {{ form.cantidad.errors }}
+                                        </td>
+                                        <td>
+                                            {{ form.prescripcion }}
+                                            {{ form.prescripcion.errors }}
+                                        </td>
+                                        <td>
+                                            {{ form.duracion_tratamiento }}
+                                            {{ form.duracion_tratamiento.errors }}
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-danger btn-sm remove-detail">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            {% if form.instance.pk %}
+                                                <input type="hidden" name="form-{{ forloop.counter0 }}-DELETE"
+                                                       id="id_form-{{ forloop.counter0 }}-DELETE">
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-4">
+                        <button class="btn me-2 grabar" type="submit">{{ grabar }}</button>
+                        <a class="btn btn-secondary cancelar" href="{{ back_url }}">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const detallesContainer = document.getElementById('detallesContainer');
+            const addDetailBtn = document.getElementById('addDetail');
+            const managementForm = document.querySelector('[name$="-TOTAL_FORMS"]');
+            let formCount = parseInt(managementForm.value);
+
+            // Función para actualizar los índices de los formularios
+            function updateFormIndices() {
+                const details = detallesContainer.getElementsByClassName('detalle-item');
+                for (let i = 0; i < details.length; i++) {
+                    const inputs = details[i].querySelectorAll('input, select, textarea');
+                    inputs.forEach(input => {
+                        input.name = input.name.replace(/-\d+-/, `-${i}-`);
+                        input.id = input.id.replace(/-\d+-/, `-${i}-`);
+                    });
+                }
+                managementForm.value = details.length;
+            }
+
+            // Agregar nueva fila de detalle
+            addDetailBtn.addEventListener('click', function () {
+                const newRow = document.createElement('tr');
+                newRow.classList.add('detalle-item');
+                newRow.innerHTML = `
+                        <td>{{ formset.empty_form.medicamento }}</td>
+                                    <td>{{ formset.empty_form.cantidad }}</td>
+                                    <td>{{ formset.empty_form.prescripcion }}</td>
+                                    <td>{{ formset.empty_form.duracion_tratamiento }}</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-danger btn-sm remove-detail">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </td>
+                `;
+                detallesContainer.appendChild(newRow);
+                formCount++;
+                updateFormIndices();
+            });
+
+            // Eliminar fila de detalle
+            detallesContainer.addEventListener('click', function (e) {
+                if (e.target.classList.contains('remove-detail') || e.target.parentElement.classList.contains('remove-detail')) {
+                    const detailRow = e.target.closest('.detalle-item');
+                    detailRow.remove();
+                    updateFormIndices();
+                }
+            });
+        });
+    </script>
+{% endblock content %}
