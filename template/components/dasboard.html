@@ -190,8 +190,9 @@
                         class="fa-solid fa-layer-group me-2"></i> Tipo Categoría</a>
                 <a class="nav-link" href="{% url 'core:auditUser_list' %}"><i class="fa-solid fa-user-secret me-2"></i>
                     Auditoria Usuario</a>
-                <a class="nav-link" href="#"><i class="fa-solid fa-file-waveform me-2"></i> Consultas</a>
-                <a class="nav-link" href="#"><i class="fas fa-procedures me-2"></i> Atencion</a>
+                <a class="nav-link" href="{% url 'attention:atencion_list' %}"><i class="fas fa-procedures me-2"></i> Atención</a>
+                <a class="nav-link" href="{% url 'attention:citaMedica_list' %}"><i class="fa-solid fa-file-medical me-2"></i> Cita Médica</a>
+{#                <a class="nav-link" href="#"><i class="fas fa-procedures me-2"></i> Atencion</a>#}
                 <a class="nav-link" href="#"><i class="fas fa-cogs me-2"></i> Mantenimiento</a>
                 <a class="nav-link" href="#">____________</a>
                 </nav>

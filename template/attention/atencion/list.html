@@ -1,0 +1,239 @@
+{% extends 'components/dasboard.html' %}
+{% block content %}
+    {% load static %}
+
+    <!-- Main Content -->
+    <div class="col-md-9 col-lg-10 px-md-4 main-content">
+
+        <!-- Top Navbar -->
+        {% include 'includes/top.html' %}
+
+        <!-- Mensajes de ERRORES -->
+        {% include 'includes/errorsList.html' %}
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="card-title mb-0">{{ title1 }}</h5>
+                </div>
+
+                <!-- Search and Filter -->
+                <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between g-3 mb-4">
+                    <form method="GET" action="{% url 'attention:atencion_list' %}"
+                          class="d-flex flex-column flex-md-row gap-0 align-items-md-center">
+                        <div class="col-md-12">
+                            <input type="text" name="q" class="form-control search-box" value="{{ request.GET.q }}"
+                                   placeholder="Buscar consulta...">
+                        </div>
+
+                    </form>
+                    <a class="btn btn-primary mt-3 mt-md-0" href="{% url 'attention:atencion_create' %}">
+                        <i class="fas fa-plus me-2"></i>{{ title2 }}
+                    </a>
+                </div>
+
+                <div class="table-responsive">
+
+                    <!-- Tabla -->
+                    <table class="table table-hover align-middle text-center">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Paciente</th>
+                            <th>Diagnostico</th>
+                            <th>Fecha Atencion</th>
+                            <th>Motivo Consulta</th>
+                            <th>Tratamiento</th>
+                            <th>Comentario</th>
+                            <th>Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in atenciones %}
+                            <tr>
+                                </td>
+
+                                <td>{{ item.paciente }}</td>
+                                <td>
+                                    {% for diagnostico in item.diagnostico.all %}
+                                        {{ diagnostico.codigo }}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>{{ item.fecha_atencion|date:"d/m/Y" }}</td>
+                                <td>{{ item.motivo_consulta }}</td>
+                                <td>{{ item.tratamiento }}</td>
+                                <td>{{ item.comentario }}</td>
+                                <td>
+                                    <div class="action-buttons d-flex gap-2">
+                                        <button class="btn btn-info btn-sm" title="Detalle Empleado"
+                                                onclick="verDetalle('{{ item.id }}')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+
+                                        <a href="{% url 'attention:atencion_update' item.id %}"
+                                           class="btn btn-info btn-sm text-white" title="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+
+                                        {% with id=item.id name=item.paciente msg="¿Está seguro de eliminar Atención Medica del Paciente?" %}
+                                            <button class="btn btn-danger"
+                                                    onclick="confirmDelete('{{ id }}', '{{ name }}', '{{ msg|escapejs }}');">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        {% endwith %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <!-- Pagination -->
+                {% include 'includes/paginations.html' %}
+
+            </div>
+        </div>
+    </div>
+
+    <!-- llama al modal generico de eliminacion -->
+    {% include 'includes/confirm_delete_modal.html' %}
+
+    <!-- llama al modal de mostrar datos del detalle -->
+    {% include 'includes/atencion_detail.html' %}
+
+    <script>
+
+        /* funciones del modal eliminar*/
+        function confirmDelete(id, name, msg) {
+            document.getElementById('modalMessage').innerText = `${msg} ${name}`;
+            const form = document.getElementById('deleteForm');
+            form.action = `/atencion_delete/${id}/`; // Ajusta la URL según tu configuración
+            const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            modal.show();
+        }
+
+        function closeModal() {
+            const modalElement = document.getElementById('confirmDeleteModal');
+            const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            if (modalInstance) {
+                modalInstance.hide();
+            }
+        }
+
+        {#function verDetalle(id) {#}
+        {#    fetch(`/atencion_detail/${id}/`)#}
+        {#        .then(response => {#}
+        {#            if (!response.ok) {#}
+        {#                throw new Error(`HTTP error! status: ${response.status}`);#}
+        {#            }#}
+        {#            return response.json();#}
+        {#        })#}
+        {#        .then(data => {#}
+        {#            console.log("Datos recibidos:", data);  // Verificar los datos recibidos#}
+        {##}
+        {#            // Información básica de la atención#}
+        {#            document.getElementById('atencion-id').textContent = data.id || "N/A";#}
+        {#            document.getElementById('atencion-fecha').textContent = data.fecha_atencion || "N/A";#}
+        {#            document.getElementById('atencion-motivo').textContent = data.motivo_consulta || "N/A";#}
+        {#            document.getElementById('atencion-tratamiento').textContent = data.tratamiento || "N/A";#}
+        {#            document.getElementById('atencion-comentario').textContent = data.comentario || "N/A";#}
+        {##}
+        {#            // Información del paciente#}
+        {#            document.getElementById('paciente-id').textContent = data.paciente.id || "N/A";#}
+        {#            document.getElementById('paciente-nombre').textContent = data.paciente.nombres || "N/A";#}
+        {#            document.getElementById('paciente-apellido').textContent = data.paciente.apellidos || "N/A";#}
+        {#            document.getElementById('paciente-cedula').textContent = data.paciente.cedula || "N/A";#}
+        {#            document.getElementById('paciente-email').textContent = data.paciente.email || "N/A";#}
+        {#            document.getElementById('paciente-sexo').textContent = data.paciente.sexo || "N/A";#}
+        {#            document.getElementById('paciente-fecha-nacimiento').textContent = data.paciente.fecha_nacimiento || "N/A";#}
+        {#            document.getElementById('paciente-edad').textContent = data.paciente.edad ? `${data.paciente.edad} años` : "N/A";#}
+        {#            document.getElementById('paciente-foto').src = data.paciente.foto || '/static/img/paciente_avatar.png';#}
+        {##}
+        {#            // Diagnósticos#}
+        {#            document.getElementById('atencion-diagnostico').textContent = data.diagnostico ? data.diagnostico.join(', ') : "N/A";#}
+        {##}
+        {#            // Detalles de medicamentos recetados#}
+        {#            const detallesContainer = document.getElementById('detalles-medicamentos');#}
+        {#            detallesContainer.innerHTML = ''; // Limpiar contenido previo#}
+        {#            data.detalles.forEach(detalle => {#}
+        {#                const detalleHTML = `#}
+        {#            <div class="detalle-medicamento">#}
+        {#                <p><strong>Medicamento:</strong> ${detalle.medicamento.nombre}</p>#}
+        {#                <p><strong>Concentración:</strong> ${detalle.medicamento.concentracion}</p>#}
+        {#                <p><strong>Descripción:</strong> ${detalle.medicamento.descripcion}</p>#}
+        {#                <p><strong>Precio:</strong> $${detalle.medicamento.precio.toFixed(2)}</p>#}
+        {#                <p><strong>Cantidad:</strong> ${detalle.cantidad}</p>#}
+        {#                <p><strong>Prescripción:</strong> ${detalle.prescripcion}</p>#}
+        {#                <p><strong>Duración del Tratamiento:</strong> ${detalle.duracion_tratamiento} días</p>#}
+        {#                <img src="${detalle.medicamento.imagen}" alt="Imagen de ${detalle.medicamento.nombre}" class="img-thumbnail" width="100">#}
+        {#                <hr>#}
+        {#            </div>#}
+        {#        `;#}
+        {#                detallesContainer.insertAdjacentHTML('beforeend', detalleHTML);#}
+        {#            });#}
+        {##}
+        {#            // Mostrar el modal con los detalles#}
+        {#            const modal = new bootstrap.Modal(document.getElementById('modal-detalle-atencion'));#}
+        {#            modal.show();#}
+        {#        })#}
+        {#        .catch(error => {#}
+        {#            console.error('Error al cargar los datos de la atención:', error);#}
+        {#            alert(`Error al cargar los datos de la atención: ${error.message}`);#}
+        {#        });#}
+      function verDetalle(id) {
+    fetch(`/atencion_detail/${id}/`)
+        .then(response => response.json())
+        .then(data => {
+            // Información del Paciente
+            document.getElementById('paciente-id').textContent = data.paciente.id;
+            document.getElementById('paciente-nombre').textContent = data.paciente.nombres;
+            document.getElementById('paciente-apellido').textContent = data.paciente.apellidos;
+            document.getElementById('paciente-cedula').textContent = data.paciente.cedula;
+            document.getElementById('paciente-email').textContent = data.paciente.email;
+            document.getElementById('paciente-sexo').textContent = data.paciente.sexo;
+            document.getElementById('paciente-fecha-nacimiento').textContent = data.paciente.fecha_nacimiento;
+            document.getElementById('paciente-edad').textContent = `${data.paciente.edad} años`;
+            document.getElementById('paciente-foto').src = data.paciente.foto || '/static/img/paciente_avatar.png';
+
+            // Información de la Atención
+            document.getElementById('atencion-id').textContent = data.id;
+            document.getElementById('atencion-fecha').textContent = data.fecha_atencion;
+            document.getElementById('atencion-motivo').textContent = data.motivo_consulta;
+            document.getElementById('atencion-tratamiento').textContent = data.tratamiento;
+            document.getElementById('atencion-comentario').textContent = data.comentario;
+            document.getElementById('atencion-diagnostico').textContent = data.diagnostico.join(', ');
+
+            // Detalles de Medicamentos
+            const detallesContainer = document.getElementById('detalles-medicamentos');
+            detallesContainer.innerHTML = '';  // Limpiar filas anteriores
+            data.detalles.forEach(detalle => {
+                const rowHTML = `
+                    <tr>
+                        <td><img src="${detalle.medicamento.imagen}" alt="Imagen de ${detalle.medicamento.nombre}" class="img-thumbnail" width="50"></td>
+                        <td>${detalle.medicamento.nombre}</td>
+                        <td>${detalle.medicamento.concentracion}</td>
+                        <td>${detalle.medicamento.descripcion}</td>
+                        <td>$${detalle.medicamento.precio.toFixed(2)}</td>
+                        <td>${detalle.cantidad}</td>
+                        <td>${detalle.prescripcion}</td>
+                        <td>${detalle.duracion_tratamiento} días</td>
+                    </tr>
+                `;
+                detallesContainer.insertAdjacentHTML('beforeend', rowHTML);
+            });
+
+            // Mostrar el modal con los detalles
+            const modal = new bootstrap.Modal(document.getElementById('modal-detalle-atencion'));
+            modal.show();
+        })
+        .catch(error => {
+            console.error('Error al cargar los datos de la atención:', error);
+            alert(`Error al cargar los datos de la atención: ${error.message}`);
+        });
+}
+
+
+    </script>
+
+{% endblock content %}

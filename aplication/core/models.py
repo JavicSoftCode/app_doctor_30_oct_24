@@ -105,7 +105,7 @@ class Paciente(models.Model):
     return f"{self.apellidos} {self.nombres}"
 
   def __str__(self):
-    return self.nombres
+    return f"{self.apellidos} {self.nombres}"
 
   def get_image(self):
     if self.foto:
@@ -393,7 +393,8 @@ class Diagnostico(models.Model):
   activo = models.BooleanField(default=True, verbose_name="Activo")
 
   def __str__(self):
-    return f"{self.codigo} - {self.descripcion}"
+    # return f"{self.codigo} - {self.descripcion}"
+    return f"{self.descripcion}"
 
   class Meta:
     # Nombre singular y plural del modelo en la interfaz administrativa

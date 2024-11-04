@@ -1,3 +1,7 @@
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+
 from aplication.core.models import *
 from doctor.const import CITA_CHOICES, DIA_SEMANA_CHOICES, EXAMEN_CHOICES
 
@@ -27,7 +31,6 @@ class HorarioAtencion(models.Model):
     verbose_name_plural = "Horarios de Atención de los Doctores"
 
 
-# modelo que almacena los datos de la cita de los pacientes
 class CitaMedica(models.Model):
   # Relación con el modelo Paciente, indica qué paciente ha reservado la cita
   paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, verbose_name="Paciente",
@@ -47,14 +50,36 @@ class CitaMedica(models.Model):
     return f"Cita {self.paciente} el {self.fecha} a las {self.hora_cita}"
 
   class Meta:
-    # Ordena las citas por fecha y hora
     ordering = ['fecha', 'hora_cita']
     indexes = [
       models.Index(fields=['fecha', 'hora_cita'], name='idx_fecha_hora'),
     ]
-    # Nombre singular y plural del modelo en la interfaz administrativa
     verbose_name = "Cita Médica"
     verbose_name_plural = "Citas Médicas"
+
+  def clean(self):
+    # Obtener fecha y hora actual
+    now = timezone.now().date()
+    current_time = timezone.now().time()
+
+    # Validar fecha y hora solo si el estado no es 'Realizada'
+    if self.estado != 'R':
+      # Validación 1: La fecha debe ser igual o posterior a hoy
+      if self.fecha < now:
+        raise ValidationError({
+          'fecha': _("La fecha de la cita no puede ser anterior a hoy. Solo se permiten citas a futuro.")
+        })
+
+      # Validación 2: Si la fecha es hoy, la hora debe ser posterior a la hora actual
+      if self.fecha == now and self.hora_cita <= current_time:
+        raise ValidationError({
+          'hora_cita': _("La hora de la cita debe ser posterior a la hora actual para las citas de hoy.")
+        })
+
+  def save(self, *args, **kwargs):
+    # Llamar a la limpieza de campos personalizada antes de guardar
+    self.full_clean()
+    super().save(*args, **kwargs)
 
 
 # Modelo que representa la cabecera de una atención médica.
