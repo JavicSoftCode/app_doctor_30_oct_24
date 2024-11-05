@@ -50,6 +50,7 @@
                         <thead class="table-light">
                         <tr>
                             {#                            <th><i class="fa-solid fa-hashtag fa-lg"></i></th>#}
+                            <th>ID</th>
                             <th>Usuario</th>
                             <th>Tabla</th>
                             <th>Registro ID</th>
@@ -62,11 +63,12 @@
                         <tbody>
                         {% for item in auditorias %}
                             <tr>
+                                <td>{{ item.id }}</td>
                                 <td>{{ item.usuario }}</td>
                                 <td>{{ item.tabla }}</td>
                                 <td>{{ item.registroid }}</td>
                                 <td>{{ item.fecha|date:"d/m/Y" }}</td>
-                                <td>{{ item.hora|time:"H:i" }}</td>
+                                <td>{{ item.hora|time:"h:i A" }}</td>
                                 <td>
                                     {% if item.accion == "A" %}
                                         <i class="fa-solid fa-square-plus fa-lg"

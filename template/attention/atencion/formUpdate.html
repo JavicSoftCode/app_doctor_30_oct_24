@@ -1,3 +1,187 @@
+{#{% extends 'components/dasboard.html' %}#}
+{#{% block content %}#}
+{#    <div class="col-md-9 col-lg-10 px-md-4 main-content">#}
+{#        {% include 'includes/top.html' %}#}
+{#        {% include 'includes/errosForms.html' %}#}
+{#        <div class="card mb-4">#}
+{#            <div class="card-body">#}
+{#                <form method="POST" enctype="multipart/form-data" id="atencionForm">#}
+{#                    {% csrf_token %}#}
+{#                    <h1 class="text-center text-primary mb-4" style="font-weight: bold;font-size: 25px">#}
+{#                        {{ title1 }}#}
+{#                    </h1>#}
+{#                    {% for error in form.non_field_errors %}#}
+{#                        <p class="text-danger">{{ error }}</p>#}
+{#                    {% endfor %}#}
+{#                    <div class="row mb-12">#}
+{#                        <div class="col-md-3 form-group">#}
+{#                            <label for="{{ form.paciente.id_for_label }}"#}
+{#                                   class="form-label fw-bold">{{ form.paciente.label }}</label>#}
+{#                            {{ form.paciente }}#}
+{#                            {{ form.paciente.errors }}#}
+{#                        </div>#}
+{#                        <div class="col-md-2 form-group">#}
+{#                            <label for="{{ form.motivo_consulta.id_for_label }}"#}
+{#                                   class="form-label fw-bold">{{ form.motivo_consulta.label }}</label>#}
+{#                            {{ form.motivo_consulta }}#}
+{#                            {{ form.motivo_consulta.errors }}#}
+{#                        </div>#}
+{#                        <div class="col-md-2 form-group">#}
+{#                            <label for="{{ form.tratamiento.id_for_label }}"#}
+{#                                   class="form-label fw-bold">{{ form.tratamiento.label }}</label>#}
+{#                            {{ form.tratamiento }}#}
+{#                            {{ form.tratamiento.errors }}#}
+{#                        </div>#}
+{#                        <div class="col-md-2 form-group">#}
+{#                            <label for="{{ form.comentario.id_for_label }}"#}
+{#                                   class="form-label fw-bold">{{ form.comentario.label }}</label>#}
+{#                            {{ form.comentario }}#}
+{#                            {{ form.comentario.errors }}#}
+{#                        </div>#}
+{#                        <div class="col-md-3 form-group">#}
+{#                            <label for="{{ form.diagnostico.id_for_label }}"#}
+{#                                   class="form-label fw-bold">{{ form.diagnostico.label }}</label>#}
+{#                            <div class="especialidadMultiple" style="max-height: 200px; overflow-y: auto;">#}
+{#                                {{ form.diagnostico }}#}
+{#                            </div>#}
+{#                            {{ form.diagnostico.errors }}#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="contenedorTABLA" style="width: 74%; margin-top: -15%">#}
+{#                        <div class="table-responsive">#}
+{#                            <div class="d-flex justify-content-between align-items-center mb-2">#}
+{#                                <h1 style="font-weight: bold; font-size: 20px">Detalles de Atención</h1>#}
+{#                                <button type="button" class="btn btn-success btn-sm" id="addDetail">#}
+{#                                    <i class="fas fa-plus"></i> Agregar Detalle#}
+{#                                </button>#}
+{#                            </div>#}
+{#                            {{ formset.management_form }}#}
+{##}
+{#                            <table class="table table-bordered">#}
+{#                                <thead>#}
+{#                                <tr>#}
+{#                                    <th>Medicamento</th>#}
+{#                                    <th>Cantidad</th>#}
+{#                                    <th>Prescripción</th>#}
+{#                                    <th>Duración (días)</th>#}
+{#                                    <th width="50">Acciones</th>#}
+{#                                </tr>#}
+{#                                </thead>#}
+{#                                <tbody id="detalleContainer">#}
+{#                                {% for form in formset %}#}
+{#                                    <tr class="detalle-item">#}
+{#                                        {{ form.id }}#}
+{#                                        <td style="display: none;">#}
+{#                                            <!-- Ocultamos el DELETE pero mantenemos dentro del tr -->#}
+{#                                            {{ form.DELETE }}#}
+{#                                        </td>#}
+{#                                        <td>#}
+{#                                            {{ form.medicamento }}#}
+{#                                            {% if form.medicamento.errors %}#}
+{#                                                <div class="text-danger">{{ form.medicamento.errors.as_text }}</div>#}
+{#                                            {% endif %}#}
+{#                                        </td>#}
+{#                                        <td>#}
+{#                                            {{ form.cantidad }}#}
+{#                                            {% if form.cantidad.errors %}#}
+{#                                                <div class="text-danger">{{ form.cantidad.errors.as_text }}</div>#}
+{#                                            {% endif %}#}
+{#                                        </td>#}
+{#                                        <td>#}
+{#                                            {{ form.prescripcion }}#}
+{#                                            {% if form.prescripcion.errors %}#}
+{#                                                <div class="text-danger">{{ form.prescripcion.errors.as_text }}</div>#}
+{#                                            {% endif %}#}
+{#                                        </td>#}
+{#                                        <td>#}
+{#                                            {{ form.duracion_tratamiento }}#}
+{#                                            {% if form.duracion_tratamiento.errors %}#}
+{#                                                <div class="text-danger">{{ form.duracion_tratamiento.errors.as_text }}</div>#}
+{#                                            {% endif %}#}
+{#                                        </td>#}
+{#                                        <td class="text-center">#}
+{#                                            <button type="button" class="btn btn-danger btn-sm remove-detail">#}
+{#                                                <i class="fas fa-minus"></i>#}
+{#                                            </button>#}
+{#                                        </td>#}
+{#                                    </tr>#}
+{#                                {% endfor %}#}
+{#                                </tbody>#}
+{#                            </table>#}
+{#                            <!-- Template oculto para nuevas filas -->#}
+{#                            <template id="row-template">#}
+{#                                <tr class="detalle-item">#}
+{#                                    <td>{{ formset.empty_form.medicamento }}</td>#}
+{#                                    <td>{{ formset.empty_form.cantidad }}</td>#}
+{#                                    <td>{{ formset.empty_form.prescripcion }}</td>#}
+{#                                    <td>{{ formset.empty_form.duracion_tratamiento }}</td>#}
+{#                                    <td class="text-center">#}
+{#                                        <button type="button" class="btn btn-danger btn-sm remove-detail">#}
+{#                                            <i class="fas fa-minus"></i>#}
+{#                                        </button>#}
+{#                                    </td>#}
+{#                                </tr>#}
+{#                            </template>#}
+{#                        </div>#}
+{#                    </div>#}
+{##}
+{#                    <div class="d-flex justify-content-end mt-4">#}
+{#                        <button class="btn me-2 grabar" type="submit">{{ grabar }}</button>#}
+{#                        <a class="btn btn-secondary cancelar" href="{{ back_url }}">Cancelar</a>#}
+{#                    </div>#}
+{#                </form>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <script>#}
+{#        document.addEventListener('DOMContentLoaded', function () {#}
+{#            const addDetailBtn = document.getElementById('addDetail');#}
+{#            const detalleContainer = document.getElementById('detalleContainer');#}
+{#            const rowTemplate = document.getElementById('row-template');#}
+{#            const totalFormsInput = document.querySelector('[name$="-TOTAL_FORMS"]');#}
+{#            let formCount = parseInt(totalFormsInput.value);#}
+{##}
+{#            // Función para agregar una nueva fila#}
+{#            function addNewRow() {#}
+{#                const newRow = rowTemplate.content.cloneNode(true);#}
+{##}
+{#                newRow.querySelectorAll('input, select').forEach(element => {#}
+{#                    element.name = element.name.replace('__prefix__', formCount);#}
+{#                    element.id = element.id.replace('__prefix__', formCount);#}
+{#                });#}
+{##}
+{#                detalleContainer.appendChild(newRow);#}
+{#                formCount++;#}
+{#                totalFormsInput.value = formCount;#}
+{#            }#}
+{##}
+{#            // Evento para agregar nueva fila#}
+{#            addDetailBtn.addEventListener('click', addNewRow);#}
+{##}
+{#            // Evento para eliminar fila#}
+{#            detalleContainer.addEventListener('click', function (e) {#}
+{#                if (e.target.closest('.remove-detail')) {#}
+{#                    const row = e.target.closest('.detalle-item');#}
+{#                    const deleteCheckbox = row.querySelector('input[type="checkbox"][name$="-DELETE"]');#}
+{##}
+{#                    if (deleteCheckbox) {#}
+{#                        // Para filas existentes#}
+{#                        deleteCheckbox.checked = true;#}
+{#                        deleteCheckbox.value = 'on';#}
+{#                        row.style.display = 'none';#}
+{#                    } else {#}
+{#                        // Para filas nuevas#}
+{#                        row.remove();#}
+{#                        formCount--;#}
+{#                        totalFormsInput.value = formCount;#}
+{#                    }#}
+{#                }#}
+{#            });#}
+{#        });#}
+{#    </script>#}
+{##}
+{#{% endblock content %}#}
 {% extends 'components/dasboard.html' %}
 {% block content %}
     <div class="col-md-9 col-lg-10 px-md-4 main-content">
@@ -13,6 +197,15 @@
                     {% for error in form.non_field_errors %}
                         <p class="text-danger">{{ error }}</p>
                     {% endfor %}
+
+{#                    {% if messages %}#}
+{#                        <ul class="alert alert-danger">#}
+{#                            {% for message in messages %}#}
+{#                                <li>{{ message }}</li>#}
+{#                            {% endfor %}#}
+{#                        </ul>#}
+{#                    {% endif %}#}
+
                     <div class="row mb-12">
                         <div class="col-md-3 form-group">
                             <label for="{{ form.paciente.id_for_label }}"
@@ -56,107 +249,36 @@
                                 </button>
                             </div>
                             {{ formset.management_form }}
-
-{#                            <table class="table table-bordered">#}
-{#                                <thead>#}
-{#                                <tr>#}
-{#                                    <th>Medicamento</th>#}
-{#                                    <th>Cantidad</th>#}
-{#                                    <th>Prescripción</th>#}
-{#                                    <th>Duración (días)</th>#}
-{#                                    <th width="50">Acciones</th>#}
-{#                                </tr>#}
-{#                                </thead>#}
-{#                                <tbody id="detalleContainer">#}
-{#                                {% for form in formset %}#}
-{#                                    <tr class="detalle-item">#}
-{#                                        {{ form.id }}#}
-{#                                        {{ form.DELETE }}  <!-- Agregamos el campo DELETE oculto -->#}
-{#                                        <td>#}
-{#                                            {{ form.medicamento }}#}
-{#                                            {% if form.medicamento.errors %}#}
-{#                                                <div class="text-danger">{{ form.medicamento.errors.as_text }}</div>#}
-{#                                            {% endif %}#}
-{#                                        </td>#}
-{#                                        <td>#}
-{#                                            {{ form.cantidad }}#}
-{#                                            {% if form.cantidad.errors %}#}
-{#                                                <div class="text-danger">{{ form.cantidad.errors.as_text }}</div>#}
-{#                                            {% endif %}#}
-{#                                        </td>#}
-{#                                        <td>#}
-{#                                            {{ form.prescripcion }}#}
-{#                                            {% if form.prescripcion.errors %}#}
-{#                                                <div class="text-danger">{{ form.prescripcion.errors.as_text }}</div>#}
-{#                                            {% endif %}#}
-{#                                        </td>#}
-{#                                        <td>#}
-{#                                            {{ form.duracion_tratamiento }}#}
-{#                                            {% if form.duracion_tratamiento.errors %}#}
-{#                                                <div class="text-danger">{{ form.duracion_tratamiento.errors.as_text }}</div>#}
-{#                                            {% endif %}#}
-{#                                        </td>#}
-{#                                        <td class="text-center">#}
-{#                                            <button type="button" class="btn btn-danger btn-sm remove-detail">#}
-{#                                                <i class="fas fa-minus"></i>#}
-{#                                            </button>#}
-{#                                        </td>#}
-{#                                    </tr>#}
-{#                                {% endfor %}#}
-{#                                </tbody>#}
-{#                            </table>#}
-
                             <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Medicamento</th>
-                <th>Cantidad</th>
-                <th>Prescripción</th>
-                <th>Duración (días)</th>
-                <th width="50">Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="detalleContainer">
-            {% for form in formset %}
-                <tr class="detalle-item">
-                    {{ form.id }}
-                    <td style="display: none;">  <!-- Ocultamos el DELETE pero mantenemos dentro del tr -->
-                        {{ form.DELETE }}
-                    </td>
-                    <td>
-                        {{ form.medicamento }}
-                        {% if form.medicamento.errors %}
-                            <div class="text-danger">{{ form.medicamento.errors.as_text }}</div>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {{ form.cantidad }}
-                        {% if form.cantidad.errors %}
-                            <div class="text-danger">{{ form.cantidad.errors.as_text }}</div>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {{ form.prescripcion }}
-                        {% if form.prescripcion.errors %}
-                            <div class="text-danger">{{ form.prescripcion.errors.as_text }}</div>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {{ form.duracion_tratamiento }}
-                        {% if form.duracion_tratamiento.errors %}
-                            <div class="text-danger">{{ form.duracion_tratamiento.errors.as_text }}</div>
-                        {% endif %}
-                    </td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-danger btn-sm remove-detail">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-                            <!-- Template oculto para nuevas filas -->
+                                <thead>
+                                <tr>
+                                    <th>Medicamento</th>
+                                    <th>Cantidad</th>
+                                    <th>Descripción</th>
+                                    <th>Duración (días)</th>
+                                    <th width="50">Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody id="detalleContainer">
+                                {% for form in formset %}
+                                    <tr class="detalle-item"
+                                        {% if form.DELETE.value %}style="display: none;"{% endif %}>
+                                            {{ form.id }}
+
+                                        <td>{{ form.medicamento }}</td>
+                                        <td>{{ form.cantidad }}</td>
+                                        <td>{{ form.prescripcion }}</td>
+                                        <td>{{ form.duracion_tratamiento }}</td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-danger btn-sm remove-detail">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </td>
+                                        <td style="display: none;">{{ form.DELETE }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
                             <template id="row-template">
                                 <tr class="detalle-item">
                                     <td>{{ formset.empty_form.medicamento }}</td>
@@ -181,96 +303,177 @@
             </div>
         </div>
     </div>
-{#    <script>#}
-{#        document.addEventListener('DOMContentLoaded', function () {#}
-{#            const addDetailBtn = document.getElementById('addDetail');#}
-{#            const detalleContainer = document.getElementById('detalleContainer');#}
-{#            const rowTemplate = document.getElementById('row-template');#}
-{#            const totalFormsInput = document.querySelector('[name$="-TOTAL_FORMS"]');#}
-{#            let formCount = parseInt(totalFormsInput.value);#}
-{##}
-{#            // Función para agregar una nueva fila#}
-{#            function addNewRow() {#}
-{#                const newRow = rowTemplate.content.cloneNode(true);#}
-{##}
-{#                newRow.querySelectorAll('input, select').forEach(element => {#}
-{#                    element.name = element.name.replace('__prefix__', formCount);#}
-{#                    element.id = element.id.replace('__prefix__', formCount);#}
-{#                });#}
-{##}
-{#                detalleContainer.appendChild(newRow);#}
-{#                formCount++;#}
-{#                totalFormsInput.value = formCount;#}
-{#            }#}
-{##}
-{#            // Evento para agregar nueva fila#}
-{#            addDetailBtn.addEventListener('click', addNewRow);#}
-{##}
-{#            // Evento para eliminar fila#}
-{#            detalleContainer.addEventListener('click', function (e) {#}
-{#                if (e.target.closest('.remove-detail')) {#}
-{#                    const row = e.target.closest('.detalle-item');#}
-{##}
-{#                    // Buscar el campo DELETE correspondiente a esta fila#}
-{#                    const deleteField = row.querySelector('input[name$="-DELETE"]');#}
-{#                    if (deleteField) {#}
-{#                        deleteField.value = 'on';  // Marcamos para eliminar#}
-{#                        row.style.display = 'none'; // Ocultamos la fila#}
-{#                    } else {#}
-{#                        // Si es una fila nueva (sin campo DELETE), simplemente la removemos#}
-{#                        row.remove();#}
-{#                        formCount--;#}
-{#                        totalFormsInput.value = formCount;#}
-{#                    }#}
-{#                }#}
-{#            });#}
-{#        });#}
-{#    </script>#}
-             <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const addDetailBtn = document.getElementById('addDetail');
-        const detalleContainer = document.getElementById('detalleContainer');
-        const rowTemplate = document.getElementById('row-template');
-        const totalFormsInput = document.querySelector('[name$="-TOTAL_FORMS"]');
-        let formCount = parseInt(totalFormsInput.value);
 
-        // Función para agregar una nueva fila
-        function addNewRow() {
-            const newRow = rowTemplate.content.cloneNode(true);
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const addDetailBtn = document.getElementById('addDetail');
+            const detalleContainer = document.getElementById('detalleContainer');
+            const rowTemplate = document.getElementById('row-template');
+            const totalFormsInput = document.querySelector('[name$="-TOTAL_FORMS"]');
+            let formCount = parseInt(totalFormsInput.value);
 
-            newRow.querySelectorAll('input, select').forEach(element => {
-                element.name = element.name.replace('__prefix__', formCount);
-                element.id = element.id.replace('__prefix__', formCount);
-            });
-
-            detalleContainer.appendChild(newRow);
-            formCount++;
-            totalFormsInput.value = formCount;
-        }
-
-        // Evento para agregar nueva fila
-        addDetailBtn.addEventListener('click', addNewRow);
-
-        // Evento para eliminar fila
-        detalleContainer.addEventListener('click', function (e) {
-            if (e.target.closest('.remove-detail')) {
-                const row = e.target.closest('.detalle-item');
-                const deleteCheckbox = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
-
-                if (deleteCheckbox) {
-                    // Para filas existentes
-                    deleteCheckbox.checked = true;
-                    deleteCheckbox.value = 'on';
-                    row.style.display = 'none';
-                } else {
-                    // Para filas nuevas
-                    row.remove();
-                    formCount--;
-                    totalFormsInput.value = formCount;
-                }
+            function addNewRow() {
+                const newRow = rowTemplate.content.cloneNode(true);
+                newRow.querySelectorAll('input, select').forEach(element => {
+                    element.name = element.name.replace('__prefix__', formCount);
+                    element.id = element.id.replace('__prefix__', formCount);
+                });
+                detalleContainer.appendChild(newRow);
+                formCount++;
+                totalFormsInput.value = formCount;
             }
+
+            addDetailBtn.addEventListener('click', addNewRow);
+
+            detalleContainer.addEventListener('click', function (e) {
+                if (e.target.closest('.remove-detail')) {
+                    const row = e.target.closest('.detalle-item');
+                    const deleteCheckbox = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
+                    if (deleteCheckbox) {
+                        deleteCheckbox.checked = true;
+                        row.style.display = 'none';
+                    } else {
+                        row.remove();
+                        formCount--;
+                        totalFormsInput.value = formCount;
+                    }
+                }
+            });
         });
-    });
     </script>
+
+    {#                    <div class="contenedorTABLA" style="width: 74%; margin-top: -15%">#}
+    {#                        <div class="table-responsive">#}
+    {#                            <div class="d-flex justify-content-between align-items-center mb-2">#}
+    {#                                <h1 style="font-weight: bold; font-size: 20px">Detalles de Atención</h1>#}
+    {#                                <button type="button" class="btn btn-success btn-sm" id="addDetail">#}
+    {#                                    <i class="fas fa-plus"></i> Agregar Detalle#}
+    {#                                </button>#}
+    {#                            </div>#}
+    {#                            {{ formset.management_form }}#}
+    {#                            <table class="table table-bordered">#}
+    {#                                <thead>#}
+    {#                                <tr>#}
+    {#                                    <th>Medicamento</th>#}
+    {#                                    <th>Cantidad</th>#}
+    {#                                    <th>Descripción</th>#}
+    {#                                    <th>Duración (días)</th>#}
+    {#                                    <th width="50">Acciones</th>#}
+    {#                                </tr>#}
+    {#                                </thead>#}
+    {#                                <tbody id="detalleContainer">#}
+    {#                                {% for form in formset %}#}
+    {#                                    <tr class="detalle-item">#}
+    {#                                        {{ form.id }}#}
+    {#                                        <td style="display: none;">#}
+    {#                                            <!-- Ocultamos el DELETE pero mantenemos dentro del tr -->#}
+    {#                                            {{ form.DELETE }}#}
+    {#                                        </td>#}
+    {#                                        <td>#}
+    {#                                            {{ form.medicamento }}#}
+    {#                                            {% if form.medicamento.errors %}#}
+    {#                                                <div class="text-danger">{{ form.medicamento.errors.as_text }}</div>#}
+    {#                                            {% endif %}#}
+    {#                                        </td>#}
+    {#                                        <td>#}
+    {#                                            {{ form.cantidad }}#}
+    {#                                            {% if form.cantidad.errors %}#}
+    {#                                                <div class="text-danger">{{ form.cantidad.errors.as_text }}</div>#}
+    {#                                            {% endif %}#}
+    {#                                        </td>#}
+    {#                                        <td>#}
+    {#                                            {{ form.prescripcion }}#}
+    {#                                            {% if form.prescripcion.errors %}#}
+    {#                                                <div class="text-danger">{{ form.prescripcion.errors.as_text }}</div>#}
+    {#                                            {% endif %}#}
+    {#                                        </td>#}
+    {#                                        <td>#}
+    {#                                            {{ form.duracion_tratamiento }}#}
+    {#                                            {% if form.duracion_tratamiento.errors %}#}
+    {#                                                <div class="text-danger">{{ form.duracion_tratamiento.errors.as_text }}</div>#}
+    {#                                            {% endif %}#}
+    {#                                        </td>#}
+    {#                                        <td class="text-center">#}
+    {#                                            <button type="button" class="btn btn-danger btn-sm remove-detail">#}
+    {#                                                <i class="fas fa-minus"></i>#}
+    {#                                            </button>#}
+    {#                                        </td>#}
+    {#                                    </tr>#}
+    {#                                {% endfor %}#}
+    {#                                </tbody>#}
+    {#                            </table>#}
+    {#                            <!-- Template oculto para nuevas filas -->#}
+    {#                            <template id="row-template">#}
+    {#                                <tr class="detalle-item">#}
+    {#                                    <td>{{ formset.empty_form.medicamento }}</td>#}
+    {#                                    <td>{{ formset.empty_form.cantidad }}</td>#}
+    {#                                    <td>{{ formset.empty_form.prescripcion }}</td>#}
+    {#                                    <td>{{ formset.empty_form.duracion_tratamiento }}</td>#}
+    {#                                    <td class="text-center">#}
+    {#                                        <button type="button" class="btn btn-danger btn-sm remove-detail">#}
+    {#                                            <i class="fas fa-minus"></i>#}
+    {#                                        </button>#}
+    {#                                    </td>#}
+    {#                                </tr>#}
+    {#                            </template>#}
+    {#                        </div>#}
+    {#                    </div>#}
+    {##}
+    {#                    <div class="d-flex justify-content-end mt-4">#}
+    {#                        <button class="btn me-2 grabar" type="submit">{{ grabar }}</button>#}
+    {#                        <a class="btn btn-secondary cancelar" href="{{ back_url }}">Cancelar</a>#}
+    {#                    </div>#}
+    {#                </form>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
+    {##}
+    {#    <script>#}
+    {#        document.addEventListener('DOMContentLoaded', function () {#}
+    {#            const addDetailBtn = document.getElementById('addDetail');#}
+    {#            const detalleContainer = document.getElementById('detalleContainer');#}
+    {#            const rowTemplate = document.getElementById('row-template');#}
+    {#            const totalFormsInput = document.querySelector('[name$="-TOTAL_FORMS"]');#}
+    {#            let formCount = parseInt(totalFormsInput.value);#}
+    {##}
+    {#            // Función para agregar una nueva fila#}
+    {#            function addNewRow() {#}
+    {#                const newRow = rowTemplate.content.cloneNode(true);#}
+    {##}
+    {#                newRow.querySelectorAll('input, select').forEach(element => {#}
+    {#                    element.name = element.name.replace('__prefix__', formCount);#}
+    {#                    element.id = element.id.replace('__prefix__', formCount);#}
+    {#                });#}
+    {##}
+    {#                detalleContainer.appendChild(newRow);#}
+    {#                formCount++;#}
+    {#                totalFormsInput.value = formCount;#}
+    {#            }#}
+    {##}
+    {#            // Evento para agregar nueva fila#}
+    {#            addDetailBtn.addEventListener('click', addNewRow);#}
+    {##}
+    {#            // Evento para eliminar fila#}
+    {#            detalleContainer.addEventListener('click', function (e) {#}
+    {#                if (e.target.closest('.remove-detail')) {#}
+    {#                    const row = e.target.closest('.detalle-item');#}
+    {#                    const deleteCheckbox = row.querySelector('input[type="checkbox"][name$="-DELETE"]');#}
+    {##}
+    {#                    if (deleteCheckbox) {#}
+    {#                        // Para filas existentes#}
+    {#                        deleteCheckbox.checked = true;#}
+    {#                        deleteCheckbox.value = 'on';#}
+    {#                        row.style.display = 'none';#}
+    {#                    } else {#}
+    {#                        // Para filas nuevas#}
+    {#                        row.remove();#}
+    {#                        formCount--;#}
+    {#                        totalFormsInput.value = formCount;#}
+    {#                    }#}
+    {#                }#}
+    {#            });#}
+    {#        });#}
+    {#    </script>#}
+
 
 {% endblock content %}

@@ -22,6 +22,9 @@ class DoctorListView(ListView):
     q1 = self.request.GET.get('q')  # ver
     doct = self.request.GET.get('doctor')
     if q1 is not None:
+      if q1.isdigit():
+        self.query.add(Q(id=q1), Q.AND)
+
       self.query.add(Q(nombres__icontains=q1), Q.OR)
       self.query.add(Q(apellidos__icontains=q1), Q.OR)
       self.query.add(Q(cedula__icontains=q1), Q.OR)

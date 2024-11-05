@@ -45,6 +45,7 @@
                         <thead class="table-light">
                         <tr>
                             {#                            <th><i class="fa-solid fa-hashtag fa-lg"></i></th>#}
+                            <th>ID</th>
                             <th>Tipo de Sangre</th>
                             <th>Descripción del Tipo Sangre</th>
                             <th>Acciones</th>
@@ -54,6 +55,7 @@
                         {% for item in tipos_sangre %}
                             <tr>
                                 {#                                <th scope="row">{{ forloop.counter }}</th>#}
+                                <td>{{ item.id }}</td>
                                 <td>{{ item.tipo }}</td>
                                 <td>{{ item.descripcion }}</td>
                                 <td>

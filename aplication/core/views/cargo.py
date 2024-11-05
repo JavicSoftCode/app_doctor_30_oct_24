@@ -22,8 +22,12 @@ class CargoListView(ListView):
     cargo = self.request.GET.get('cargo')  # Estado activo o inactivo
 
     if q1:
-      # Filtra por nombre que contenga el valor ingresado en 'q'
-      self.query.add(Q(nombre__icontains=q1), Q.AND)
+      if q1.isdigit():
+        self.query.add(Q(id=q1), Q.AND)
+
+      else:
+        # Filtra por nombre que contenga el valor ingresado en 'q'
+        self.query.add(Q(nombre__icontains=q1), Q.AND)
 
     if cargo in ["True", "False"]:
       # Filtra por el valor booleano de activo

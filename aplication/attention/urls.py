@@ -1,6 +1,7 @@
 from django.urls import path
 from aplication.attention.views.atencion import *
 from aplication.attention.views.citaMedica import *
+from aplication.attention.views.examenSolicitado import *
 
 app_name = "attention"
 
@@ -19,4 +20,11 @@ urlpatterns = [
     path('citaMedica_update/<int:pk>/', CitaMedicaUpdateView.as_view(), name='citaMedica_update'),
     path('citaMedica_delete/<int:pk>/', CitaMedicaDeleteView.as_view(), name='citaMedica_delete'),
     path('citaMedica_detail/<int:pk>/', CitaMedicaDetailView.as_view(), name='citaMedica_detail'),
+
+    # URLs examen solicitado
+    path('examenSolicitado_list/', ExamenSolicitadoListView.as_view(), name='examenSolicitado_list'),
+    path('examenSolicitado_create/', ExamenSolicitadoCreateView.as_view(), name='examenSolicitado_create'),
+    path('examenSolicitado_update/<int:pk>/', ExamenSolicitadoUpdateView.as_view(), name='examenSolicitado_update'),
+    path('examenSolicitado_delete/<int:pk>/', ExamenSolicitadoDeleteView.as_view(), name='examenSolicitado_delete'),
+    path('examenSolicitado_detail/<int:pk>/', ExamenSolicitadoDetailView.as_view(), name='examenSolicitado_detail'),
 ]

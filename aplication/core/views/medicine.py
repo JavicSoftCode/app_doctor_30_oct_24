@@ -25,7 +25,11 @@ class MedicineListView(ListView):
 
     # Filtrado por nombre o descripción
     if search_query:
-      self.query.add(Q(nombre__icontains=search_query) | Q(descripcion__icontains=search_query), Q.AND)
+      if search_query.isdigit():
+        self.query.add(Q(id=search_query), Q.AND)
+
+      else:
+        self.query.add(Q(nombre__icontains=search_query) | Q(descripcion__icontains=search_query), Q.AND)
 
     # Filtrado por el campo 'comercial'
     if is_commercial in ["True", "False"]:
