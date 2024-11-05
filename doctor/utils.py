@@ -5,19 +5,32 @@ from datetime import date
 from datetime import datetime
 from decimal import Decimal
 from decimal import InvalidOperation
-
+from decimal import Decimal, InvalidOperation
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 from django.core.validators import RegexValidator
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+
 phone_regex = RegexValidator(regex=r'^\d{9,15}$', message="Caracteres inválidos para un número de teléfono.")
 
 
-def valida_numero_entero_positivo(value):
-  if not str(value).isdigit() or int(value) <= 0:
-    raise ValidationError('Debe ingresar un número entero positivo válido.')
+# def valida_numero_entero_positivo(value):
+#   if not str(value).isdigit() or int(value) <= 0:
+#     raise ValidationError('Debe ingresar un número entero positivo válido.')
+
+def valida_numero_decimal_positivo(value):
+  try:
+    value = Decimal(value)
+  except InvalidOperation:
+    # Mensaje de error personalizado sin el nombre del campo
+    raise ValidationError("Debe ingresar un número positivo en el Costo del Servicio.")
+
+  if value <= 0:
+    raise ValidationError("Debe ingresar un número positivo en el Costo del Servicio.")
+  elif value.as_tuple().exponent < -2:
+    raise ValidationError("El número no puede tener más de dos decimales en el Costo del Servicio.")
 
 
 def valida_numero_flotante_positivo(value):

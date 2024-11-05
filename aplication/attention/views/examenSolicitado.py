@@ -137,9 +137,16 @@ class ExamenSolicitadoDetailView(DetailView):
     data = {
       'id': examenSolicitado.id,
       'nombre_examen': examenSolicitado.nombre_examen,
-      'paciente': examenSolicitado.paciente,
-      'fecha_solicitud': examenSolicitado.fecha_solicitud,
-      'resultado': examenSolicitado.resultado,
+      'paciente': examenSolicitado.paciente.nombre_completo,
+      # 'foto': examenSolicitado.paciente.foto,
+      'foto': examenSolicitado.paciente.get_image(),
+
+      # 'fecha_solicitud': examenSolicitado.fecha_solicitud,
+      'fecha_solicitud': examenSolicitado.fecha_solicitud.isoformat() if examenSolicitado.fecha_solicitud else None,
+
+      # 'resultado': examenSolicitado.resultado,
+      'resultado': examenSolicitado.resultado.url if examenSolicitado.resultado else None,
+
       'comentario': examenSolicitado.comentario,
       'estado': examenSolicitado.estado,
     }

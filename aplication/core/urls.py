@@ -1,5 +1,6 @@
 from django.urls import path
 
+from aplication.core.views.auditUser import *
 from aplication.core.views.bloodType import *
 from aplication.core.views.cargo import *
 from aplication.core.views.categoryExamen import *
@@ -8,11 +9,11 @@ from aplication.core.views.diagnosis import *
 from aplication.core.views.doctor import *
 from aplication.core.views.empleado import *
 from aplication.core.views.home import HomeTemplateView
+from aplication.core.views.marcaMedicamento import *
 from aplication.core.views.medicine import *
 from aplication.core.views.medicineType import *
 from aplication.core.views.patient import *
 from aplication.core.views.specialty import *
-from aplication.core.views.auditUser import *
 
 app_name = 'core'
 urlpatterns = [
@@ -96,6 +97,13 @@ urlpatterns = [
   path('categoryType_update/<int:pk>/', CategoryTypeUpdateView.as_view(), name='categoryType_update'),
   path('categoryType_delete/<int:pk>/', CategoryTypeDeleteView.as_view(), name='categoryType_delete'),
   path('categoryType_detail/<int:pk>/', CategoryTypeDetailView.as_view(), name='categoryType_detail'),
+
+  # URLs marca medicamento
+  path('marcaMedicamento_list/', MarcaMedicamentoListView.as_view(), name="marcaMedicamento_list"),
+  path('marcaMedicamento_create/', MarcaMedicamentoCreateView.as_view(), name="marcaMedicamento_create"),
+  path('marcaMedicamento_update/<int:pk>/', MarcaMedicamentoUpdateView.as_view(), name='marcaMedicamento_update'),
+  path('marcaMedicamento_delete/<int:pk>/', MarcaMedicamentoDeleteView.as_view(), name='marcaMedicamento_delete'),
+  path('marcaMedicamento_detail/<int:pk>/', MarcaMedicamentoDetailView.as_view(), name='marcaMedicamento_detail'),
 
   # URLs de auditoria user
   path('auditUser_list/', AuditUserListView.as_view(), name="auditUser_list"),

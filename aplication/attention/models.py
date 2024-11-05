@@ -1,6 +1,7 @@
 from django.utils import timezone
 
 from aplication.core.models import *
+from doctor.utils import valida_numero_decimal_positivo
 from doctor.const import DIA_SEMANA_CHOICES, EXAMEN_CHOICES, CITA_CHOICES
 
 
@@ -161,7 +162,7 @@ class ServiciosAdicionales(models.Model):
   # Nombre del servicio (ej. Radiografía, Laboratorio, Procedimiento menor, etc.)
   nombre_servicio = models.CharField(max_length=255, verbose_name="Nombre del Servicio")
   # Costo unitario del servicio adicional
-  costo_servicio = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Costo del Servicio")
+  costo_servicio = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Costo del Servicio", validators=[valida_numero_decimal_positivo])
   # Descripción opcional sobre el servicio adicional
   descripcion = models.TextField(null=True, blank=True, verbose_name="Descripción del Servicio")
 

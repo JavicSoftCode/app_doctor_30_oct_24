@@ -1,0 +1,39 @@
+<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary bg-opacity-75">
+                <h5 class="modal-title text-white fw-bold" id="ModalLabel">
+                    <i class="fa-solid fa-stethoscope me-2"></i> Detalles del Examen Solicitado
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                 <div class="row mb-4 border-bottom pb-2">
+                    <!-- Columna izquierda: Foto del examenSolicitado -->
+                    <div class="col-md-4 text-center">
+                        <img id="examenSolicitado-foto" src="" alt="Foto del Exámen Solicitado"
+                             class="img-fluid rounded shadow-sm" style="max-height: 350px; width: auto;">
+                    </div>
+
+                    <!-- Columna central: Información del examenSolicitado -->
+                    <div class="col-md-8">
+                        <p><strong>ID:</strong> <span id="examenSolicitado-id"></span></p>
+                        <p><strong>Nombre de Exámen:</strong> <span id="examenSolicitado-nombre_examen"></span></p>
+                        <p><strong>Paciente:</strong> <span id="examenSolicitado-paciente"></span></p>
+                        <p><strong>Fecha Solicitud:</strong> <span id="examenSolicitado-fecha_solicitud"></span></p>
+
+                    <!-- Columna derecha: Información de la Atención -->
+                        <p><strong>Resultado del Examen PDF:</strong> <span id="examenSolicitado-resultado"></span></p>
+                        <p><strong>Comentario:</strong> <span id="examenSolicitado-comentario"></span></p>
+                        <p><strong>Estado:</strong> <span id="examenSolicitado-estado"></span></p>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
