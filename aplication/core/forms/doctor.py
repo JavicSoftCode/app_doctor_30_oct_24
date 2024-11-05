@@ -65,12 +65,9 @@ class DoctorForm(ModelForm):
           "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         }
       ),
-      "fecha_nacimiento": forms.DateInput(
-        attrs={
-          "type": "date",
-          "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        }
-      ),
+      "fecha_nacimiento": forms.DateInput(attrs={"type": "date",
+                                                 "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"},
+                                          format='%Y-%m-%d'),
       "direccion": forms.TextInput(
         attrs={
           "placeholder": "Ingrese la dirección de trabajo",
