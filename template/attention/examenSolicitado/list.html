@@ -62,18 +62,18 @@
                             <tr>
                                 <td>{{ item.id }}</td>
                                 {#                            <td>{{ item.resultado }}</td>#}
-                               <td>
-    {% if item.resultado %}
-        <a href="{{ item.resultado.url }}" title="{{ item.resultado }}"  target="_blank">
-            <i class="fa-solid fa-file-pdf fa-lg" style="color: red"></i>
-        </a>
-    {% else %}
-        <span><i class="fa-regular fa-file-pdf" title="SIN EXAMEN" style="cursor: pointer"></i></span>
-    {% endif %}
-</td>
-
-
+                                <td>
+                                    {% if item.resultado %}
+                                        <a href="{{ item.resultado.url }}" title="{{ item.resultado }}" target="_blank">
+                                            <i class="fa-solid fa-file-pdf fa-lg" style="color: red"></i>
+                                        </a>
+                                    {% else %}
+                                        <span><i class="fa-regular fa-file-pdf" title="SIN EXAMEN"
+                                                 style="cursor: pointer"></i></span>
+                                    {% endif %}
                                 </td>
+
+
                                 <td>{{ item.paciente }}</td>
                                 <td>{{ item.nombre_examen }} </td>
                                 <td>{{ item.fecha_solicitud |date:"d/m/Y" }}</td>
@@ -149,26 +149,26 @@
 
         /* funciones del mode¿al detalle */
         function verDetalle(id) {
-            fetch(`/examenSolicitado_delete/${id}/`)
+            fetch(`/examenSolicitado_detail/${id}/`)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('examenSolicitado-id').textContent = data.id;
                     document.getElementById('examenSolicitado-nombre_examen').textContent = data.nombre_examen;
                     document.getElementById('examenSolicitado-paciente').textContent = data.paciente;
                     document.getElementById('examenSolicitado-fecha_solicitud').textContent = data.fecha_solicitud;
-                    document.getElementById('examenSolicitado-resultado').textContent = data.resultado;
+                    {#document.getElementById('examenSolicitado-resultado').textContent = data.resultado;#}
+                    document.getElementById('examenSolicitado-resultado').innerHTML = data.resultado ? `<a href="${data.resultado}" target="_blank"><i class="fa-solid fa-file-pdf fa-lg" style="color: red"></i></a>` : '<i class="fa-regular fa-file-pdf" title="SIN EXAMEN"style="cursor: pointer"></i>';
                     document.getElementById('examenSolicitado-comentario').textContent = data.comentario;
-                    document.getElementById('examenSolicitado-curriculum').innerHTML = data.curriculum ? `<a href="${data.curriculum}" target="_blank"><i class="fa-solid fa-eye me-2"></i></a>` : '<i class="fa-solid fa-circle-xmark" style="color: red;"></i>';
-                    {#document.getElementById('examenSolicitado-foto').src = data.foto;#}
+                    document.getElementById('examenSolicitado-foto').src = data.foto;
 
                     // Condicional para cambiar el estado con iconos y colores
                     let estadoHtml = '';
-                    if (data.estado === 'Solicitado') {
-                        estadoHtml = '<i class="fa-brands fa-product-hunt" style="color: greenyellow"></i> Solicitado';
-                    } else if (data.estado === 'Realizado') {
-                        estadoHtml = '<i class="fa-solid fa-registered" style="color: red"></i> Realizado';
+                    if (data.estado === 'S') {
+                        estadoHtml = ' <i class="fa-solid fa-s fa-lg" style="color: #ffffff; background-color: #183153DB; padding: 13px; border-radius: 5px"></i>';
+                    } else if (data.estado === 'R') {
+                        estadoHtml = '  <i class="fa-solid fa-r fa-lg" style="color: #ffffff ; background-color: #183153DB; padding: 13px; border-radius: 5px"></i>';
                     }
-                    document.getElementById('citaMedica-estado').innerHTML = estadoHtml;
+                    document.getElementById('examenSolicitado-estado').innerHTML = estadoHtml;
                     const modal = new bootstrap.Modal(document.getElementById('modal'));
                     modal.show();
                 })
