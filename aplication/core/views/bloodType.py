@@ -21,7 +21,11 @@ class BloodTypeListView(ListView):
     q1 = self.request.GET.get('q')  # ver
     tipoSangre = self.request.GET.get('tip')
     if q1 is not None:
-      self.query.add(Q(tipo__icontains=q1), Q.OR)
+      if q1.isdigit():
+        self.query.add(Q(id=q1), Q.AND)
+
+      else:
+        self.query.add(Q(tipo__icontains=q1), Q.OR)
     if tipoSangre == "+" or tipoSangre == "-": self.query.add(Q(tipo__icontains=tipoSangre), Q.AND)
     return self.model.objects.filter(self.query).order_by('tipo')
 

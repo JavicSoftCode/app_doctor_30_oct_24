@@ -45,6 +45,7 @@
                         <thead class="table-light">
                         <tr>
                             {#                            <th><i class="fa-solid fa-hashtag fa-lg"></i></th>#}
+                            <th>ID</th>
                             <th>Codigo</th>
                             <th>Descripción</th>
                             <th>Datos Adicionales</th>
@@ -56,6 +57,7 @@
                         {% for item in diagnosticos %}
                             <tr>
                                 {#                                <th scope="row">{{ forloop.counter }}</th>#}
+                                <td>{{ item.id }}</td>
                                 <td>{{ item.codigo }}</td>
                                 <td>{{ item.descripcion | striptags | truncatechars:100 }}</td>
                                 <td>{{ item.datos_adicionales }}</td>

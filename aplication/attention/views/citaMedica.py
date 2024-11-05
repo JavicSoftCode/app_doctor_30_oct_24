@@ -22,19 +22,18 @@ class CitaMedicaListView(ListView):
     estado = self.request.GET.get('estado')  # Estado de la cita
 
     if q1:
-        # Si q1 es un número, filtrar solo por ID
-        if q1.isdigit():
-            self.query.add(Q(id=q1), Q.AND)
-            self.query.add(Q(paciente__cedula__icontains=q1), Q.OR)
-
-        else:
-            # Si q1 no es un número, buscar por nombres y apellidos del paciente
-            self.query.add(Q(paciente__nombres__icontains=q1), Q.OR)
-            self.query.add(Q(paciente__apellidos__icontains=q1), Q.OR)
+      # Si q1 es un número, filtrar solo por ID
+      if q1.isdigit():
+        self.query.add(Q(id=q1), Q.AND)
+        self.query.add(Q(paciente__cedula__icontains=q1), Q.OR)
+      else:
+        # Si q1 no es un número, buscar por nombres y apellidos del paciente
+        self.query.add(Q(paciente__nombres__icontains=q1), Q.OR)
+        self.query.add(Q(paciente__apellidos__icontains=q1), Q.OR)
 
     # Filtrar por estado si es uno de los valores válidos
     if estado in ["P", "C", "R"]:
-        self.query.add(Q(estado=estado), Q.AND)
+      self.query.add(Q(estado=estado), Q.AND)
 
     # Retornar el queryset filtrado, ordenado por nombres y apellidos del paciente
     return self.model.objects.filter(self.query).order_by('paciente__nombres', 'paciente__apellidos')

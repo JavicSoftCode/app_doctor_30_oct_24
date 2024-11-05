@@ -96,6 +96,7 @@
                     <table class="table table-hover align-middle text-center">
                         <thead class="table-light">
                         <tr>
+                            <th>ID</th>
                             <th>Cargo</th>
                             <th>Descripción</th>
                             <th>Estado</th>
@@ -105,6 +106,7 @@
                         <tbody>
                         {% for item in cargos %}
                             <tr>
+                                <td>{{ item.id }}</td>
                                 <td>{{ item.nombre }}</td>
                                 <td>{{ item.descripcion|striptags|truncatechars:100 }}</td>
                                 <td>

@@ -1,9 +1,7 @@
-from django.core.exceptions import ValidationError
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
 
 from aplication.core.models import *
-from doctor.const import CITA_CHOICES, DIA_SEMANA_CHOICES, EXAMEN_CHOICES
+from doctor.const import DIA_SEMANA_CHOICES, EXAMEN_CHOICES, CITA_CHOICES
 
 
 # Modelo que representa los días y horas de atención de un doctor.
@@ -57,29 +55,9 @@ class CitaMedica(models.Model):
     verbose_name = "Cita Médica"
     verbose_name_plural = "Citas Médicas"
 
-  def clean(self):
-    # Obtener fecha y hora actual
-    now = timezone.now().date()
-    current_time = timezone.now().time()
-
-    # Validar fecha y hora solo si el estado no es 'Realizada'
-    if self.estado != 'R':
-      # Validación 1: La fecha debe ser igual o posterior a hoy
-      if self.fecha < now:
-        raise ValidationError({
-          'fecha': _("La fecha de la cita no puede ser anterior a hoy. Solo se permiten citas a futuro.")
-        })
-
-      # Validación 2: Si la fecha es hoy, la hora debe ser posterior a la hora actual
-      if self.fecha == now and self.hora_cita <= current_time:
-        raise ValidationError({
-          'hora_cita': _("La hora de la cita debe ser posterior a la hora actual para las citas de hoy.")
-        })
-
-  def save(self, *args, **kwargs):
-    # Llamar a la limpieza de campos personalizada antes de guardar
-    self.full_clean()
-    super().save(*args, **kwargs)
+  @staticmethod
+  def cantidad_disponible_hoy():
+    return CitaMedica.objects.all().count()
 
 
 # Modelo que representa la cabecera de una atención médica.
@@ -108,6 +86,10 @@ class Atencion(models.Model):
     # Nombre singular y plural del modelo en la interfaz administrativa
     verbose_name = "Atención"
     verbose_name_plural = "Atenciones"
+
+  @staticmethod
+  def cantidad():
+    return Atencion.objects.all().count()
 
 
 # Modelo que representa el detalle de una atención médica.

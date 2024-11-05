@@ -1,8 +1,7 @@
-from django.contrib import messages
+from django.db.models import Q
 from django.db.models import Q
 from django.http import JsonResponse
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
+from django.views.generic import ListView, DetailView
 
 from aplication.core.models import AuditUser
 
@@ -21,14 +20,18 @@ class AuditUserListView(ListView):
     accion_filter = self.request.GET.get('acciones')  # Filtro de acción (Adición, Modificación, Eliminación)
 
     if q1:
-        # Filtra por usuario, tabla o registroid que contengan el texto ingresado en 'q'
+      # Si q1 es un número, filtrar solo por ID
+      if q1.isdigit():
+        self.query.add(Q(id=q1), Q.AND)
+
+      else:
         self.query |= Q(usuario__username__icontains=q1)
         self.query |= Q(tabla__icontains=q1)
         self.query |= Q(registroid__icontains=q1)
 
     if accion_filter in ["A", "M", "E"]:
-        # Filtra por el valor seleccionado en el filtro de acciones
-        self.query &= Q(accion=accion_filter)
+      # Filtra por el valor seleccionado en el filtro de acciones
+      self.query &= Q(accion=accion_filter)
 
     # Retorna los resultados ordenados por 'fecha' y 'hora'
     return self.model.objects.filter(self.query).order_by('fecha', 'hora')

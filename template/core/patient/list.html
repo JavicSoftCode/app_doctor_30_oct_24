@@ -77,7 +77,7 @@
                                 <td>{{ item.medicacion_actual }}</td>
                                 <td>{{ item.cirugias_previas }}</td>
 
-                                 <td>
+                                <td>
                                     {% if item.activo %}
                                         <i class="fa-solid fa-circle-check" style="color: #3cff3c;"></i>
                                     {% else %}
@@ -94,11 +94,25 @@
                                            class="btn btn-info btn-sm text-white" title="Editar">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        {% with id=item.id name=item.nombre_completo msg="Esta seguro de elimnar al paciente:" %}
-                                            <button class="btn btn-danger"
-                                                    onclick="confirmDelete('{{ id }}','{{ name }}','{{ msg|escapejs }}');">
-                                                <i class="fa-solid fa-trash"></i></button>
-                                        {% endwith %}
+                                        {#                                        {% with id=item.id name=item.nombre_completo msg="Esta seguro de elimnar al paciente:" %}#}
+                                        {#                                            <button class="btn btn-danger"#}
+                                        {#                                                    onclick="confirmDelete('{{ id }}','{{ name }}','{{ msg|escapejs }}');">#}
+                                        {#                                                <i class="fa-solid fa-trash"></i></button>#}
+                                        {#                                        {% endwith %}#}
+                                        {% if item.doctores_atencion.exists %}
+                                            <button class="btn btn-danger btn-sm" disabled
+                                                    >
+                                                <i class="fa-solid fa-trash"
+                                                   title="No se puede eliminar al Paciente tiene una atención Médica."></i>
+                                            </button>
+                                        {% else %}
+                                                {% with id=item.id name=item.nombre_completo msg="¿Está seguro de eliminar este Paciente?" %}
+                                                <button class="btn btn-danger btn-sm"
+                                                        onclick="confirmDelete('{{ id }}', '{{ name }}', '{{ msg|escapejs }}');">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            {% endwith %}
+                                        {% endif %}
                                     </div>
                                 </td>
                             </tr>

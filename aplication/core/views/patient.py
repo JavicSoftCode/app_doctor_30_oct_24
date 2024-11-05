@@ -1,9 +1,9 @@
 from django.contrib import messages
 from django.db.models import Q
 from django.http import JsonResponse, Http404
+from django.templatetags.static import static
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
-from django.templatetags.static import static
 
 from aplication.core.forms.patient import PatientForm
 from aplication.core.models import Paciente
@@ -104,19 +104,29 @@ class PatientDeleteView(DeleteView):
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data()
-    context['grabar'] = 'Eliminar Proveedorl'
-    context['description'] = f"¿Desea Eliminar al paciente: {self.object.name}?"
+    context['grabar'] = 'Eliminar paciente'
+    context['description'] = f"¿Desea Eliminar al paciente: {self.object.nombre_completo}?"
     context['back_url'] = self.success_url
     return context
 
   def delete(self, request, *args, **kwargs):
     self.object = self.get_object()
-    success_message = f"Éxito al eliminar lógicamente al paciente {self.object.name}."
+    if self.object.doctores_atencion.exists():  # related name
+      messages.error(self.request, "No se puede eliminar el paciente porque tiene una atención Médica.")
+      return self.get(request, *args, **kwargs)  # Retorna a la misma página sin eliminar
+
+    success_message = f"Éxito al eliminar lógicamente al Paciente {self.object.nombre_completo}."
     messages.success(self.request, success_message)
-    # Cambiar el estado de eliminado lógico
-    # self.object.deleted = True
-    # self.object.save()
     return super().delete(request, *args, **kwargs)
+
+  # def delete(self, request, *args, **kwargs):
+  #   self.object = self.get_object()
+  #   success_message = f"Éxito al eliminar lógicamente al paciente {self.object.name}."
+  #   messages.success(self.request, success_message)
+  #   # Cambiar el estado de eliminado lógico
+  #   # self.object.deleted = True
+  #   # self.object.save()
+  #   return super().delete(request, *args, **kwargs)
 
 
 class PatientDetailView(DetailView):

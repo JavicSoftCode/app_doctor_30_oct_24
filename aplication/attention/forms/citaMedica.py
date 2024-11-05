@@ -22,6 +22,7 @@ class CitaMedicaForm(ModelForm):
       "estado": {
         "required": "Selecione el estado de la cita médica.",
       },
+
     }
 
     widgets = {

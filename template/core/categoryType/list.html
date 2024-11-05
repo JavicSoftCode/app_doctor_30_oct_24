@@ -44,6 +44,7 @@
                     <table class="table table-hover align-middle text-center">
                         <thead class="table-light">
                         <tr>
+                            <th>ID</th>
                             <th>Categoría del Examen</th>
                             <th>Tipo de Examen</th>
                             <th>Descripción</th>
@@ -56,6 +57,7 @@
                         <tbody>
                         {% for item in tipos_categorias %}
                             <tr>
+                                <td>{{ item.id }}</td> <!-- assuming categoria_examen has a 'nombre' attribute -->
                                 <td>{{ item.categoria_examen.nombre }}</td> <!-- assuming categoria_examen has a 'nombre' attribute -->
                                 <td>{{ item.nombre }}</td>
                                 <td>{{ item.descripcion | striptags | truncatechars:100 }}</td>

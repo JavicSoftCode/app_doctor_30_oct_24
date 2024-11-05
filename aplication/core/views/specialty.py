@@ -60,16 +60,6 @@ class SpecialtyCreateView(CreateView):
     messages.success(self.request, f"Éxito al crear la Especialidad {specialty.nombre}.")
     return response
 
-  # def form_valid(self, form):
-  #   if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-  #     form.instance.usuario = self.request.user
-  #   else:
-  #     # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
-  #     form.instance.usuario = None  # O el valor que consideres adecuado
-  #     messages.success(self.request, f"Éxito al Crear la Especialidad.")
-  #
-  #   return super().form_valid(form)
-
   def form_invalid(self, form):
     messages.error(self.request, "Error al enviar el formulario. Corrige los errores.")
     print(form.errors)
@@ -97,17 +87,6 @@ class SpecialtyUpdateView(UpdateView):
     print("mande mensaje")
     return response
 
-  # def form_valid(self, form):
-  #   bloodType = self.object
-  #   if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-  #     form.instance.usuario = self.request.user
-  #   else:
-  #     # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
-  #     form.instance.usuario = None  # O el valor que consideres adecuado
-  #     messages.success(self.request, f"Éxito al Modificar la Especialidad {bloodType.nombre}.")
-  #
-  #   return super().form_valid(form)
-
   def form_invalid(self, form):
     messages.error(self.request, "Error al Modificar el formulario. Corrige los errores.")
     print(form.errors)
@@ -119,19 +98,45 @@ class SpecialtyDeleteView(DeleteView):
   success_url = reverse_lazy('core:specialty_list')
 
   def get_context_data(self, **kwargs):
-    context = super().get_context_data()
+    context = super().get_context_data(**kwargs)
     context['grabar'] = 'Eliminar Especialidad'
     context['description'] = f"¿Desea Eliminar la Especialidad: {self.object.nombre}?"
     return context
 
   def delete(self, request, *args, **kwargs):
     self.object = self.get_object()
-    success_message = f"Éxito al eliminar lógicamente la Especialidad {self.object.nombre}."
+    specialty_name = self.object.nombre  # Guardamos el nombre de la especialidad
+    # Guarda la auditoría de la eliminación
+    save_audit(self.request, self.object, action='E')
+
+    success_message = f"Éxito al eliminar lógicamente la Especialidad {specialty_name}."
     messages.success(self.request, success_message)
-    # Cambiar el estado de eliminado lógico
+
+    # Cambiar el estado de eliminado lógico (si es necesario)
     # self.object.deleted = True
     # self.object.save()
+
     return super().delete(request, *args, **kwargs)
+
+
+# class SpecialtyDeleteView(DeleteView):
+#   model = Especialidad
+#   success_url = reverse_lazy('core:specialty_list')
+#
+#   def get_context_data(self, **kwargs):
+#     context = super().get_context_data()
+#     context['grabar'] = 'Eliminar Especialidad'
+#     context['description'] = f"¿Desea Eliminar la Especialidad: {self.object.nombre}?"
+#     return context
+#
+#   def delete(self, request, *args, **kwargs):
+#     self.object = self.get_object()
+#     success_message = f"Éxito al eliminar lógicamente la Especialidad {self.object.nombre}."
+#     messages.success(self.request, success_message)
+#     # Cambiar el estado de eliminado lógico
+#     # self.object.deleted = True
+#     # self.object.save()
+#     return super().delete(request, *args, **kwargs)
 
 
 class SpecialtyDetailView(DetailView):

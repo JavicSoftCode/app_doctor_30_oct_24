@@ -38,7 +38,8 @@
                         </div>
                         <div>
                             <h6 class="card-title mb-0">Citas Hoy</h6>
-                            <h3 class="mb-0">24</h3>
+                            {#                            <h3 class="mb-0">24</h3>#}
+                            <h3 class="mb-0">{{ can_citas }}</h3>
                         </div>
                     </div>
                 </div>
@@ -50,10 +51,8 @@
                             <i class="fas fa-user-injured"></i>
                         </div>
                         <div>
-
-                            <h6 class="card-title mb-0">Paciente</h6>
+                            <h6 class="card-title mb-0">Pacientes</h6>
                             <h3 class="mb-0">{{ can_paci }}</h3>
-
                         </div>
                     </div>
                 </div>
@@ -66,20 +65,22 @@
                         </div>
                         <div>
                             <h6 class="card-title mb-0">Atenciones</h6>
-                            <h3 class="mb-0">85</h3>
+                            {#                            <h3 class="mb-0">85</h3>#}
+                            <h3 class="mb-0">{{ can_atencion }}</h3>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="card stat-card" style="background: linear-gradient(45deg, #9b59b6, #8e44ad);">
+
                     <div class="card-body d-flex align-items-center">
-                        <div class="icon-square bg-white text-purple">
-                            <i class="fas fa-file-medical"></i>
+                        <div class="icon-square bg-white" style="color: #934cb0">
+                            <i class="fa-solid fa-file-medical"></i>
                         </div>
                         <div>
                             <h6 class="card-title mb-0">Consultas</h6>
-                            <h3 class="mb-0">156</h3>
+                            <h3 class="mb-0">85</h3>
                         </div>
                     </div>
                 </div>
@@ -93,12 +94,16 @@
                     <div class="card-body">
                         <h5 class="card-title mb-4">Acciones Rápidas</h5>
                         <div class="quick-actions d-flex flex-wrap gap-3">
-                            <button class="btn btn-primary"><i class="fas fa-plus-circle me-2"></i>Nueva Cita</button>
-                            <a class="btn btn-primary text-white d-inline-flex align-items-center text-lowercase"
-                               href="{% url 'core:patient_list' %}">
-                                <i class="fas fa-user-plus me-2"></i> nuevo paciente
+                            <a class="btn btn-primary text-white d-inline-flex align-items-center"
+                               href="{% url 'attention:citaMedica_create' %}" style="background-color: #2c87c3">
+                                <i class="fas fa-calendar-check me-2"></i> Nueva Cita
                             </a>
-                            <button class="btn btn-info text-white"><i class="fas fa-file-medical me-2"></i>Nueva
+                            <a class="btn text-white d-inline-flex align-items-center"
+                               href="{% url 'core:patient_list' %}" style="background-color: #29B866">
+                                <i class="fas fa-user-plus me-2"></i> Nuevo Paciente
+                            </a>
+                            <button class="btn text-white" style="background-color: #944db1"><i
+                                    class="fas fa-file-medical me-2"></i>Nueva
                                 Consulta
                             </button>
                             <button class="btn btn-warning"><i class="fas fa-notes-medical me-2"></i>Historial Médico
@@ -110,73 +115,95 @@
         </div>
 
         <!-- Recent Activity & Upcoming Appointments -->
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title mb-4">Actividad Reciente</h5>
-                        <div class="activity-item d-flex align-items-center py-3 border-bottom">
-                            <div class="bg-primary text-white p-2 rounded me-3">
-                                <i class="fas fa-user-plus"></i>
-                            </div>
-                            <div>
-                                <p class="mb-0 fw-bold">Nuevo paciente registrado</p>
-                                <small class="text-muted">Hace 5 minutos</small>
-                            </div>
-                        </div>
-                        <div class="activity-item d-flex align-items-center py-3 border-bottom">
-                            <div class="bg-success text-white p-2 rounded me-3">
-                                <i class="fas fa-calendar-check"></i>
-                            </div>
-                            <div>
-                                <p class="mb-0 fw-bold">Cita completada</p>
-                                <small class="text-muted">Hace 15 minutos</small>
-                            </div>
-                        </div>
-                        <div class="activity-item d-flex align-items-center py-3">
-                            <div class="bg-info text-white p-2 rounded me-3">
-                                <i class="fas fa-file-medical"></i>
-                            </div>
-                            <div>
-                                <p class="mb-0 fw-bold">Nueva consulta registrada</p>
-                                <small class="text-muted">Hace 30 minutos</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title mb-4">Próximas Citas</h5>
-                        <div class="appointment-item d-flex align-items-center py-3 border-bottom">
-                            <img src="{% static 'img/usuario_anonimo.png' %}" alt="Patient"
-                                 class="rounded-circle me-3 pruebaAnoni">
-                            <div>
-                                <p class="mb-0 fw-bold">María García</p>
-                                <small class="text-muted">Hoy - 10:00 AM</small>
-                            </div>
-                        </div>
-                        <div class="appointment-item d-flex align-items-center py-3 border-bottom">
-                            <img src="{% static 'img/usuario_anonimo.png' %}" alt="Patient"
-                                 class="rounded-circle me-3 pruebaAnoni">
-                            <div>
-                                <p class="mb-0 fw-bold">Carlos Rodríguez</p>
-                                <small class="text-muted">Hoy - 11:30 AM</small>
-                            </div>
-                        </div>
-                        <div class="appointment-item d-flex align-items-center py-3">
-                            <img src="{% static 'img/usuario_anonimo.png' %}" alt="Patient"
-                                 class="rounded-circle me-3 pruebaAnoni">
-                            <div>
-                                <p class="mb-0 fw-bold">Ana Martínez</p>
-                                <small class="text-muted">Hoy - 2:00 PM</small>
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title mb-4">Actividad Reciente</h5>
+                                <div class="activity-item d-flex align-items-center py-3 border-bottom">
+                                    <div class="bg-primary text-white p-2 rounded me-3">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div>
+                                        <p class="mb-0 fw-bold">Nuevo paciente registrado</p>
+                                        <small class="text-muted">Hace 5 minutos</small>
+                                    </div>
+                                </div>
+                                <div class="activity-item d-flex align-items-center py-3 border-bottom">
+                                    <div class="bg-success text-white p-2 rounded me-3">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div>
+                                        <p class="mb-0 fw-bold">Cita completada</p>
+                                        <small class="text-muted">Hace 15 minutos</small>
+                                    </div>
+                                </div>
+                                <div class="activity-item d-flex align-items-center py-3">
+                                    <div class="bg-info text-white p-2 rounded me-3">
+                                        <i class="fas fa-file-medical"></i>
+                                    </div>
+                                    <div>
+                                        <p class="mb-0 fw-bold">Nueva consulta registrada</p>
+                                        <small class="text-muted">Hace 30 minutos</small>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+{#                    <div class="col-md-6 mb-4">#}
+{#                        <div class="card h-100">#}
+{#                            <div class="card-body">#}
+{#                                <h5 class="card-title mb-4">Próximas Citas</h5>#}
+{#                                <div class="appointment-item d-flex align-items-center py-3 border-bottom">#}
+{#                                    <img src="{% static 'img/usuario_anonimo.png' %}" alt="Patient"#}
+{#                                         class="rounded-circle me-3 pruebaAnoni">#}
+{#                                    <div>#}
+{#                                        <p class="mb-0 fw-bold">María García</p>#}
+{#                                        <small class="text-muted">Hoy - 10:00 AM</small>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="appointment-item d-flex align-items-center py-3 border-bottom">#}
+{#                                    <img src="{% static 'img/usuario_anonimo.png' %}" alt="Patient"#}
+{#                                         class="rounded-circle me-3 pruebaAnoni">#}
+{#                                    <div>#}
+{#                                        <p class="mb-0 fw-bold">Carlos Rodríguez</p>#}
+{#                                        <small class="text-muted">Hoy - 11:30 AM</small>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="appointment-item d-flex align-items-center py-3">#}
+{#                                    <img src="{% static 'img/usuario_anonimo.png' %}" alt="Patient"#}
+{#                                         class="rounded-circle me-3 pruebaAnoni">#}
+{#                                    <div>#}
+{#                                        <p class="mb-0 fw-bold">Ana Martínez</p>#}
+{#                                        <small class="text-muted">Hoy - 2:00 PM</small>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Próximas Citas</h5>
+                    {% for cita in proximas_citas %}
+                        <div class="appointment-item d-flex align-items-center py-3 border-bottom">
+                            <img src="{{ cita.paciente.get_image }}" alt="Patient"
+                                 class="rounded-circle me-3 pruebaAnoni">
+                            <div>
+                                <p class="mb-0 fw-bold">{{ cita.paciente.nombre_completo }}</p>
+                                <small class="text-muted">{{ cita.fecha }} - {{ cita.hora_cita|time:"g:i A" }}</small>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="py-3">
+                            <p class="mb-0 text-muted">No hay citas programadas.</p>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
+
+                </div>
 
     </div>
 
