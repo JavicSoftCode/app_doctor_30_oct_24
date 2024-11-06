@@ -137,8 +137,9 @@ class PatientDetailView(DetailView):
       pacient = self.get_object()
       data = {
         'id': pacient.id,
-        'nombres': pacient.nombres,
-        'apellidos': pacient.apellidos,
+        'paciente': pacient.nombre_completo,
+        # 'nombres': pacient.nombres,
+        # 'apellidos': pacient.apellidos,
         'foto': pacient.get_image(),
         'fecha_nacimiento': pacient.fecha_nacimiento,
         'edad': pacient.calcular_edad(pacient.fecha_nacimiento),

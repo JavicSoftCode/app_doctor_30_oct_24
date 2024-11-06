@@ -150,8 +150,9 @@ class EmpleadoDetailView(DetailView):
     empleado = self.get_object()
     data = {
       'id': empleado.id,
-      'nombres': empleado.nombres,
-      'apellidos': empleado.apellidos,
+      'empleado': empleado.nombre_completo,
+      # 'nombres': empleado.nombres,
+      # 'apellidos': empleado.apellidos,
       'cedula': empleado.cedula,
       'fecha_nacimiento': empleado.fecha_nacimiento.isoformat() if empleado.fecha_nacimiento else None,
       'edad': empleado.calcular_edad(empleado.fecha_nacimiento),

@@ -56,7 +56,7 @@
                                 <td>{{ item.paciente }}</td>
                                 <td>
                                     {% for diagnostico in item.diagnostico.all %}
-                                        {{ diagnostico.codigo }}{% if not forloop.last %}, {% endif %}
+                                 {{ diagnostico.descripcion }}{% if not forloop.last %}, {% endif %}
                                     {% endfor %}
                                 </td>
                                 <td>{{ item.fecha_atencion|date:"d/m/Y" }}</td>
@@ -203,8 +203,9 @@
                 .then(data => {
                     // Información del Paciente
                     document.getElementById('paciente-id').textContent = data.paciente.id;
-                    document.getElementById('paciente-nombre').textContent = data.paciente.nombres;
-                    document.getElementById('paciente-apellido').textContent = data.paciente.apellidos;
+                    document.getElementById('paciente-paciente').textContent = data.paciente.paciente;
+                    {#document.getElementById('paciente-nombre').textContent = data.paciente.nombres;#}
+                    {#document.getElementById('paciente-apellido').textContent = data.paciente.apellidos;#}
                     document.getElementById('paciente-cedula').textContent = data.paciente.cedula;
                     document.getElementById('paciente-email').textContent = data.paciente.email;
                     document.getElementById('paciente-sexo').textContent = data.paciente.sexo;

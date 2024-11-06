@@ -173,8 +173,9 @@
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('empleado-id').textContent = data.id;
-                    document.getElementById('empleado-nombres').textContent = data.nombres;
-                    document.getElementById('empleado-apellidos').textContent = data.apellidos;
+                    document.getElementById('empleado-empleado').textContent = data.empleado;
+                    {#document.getElementById('empleado-nombres').textContent = data.nombres;#}
+                    {#document.getElementById('empleado-apellidos').textContent = data.apellidos;#}
                     document.getElementById('empleado-cedula').textContent = data.cedula;
                     document.getElementById('empleado-fecha-nacimiento').textContent = data.fecha_nacimiento;
                     document.getElementById('empleado-edad').textContent = `${data.edad} años`;

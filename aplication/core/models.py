@@ -181,7 +181,8 @@ class Doctor(models.Model):
   # Dirección de correo electrónico del doctor
   email = models.EmailField(verbose_name="Correo", null=True, blank=True, unique=True)
   # Hora de inicio y fin de atención del doctor
-  horario_atencion = models.TextField(verbose_name="Horario de Atencion")
+  # horario_atencion = models.TextField(verbose_name="Horario de Atencion")
+  horario_atencion = models.JSONField(verbose_name="Horario de Atención", default=dict, blank=True)
   # tiempo de atencion en minutos
   duracion_cita = models.IntegerField(verbose_name="Tiempo de Atencion(minutos)", default=30)
   # Curriculum vitae del doctor en formato de archivo
@@ -393,8 +394,8 @@ class Diagnostico(models.Model):
   activo = models.BooleanField(default=True, verbose_name="Activo")
 
   def __str__(self):
-    # return f"{self.codigo} - {self.descripcion}"
-    return f"{self.descripcion}"
+    return f"{self.codigo} - {self.descripcion}"
+    # return f"{self.descripcion}"
 
   class Meta:
     # Nombre singular y plural del modelo en la interfaz administrativa

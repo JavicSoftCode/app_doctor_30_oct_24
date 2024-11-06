@@ -131,7 +131,7 @@
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('serviciosAdicionales-id').textContent = data.id;
-                    document.getElementById('serviciosAdicionales-nombre_servico').textContent = data.nombre_servico;
+                    document.getElementById('serviciosAdicionales-nombre_servicio').textContent = data.nombre_servicio;
                     document.getElementById('serviciosAdicionales-costo_servicio').textContent = data.costo_servicio;
                     document.getElementById('serviciosAdicionales-descripcion').textContent = data.descripcion;
                     {#document.getElementById('especialidad-activo').textContent = data.activo;#}

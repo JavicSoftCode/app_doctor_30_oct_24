@@ -5,6 +5,10 @@ from aplication.core.models import Doctor
 
 
 class DoctorForm(ModelForm):
+  horario_atencion = forms.CharField(
+    widget=forms.HiddenInput(attrs={'id': 'horario_atencion_input'})
+  )
+
   class Meta:
     model = Doctor
     fields = [
@@ -49,6 +53,8 @@ class DoctorForm(ModelForm):
     widgets = {
       "cedula": forms.TextInput(
         attrs={
+          "id": "id_cedula",
+
           "placeholder": "Ingrese la cédula",
           "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         }
@@ -114,12 +120,13 @@ class DoctorForm(ModelForm):
           "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         }
       ),
-      "horario_atencion": forms.TextInput(
-        attrs={
-          "placeholder": "Horario de atención",
-          "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        }
-      ),
+      # "horario_atencion": forms.TextInput(
+      #   attrs={
+      #     "placeholder": "Horario de atención",
+      #     "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+      #   }
+      # ),
+
       "duracion_cita": forms.NumberInput(
         attrs={
           "placeholder": "Duración de cita (minutos)",
