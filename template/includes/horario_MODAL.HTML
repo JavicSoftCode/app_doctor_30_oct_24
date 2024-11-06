@@ -14,145 +14,145 @@
         <div class="modal-content" style="width: 120%; margin-left: -12%;">
             <div class="modal-header bg-primary bg-opacity-75">
                 <h5 class="modal-title text-white fw-bold" id="ModalLabel">
-                    <i class="fa-solid fa-user-md fa-lg me-2"></i>  Horario del Doctor
+                    <i class="fa-solid fa-user-md fa-lg me-2"></i> Horario del Doctor
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body scrollDoctor" style="max-height: 400px; overflow-y: auto;">
 
-    {% load static %}
-    <style>
+                {% load static %}
+                <style>
 
-        .calendar-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-            width: 100%;
-        }
+                    .calendar-container {
+                        background-color: white;
+                        padding: 20px;
+                        border-radius: 10px;
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                        max-width: 500px;
+                        width: 100%;
+                    }
 
-        .calendar {
-            display: flex;
-            flex-direction: column;
-        }
+                    .calendar {
+                        display: flex;
+                        flex-direction: column;
+                    }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
+                    .header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 10px;
+                    }
 
-        .month {
-            font-size: 1.2em;
-            font-weight: bold;
-        }
+                    .month {
+                        font-size: 1.2em;
+                        font-weight: bold;
+                    }
 
-        .btns {
-            display: flex;
-            gap: 5px;
-        }
+                    .btns {
+                        display: flex;
+                        gap: 5px;
+                    }
 
-        .btn {
-            cursor: pointer;
-            padding: 5px;
-        {#border-radius: 50%;#} background-color: #e0e0e0;
-            transition: background-color 0.3s;
-        }
+                    .btn {
+                        cursor: pointer;
+                        padding: 5px;
+                    {#border-radius: 50%;#} background-color: #e0e0e0;
+                        transition: background-color 0.3s;
+                    }
 
-        .btn:hover {
-            background-color: #d4d4d4;
-        }
+                    .btn:hover {
+                        background-color: #d4d4d4;
+                    }
 
-        .weekdays, .days {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
-            text-align: center;
-        }
+                    .weekdays, .days {
+                        display: grid;
+                        grid-template-columns: repeat(7, 1fr);
+                        gap: 5px;
+                        text-align: center;
+                    }
 
-        .weekdays .day {
-            font-weight: bold;
-            color: #333;
-            padding: 5px 0;
-        }
+                    .weekdays .day {
+                        font-weight: bold;
+                        color: #333;
+                        padding: 5px 0;
+                    }
 
-        .days .day {
-            padding: 10px 0;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            cursor: pointer;
-            font-weight: bold;
-        }
+                    .days .day {
+                        padding: 10px 0;
+                        border-radius: 5px;
+                        transition: background-color 0.3s;
+                        cursor: pointer;
+                        font-weight: bold;
+                    }
 
-        {#.days .day:hover {#}
-        {#    background-color: #d4e4f2;#}
+                    {#.days .day:hover {#}
+                    {#    background-color: #d4e4f2;#}
 
-        .day.active {
-            background-color: #d4e4f2; /* Fondo bajo cuando está activo */
-        }
+                    .day.active {
+                        background-color: #d4e4f2; /* Fondo bajo cuando está activo */
+                    }
 
-        .day.has-hours {
-            background-color: #4a90e2; /* Fondo fuerte cuando tiene horas seleccionadas */
-            color: white;
-        }
+                    .day.has-hours {
+                        background-color: #4a90e2; /* Fondo fuerte cuando tiene horas seleccionadas */
+                        color: white;
+                    }
 
-        .hours-selection {
-            margin-top: 20px;
-            display: none;
-        }
+                    .hours-selection {
+                        margin-top: 20px;
+                        display: none;
+                    }
 
-        .hours-selection h4 {
-            text-align: center;
-            font-size: 1.1em;
-            color: #4a90e2;
-        }
+                    .hours-selection h4 {
+                        text-align: center;
+                        font-size: 1.1em;
+                        color: #4a90e2;
+                    }
 
-        .hours-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 10px;
-        }
+                    .hours-container {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 10px;
+                        justify-content: center;
+                        margin-top: 10px;
+                    }
 
-        .hour-block {
-            width: 80px;
-            padding: 10px;
-            text-align: center;
-            border-radius: 5px;
-            background-color: #d4e4f2; /* Fondo bajo por defecto */
-            cursor: pointer;
-            transition: all 0.3s;
-        }
+                    .hour-block {
+                        width: 80px;
+                        padding: 10px;
+                        text-align: center;
+                        border-radius: 5px;
+                        background-color: #d4e4f2; /* Fondo bajo por defecto */
+                        cursor: pointer;
+                        transition: all 0.3s;
+                    }
 
-        .hour-block:hover {
-            background-color: #b9d9e6;
-        }
+                    .hour-block:hover {
+                        background-color: #b9d9e6;
+                    }
 
-        .hour-block.selected {
-            background-color: #4a90e2; /* Fondo fuerte cuando está seleccionado */
-            color: white;
-        }
+                    .hour-block.selected {
+                        background-color: #4a90e2; /* Fondo fuerte cuando está seleccionado */
+                        color: white;
+                    }
 
-        .clear-btn {
-            display: block;
-            margin: 10px auto;
-            padding: 5px 10px;
-            background-color: #ff4d4d;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
+                    .clear-btn {
+                        display: block;
+                        margin: 10px auto;
+                        padding: 5px 10px;
+                        background-color: #ff4d4d;
+                        color: white;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        font-weight: bold;
+                    }
 
-        .clear-btn:hover {
-            background-color: #ff1a1a;
-        }
-    </style>
+                    .clear-btn:hover {
+                        background-color: #ff1a1a;
+                    }
+                </style>
 
                 <form method="POST" enctype="multipart/form-data" class="row">
                     {% csrf_token %}
@@ -163,7 +163,7 @@
 
                         <div class="calendar-container" style="margin-left: 50%">
                             <h1 class="text-center text-primary mb-4"
-                        style="font-weight: bold;font-size: 25px">{{ title1 }}</h1>
+                                style="font-weight: bold;font-size: 25px">{{ title1 }}</h1>
 
                             {{ form.horario_atencion }}
                             <div class="calendar">
@@ -196,12 +196,14 @@
                             <div class="hours-selection">
                                 <h4>Seleccionar Horas</h4>
                                 <div class="hours-container"></div>
-                                <button class="clear-btn" type="button" disabled style="display: none">Limpiar Selección de Horas</button>
+                                <button class="clear-btn" type="button" disabled style="display: none">Limpiar Selección
+                                    de Horas
+                                </button>
                             </div>
-                            {#                                                        <button type="button" class="save-schedule-btn btn btn-primary mt-3">#}
-                            {#                                                            Guardar Horarios#}
-                            {#                                                        </button>#}
                         </div>
+                        <!-- Campo oculto para el horario de atención -->
+                        <input type="hidden" id="horario_atencion_input" value="{{ horario_atencion }}">
+
 
                         {#///////////////////////////////////////////////////////////////////////////////////////////////#}
 
@@ -216,264 +218,195 @@
 
                 </form>
 
-    <script>
-        const daysContainer = document.querySelector(".days");
-        const nextBtn = document.querySelector(".next-btn");
-        const prevBtn = document.querySelector(".prev-btn");
-        const month = document.querySelector(".month");
-        const todayBtn = document.querySelector(".today-btn");
-        const hoursContainer = document.querySelector(".hours-container");
-        const hoursSelectionDiv = document.querySelector(".hours-selection");
-        const clearBtn = document.querySelector(".clear-btn");
+                <script>
+                    const daysContainer = document.querySelector(".days");
+                    const nextBtn = document.querySelector(".next-btn");
+                    const prevBtn = document.querySelector(".prev-btn");
+                    const month = document.querySelector(".month");
+                    const todayBtn = document.querySelector(".today-btn");
+                    const hoursContainer = document.querySelector(".hours-container");
+                    const hoursSelectionDiv = document.querySelector(".hours-selection");
+                    const clearBtn = document.querySelector(".clear-btn");
 
-        const months = [
-            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-        ];
-        const workingHours = [
-            "8AM-9AM", "9AM-10AM", "10AM-11AM", "11AM-12PM", "12PM-1PM",
-            "1PM-2PM", "2PM-3PM", "3PM-4PM", "4PM-5PM"
-        ];
+                    const months = [
+                        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+                    ];
+                    const workingHours = [
+                        "8AM-9AM", "9AM-10AM", "10AM-11AM", "11AM-12PM", "12PM-1PM",
+                        "1PM-2PM", "2PM-3PM", "3PM-4PM", "4PM-5PM"
+                    ];
 
-        const date = new Date();
-        let currentMonth = date.getMonth();
-        let currentYear = date.getFullYear();
-        let selectedDays = {};
-        let activeDay = null;
+                    const date = new Date();
+                    let currentMonth = date.getMonth();
+                    let currentYear = date.getFullYear();
+                    let selectedDays = {};
+                    let activeDay = null;
 
-        function renderCalendar() {
-            date.setDate(1);
-            const firstDay = new Date(currentYear, currentMonth, 1);
-            const lastDay = new Date(currentYear, currentMonth + 1, 0);
-            const prevLastDay = new Date(currentYear, currentMonth, 0);
-            const lastDayIndex = lastDay.getDay();
-            const prevLastDayDate = prevLastDay.getDate();
-            const nextDays = 7 - lastDayIndex - 1;
+                    function renderCalendar() {
+                        date.setDate(1);
+                        const firstDay = new Date(currentYear, currentMonth, 1);
+                        const lastDay = new Date(currentYear, currentMonth + 1, 0);
+                        const prevLastDay = new Date(currentYear, currentMonth, 0);
+                        const lastDayIndex = lastDay.getDay();
+                        const prevLastDayDate = prevLastDay.getDate();
+                        const nextDays = 7 - lastDayIndex - 1;
 
-            month.innerHTML = `${months[currentMonth]} ${currentYear}`;
-            let days = "";
+                        month.innerHTML = `${months[currentMonth]} ${currentYear}`;
+                        let days = "";
 
-            for (let x = firstDay.getDay(); x > 0; x--) {
-                days += `<div class="day prev">${prevLastDayDate - x + 1}</div>`;
-            }
+                        for (let x = firstDay.getDay(); x > 0; x--) {
+                            days += `<div class="day prev">${prevLastDayDate - x + 1}</div>`;
+                        }
 
-            for (let i = 1; i <= lastDay.getDate(); i++) {
-                const dayKey = `${currentYear}-${currentMonth}-${i}`;
-                const hasHours = selectedDays[dayKey]?.length > 0;
-                const isActive = activeDay === i;
-                days += `<div class="day ${hasHours ? 'has-hours' : ''} ${isActive ? 'active' : ''}" data-day="${i}">${i}</div>`;
-            }
+                        for (let i = 1; i <= lastDay.getDate(); i++) {
+                            const dayKey = `${currentYear}-${currentMonth}-${i}`;
+                            const hasHours = selectedDays[dayKey]?.length > 0;
+                            const isActive = activeDay === i;
+                            days += `<div class="day ${hasHours ? 'has-hours' : ''} ${isActive ? 'active' : ''}" data-day="${i}">${i}</div>`;
+                        }
 
-            for (let j = 1; j <= nextDays; j++) {
-                days += `<div class="day next">${j}</div>`;
-            }
+                        for (let j = 1; j <= nextDays; j++) {
+                            days += `<div class="day next">${j}</div>`;
+                        }
 
-            daysContainer.innerHTML = days;
-            hideTodayBtn();
-        }
+                        daysContainer.innerHTML = days;
+                        hideTodayBtn();
+                    }
 
-        {#function renderHours(selectedDayKey) {#}
-        {#    hoursContainer.innerHTML = '';#}
-        {#    workingHours.forEach(hour => {#}
-        {#        const hourDiv = document.createElement("div");#}
-        {#        hourDiv.classList.add("hour-block");#}
-        {#        hourDiv.textContent = hour;#}
-        {##}
-        {#        // Verificar si la hora está seleccionada para este día#}
-        {#        if (selectedDays[selectedDayKey]?.includes(hour)) {#}
-        {#            hourDiv.classList.add("selected");#}
-        {#        }#}
-        {##}
-        {#        hourDiv.addEventListener("click", () => {#}
-        {#            hourDiv.classList.toggle("selected");#}
-        {#            if (!selectedDays[selectedDayKey]) {#}
-        {#                selectedDays[selectedDayKey] = [];#}
-        {#            }#}
-        {##}
-        {#            if (hourDiv.classList.contains("selected")) {#}
-        {#                selectedDays[selectedDayKey].push(hour);#}
-        {#            } else {#}
-        {#                selectedDays[selectedDayKey] = selectedDays[selectedDayKey].filter(h => h !== hour);#}
-        {#            }#}
-        {##}
-        {#            // Actualizar el estado visual del día#}
-        {#            updateDayVisual(selectedDayKey);#}
-        {#        });#}
-        {##}
-        {#        hoursContainer.appendChild(hourDiv);#}
-        {#    });#}
-        {#}#}
-{#    function renderHours(selectedDayKey) {#}
-{#    hoursContainer.innerHTML = '';#}
-{#    workingHours.forEach(hour => {#}
-{#        const hourDiv = document.createElement("div");#}
-{#        hourDiv.classList.add("hour-block");#}
-{#        hourDiv.textContent = hour;#}
-{##}
-{#        // Si la hora está seleccionada previamente, la mostramos como seleccionada y desactivada#}
-{#        if (selectedDays[selectedDayKey]?.includes(hour)) {#}
-{#            hourDiv.classList.add("selected");#}
-{#            hourDiv.classList.add("disabled-hour");  // Clase para evitar clicks#}
-{#        } else {#}
-{#            // Solo permitimos el evento click en las horas no seleccionadas previamente#}
-{#            hourDiv.addEventListener("click", () => {#}
-{#                hourDiv.classList.toggle("selected");#}
-{#                if (!selectedDays[selectedDayKey]) {#}
-{#                    selectedDays[selectedDayKey] = [];#}
-{#                }#}
-{##}
-{#                if (hourDiv.classList.contains("selected")) {#}
-{#                    selectedDays[selectedDayKey].push(hour);#}
-{#                } else {#}
-{#                    selectedDays[selectedDayKey] = selectedDays[selectedDayKey].filter(h => h !== hour);#}
-{#                }#}
-{##}
-{#                // Actualizar el estado visual del día#}
-{#                updateDayVisual(selectedDayKey);#}
-{#            });#}
-{#        }#}
-{##}
-{#        hoursContainer.appendChild(hourDiv);#}
-{#    });#}
-{#}#}
-               function renderHours(selectedDayKey) {
-    hoursContainer.innerHTML = '';
-    workingHours.forEach(hour => {
-        const hourDiv = document.createElement("div");
-        hourDiv.classList.add("hour-block");
-        hourDiv.textContent = hour;
+                    function renderHours(selectedDayKey) {
+                        hoursContainer.innerHTML = '';
+                        workingHours.forEach(hour => {
+                            const hourDiv = document.createElement("div");
+                            hourDiv.classList.add("hour-block");
+                            hourDiv.textContent = hour;
 
-        // Mostrar solo las horas seleccionadas sin permitir clic
-        if (selectedDays[selectedDayKey]?.includes(hour)) {
-            hourDiv.classList.add("selected");
-        } else {
-            // Si la hora no fue seleccionada, se desactiva visualmente
-            hourDiv.classList.add("disabled");
-        }
+                            // Mostrar solo las horas seleccionadas sin permitir clic
+                            if (selectedDays[selectedDayKey]?.includes(hour)) {
+                                hourDiv.classList.add("selected");
+                            } else {
+                                // Si la hora no fue seleccionada, se desactiva visualmente
+                                hourDiv.classList.add("disabled");
+                            }
 
-        hoursContainer.appendChild(hourDiv);
-    });
-}
+                            hoursContainer.appendChild(hourDiv);
+                        });
+                    }
 
-        function updateDayVisual(dateKey) {
-            const day = parseInt(dateKey.split("-")[2]);
-            const dayElement = document.querySelector(`[data-day="${day}"]`);
+                    function updateDayVisual(dateKey) {
+                        const day = parseInt(dateKey.split("-")[2]);
+                        const dayElement = document.querySelector(`[data-day="${day}"]`);
 
-            if (selectedDays[dateKey]?.length > 0) {
-                dayElement.classList.add("has-hours");
-            } else {
-                dayElement.classList.remove("has-hours");
-            }
-            updateHorarioInput();
-        }
+                        if (selectedDays[dateKey]?.length > 0) {
+                            dayElement.classList.add("has-hours");
+                        } else {
+                            dayElement.classList.remove("has-hours");
+                        }
+                        updateHorarioInput();
+                    }
 
-        daysContainer.addEventListener("click", (e) => {
-            if (!e.target.classList.contains("day") ||
-                e.target.classList.contains("prev") ||
-                e.target.classList.contains("next")) return;
+                    daysContainer.addEventListener("click", (e) => {
+                        if (!e.target.classList.contains("day") ||
+                            e.target.classList.contains("prev") ||
+                            e.target.classList.contains("next")) return;
 
-            // Remover active de todos los días
-            document.querySelectorAll(".day").forEach(day => {
-                if (!day.classList.contains("prev") && !day.classList.contains("next")) {
-                    day.classList.remove("active");
-                }
-            });
+                        // Remover active de todos los días
+                        document.querySelectorAll(".day").forEach(day => {
+                            if (!day.classList.contains("prev") && !day.classList.contains("next")) {
+                                day.classList.remove("active");
+                            }
+                        });
 
-            const day = parseInt(e.target.dataset.day);
-            const dayKey = `${currentYear}-${currentMonth}-${day}`;
+                        const day = parseInt(e.target.dataset.day);
+                        const dayKey = `${currentYear}-${currentMonth}-${day}`;
 
-            // Activar el día seleccionado
-            activeDay = day;
-            e.target.classList.add("active");
+                        // Activar el día seleccionado
+                        activeDay = day;
+                        e.target.classList.add("active");
 
-            // Mostrar las horas
-            renderHours(dayKey);
-            hoursSelectionDiv.style.display = "block";
-        });
+                        // Mostrar las horas
+                        renderHours(dayKey);
+                        hoursSelectionDiv.style.display = "block";
+                    });
 
-        clearBtn.addEventListener("click", () => {
-            if (activeDay !== null) {
-                const selectedDayKey = `${currentYear}-${currentMonth}-${activeDay}`;
-                selectedDays[selectedDayKey] = [];
-                renderHours(selectedDayKey);
-                updateDayVisual(selectedDayKey);
-                updateHorarioInput();
-            }
-        });
+                    clearBtn.addEventListener("click", () => {
+                        if (activeDay !== null) {
+                            const selectedDayKey = `${currentYear}-${currentMonth}-${activeDay}`;
+                            selectedDays[selectedDayKey] = [];
+                            renderHours(selectedDayKey);
+                            updateDayVisual(selectedDayKey);
+                            updateHorarioInput();
+                        }
+                    });
 
-        function hideTodayBtn() {
-            const todayDate = new Date();
-            todayBtn.style.display =
-                (todayDate.getMonth() === currentMonth && todayDate.getFullYear() === currentYear)
-                    ? "none"
-                    : "inline-block";
-        }
+                    function hideTodayBtn() {
+                        const todayDate = new Date();
+                        todayBtn.style.display =
+                            (todayDate.getMonth() === currentMonth && todayDate.getFullYear() === currentYear)
+                                ? "none"
+                                : "inline-block";
+                    }
 
-        nextBtn.addEventListener("click", () => {
-            currentMonth++;
-            if (currentMonth > 11) {
-                currentMonth = 0;
-                currentYear++;
-            }
-            activeDay = null;
-            hoursSelectionDiv.style.display = "none";
-            renderCalendar();
-        });
+                    nextBtn.addEventListener("click", () => {
+                        currentMonth++;
+                        if (currentMonth > 11) {
+                            currentMonth = 0;
+                            currentYear++;
+                        }
+                        activeDay = null;
+                        hoursSelectionDiv.style.display = "none";
+                        renderCalendar();
+                    });
 
-        prevBtn.addEventListener("click", () => {
-            currentMonth--;
-            if (currentMonth < 0) {
-                currentMonth = 11;
-                currentYear--;
-            }
-            activeDay = null;
-            hoursSelectionDiv.style.display = "none";
-            renderCalendar();
-        });
+                    prevBtn.addEventListener("click", () => {
+                        currentMonth--;
+                        if (currentMonth < 0) {
+                            currentMonth = 11;
+                            currentYear--;
+                        }
+                        activeDay = null;
+                        hoursSelectionDiv.style.display = "none";
+                        renderCalendar();
+                    });
 
-        todayBtn.addEventListener("click", () => {
-            currentMonth = date.getMonth();
-            currentYear = date.getFullYear();
-            activeDay = null;
-            hoursSelectionDiv.style.display = "none";
-            renderCalendar();
-        });
+                    todayBtn.addEventListener("click", () => {
+                        currentMonth = date.getMonth();
+                        currentYear = date.getFullYear();
+                        activeDay = null;
+                        hoursSelectionDiv.style.display = "none";
+                        renderCalendar();
+                    });
 
-        renderCalendar();
-
-        const horarioInput = document.getElementById('horario_atencion_input');
-        const saveScheduleBtn = document.querySelector('.save-schedule-btn');
-
-        // Función para actualizar el input oculto con los horarios
-        function updateHorarioInput() {
-            // Convertimos el objeto selectedDays a string JSON
-            horarioInput.value = JSON.stringify(selectedDays);
-        }
-
-        // Botón de guardar
-        saveScheduleBtn.addEventListener("click", () => {
-            updateHorarioInput();
-            // Opcional: Mostrar mensaje de confirmación
-            {#alert('Horarios guardados correctamente');#}
-        });
-
-        // Al cargar la página, si hay datos existentes
-        document.addEventListener('DOMContentLoaded', () => {
-            if (horarioInput.value) {
-                try {
-                    selectedDays = JSON.parse(horarioInput.value);
                     renderCalendar();
-                } catch (e) {
-                    console.error('Error al cargar horarios existentes:', e);
-                }
-            }
-        });
-    </script>
 
+                    const horarioInput = document.getElementById('horario_atencion_input');
+                    const saveScheduleBtn = document.querySelector('.save-schedule-btn');
 
+                    // Función para actualizar el input oculto con los horarios
+                    function updateHorarioInput() {
+                        // Convertimos el objeto selectedDays a string JSON
+                        horarioInput.value = JSON.stringify(selectedDays);
+                    }
+
+                    // Botón de guardar
+                    saveScheduleBtn.addEventListener("click", () => {
+                        updateHorarioInput();
+                    });
+
+                    document.addEventListener('DOMContentLoaded', () => {
+                        if (horarioInput.value) {
+                            try {
+                                selectedDays = JSON.parse(horarioInput.value);
+                                renderCalendar();
+                            } catch (e) {
+                                console.error('Error al cargar horarios existentes:', e);
+                            }
+                        }
+                    });
+
+                </script>
 
             </div>
-
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">

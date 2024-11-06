@@ -170,8 +170,6 @@ class DoctorUpdateView(UpdateView):
     return response
 
 
-
-
 # class DoctorHorarioDetailView(DetailView):
 #   model = Doctor
 #   template_name = 'core/doctor/horario_detail.html'
@@ -254,7 +252,7 @@ class DoctorDetailView(DetailView):
       'especialidad': [especialidad.nombre for especialidad in doctor.especialidad.all()],
       'telefonos': doctor.telefonos,
       'email': doctor.email,
-      'horario_atencion': doctor.horario_atencion,
+      # 'horario_atencion': doctor.horario_atencion,
       'duracion_cita': doctor.duracion_cita,
       'curriculum': doctor.curriculum.url if doctor.curriculum else None,
       'firmaDigital': doctor.firmaDigital.url if doctor.firmaDigital else None,
@@ -263,7 +261,6 @@ class DoctorDetailView(DetailView):
       'activo': doctor.activo,
     }
     return JsonResponse(data)
-
 
 
 class DoctorHorarioDetailView(UpdateView):
