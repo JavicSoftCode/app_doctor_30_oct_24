@@ -1,8 +1,10 @@
-from django.utils import timezone
+import datetime
+
+from django.core.exceptions import ValidationError
 
 from aplication.core.models import *
-from doctor.utils import valida_numero_decimal_positivo
 from doctor.const import DIA_SEMANA_CHOICES, EXAMEN_CHOICES, CITA_CHOICES
+from doctor.utils import valida_numero_decimal_positivo
 
 
 # Modelo que representa los días y horas de atención de un doctor.
@@ -29,11 +31,45 @@ class HorarioAtencion(models.Model):
     verbose_name = "Horario de Atenciónl Doctor"
     verbose_name_plural = "Horarios de Atención de los Doctores"
 
+  # class CitaMedica(models.Model):
+  #   # Relación con el modelo Paciente, indica qué paciente ha reservado la cita
+  #   paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, verbose_name="Paciente",
+  #                                related_name="pacientes_citas")
+  #   # Fecha de la cita médica
+  #   fecha = models.DateField(verbose_name="Fecha de la Cita")
+  #   # Hora de la cita médica
+  #   hora_cita = models.TimeField(verbose_name="Hora de la Cita")
+  #   # Estado de la cita (ej. Programada, Cancelada, Realizada)
+  #   estado = models.CharField(
+  #     max_length=1,
+  #     choices=CITA_CHOICES,
+  #     verbose_name="Estado de la Cita"
+  #   )
+  #
+  #   def __str__(self):
+  #     return f"Cita {self.paciente} el {self.fecha} a las {self.hora_cita}"
+  #
+  #   class Meta:
+  #     ordering = ['fecha', 'hora_cita']
+  #     indexes = [
+  #       models.Index(fields=['fecha', 'hora_cita'], name='idx_fecha_hora'),
+  #     ]
+  #     verbose_name = "Cita Médica"
+  #     verbose_name_plural = "Citas Médicas"
+  #
+  #   @staticmethod
+  #   def cantidad_disponible_hoy():
+  #     return CitaMedica.objects.all().count()
+
 
 class CitaMedica(models.Model):
   # Relación con el modelo Paciente, indica qué paciente ha reservado la cita
-  paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, verbose_name="Paciente",
-                               related_name="pacientes_citas")
+  paciente = models.ForeignKey(
+    Paciente,
+    on_delete=models.CASCADE,
+    verbose_name="Paciente",
+    related_name="pacientes_citas"
+  )
   # Fecha de la cita médica
   fecha = models.DateField(verbose_name="Fecha de la Cita")
   # Hora de la cita médica
@@ -59,6 +95,31 @@ class CitaMedica(models.Model):
   @staticmethod
   def cantidad_disponible_hoy():
     return CitaMedica.objects.all().count()
+
+  def clean(self):
+    super().clean()
+
+    errors = {}
+
+    Fecha = ['fecha']
+    Hora = ['hora_cita']
+    # Verifica que la fecha no sea un domingo
+    if self.fecha.weekday() == 6:  # 6 representa el domingo
+      errors['Fecha'] = "Domingos no se trabaja. CLINICA CERRADA."
+
+    # Verifica que la hora esté dentro del horario permitido
+    hora_minima = datetime.time(8, 0)  # 8:00 AM
+    hora_maxima = datetime.time(17, 0)  # 5:00 PM
+    if self.hora_cita < hora_minima or self.hora_cita > hora_maxima:
+      errors['Hora'] = "CLINICA CERRADA. Horario permitido es de 8AM a 5PM de Lunes a Sábado."
+
+    if errors:
+      raise ValidationError(errors)
+
+  def save(self, *args, **kwargs):
+    # Llama a clean() antes de guardar para asegurar la validación
+    self.clean()
+    super().save(*args, **kwargs)
 
 
 # Modelo que representa la cabecera de una atención médica.
@@ -162,7 +223,8 @@ class ServiciosAdicionales(models.Model):
   # Nombre del servicio (ej. Radiografía, Laboratorio, Procedimiento menor, etc.)
   nombre_servicio = models.CharField(max_length=255, verbose_name="Nombre del Servicio")
   # Costo unitario del servicio adicional
-  costo_servicio = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Costo del Servicio", validators=[valida_numero_decimal_positivo])
+  costo_servicio = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Costo del Servicio",
+                                       validators=[valida_numero_decimal_positivo])
   # Descripción opcional sobre el servicio adicional
   descripcion = models.TextField(null=True, blank=True, verbose_name="Descripción del Servicio")
 

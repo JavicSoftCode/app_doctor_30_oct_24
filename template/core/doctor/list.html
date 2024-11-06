@@ -188,8 +188,6 @@
                 .then(data => {
                     document.getElementById('doctor-id').textContent = data.id;
                     document.getElementById('doctor-doctor').textContent = data.doctor;
-                    {#document.getElementById('doctor-nombres').textContent = data.nombres;#}
-                    {#document.getElementById('doctor-apellidos').textContent = data.apellidos;#}
                     document.getElementById('doctor-cedula').textContent = data.cedula;
                     document.getElementById('doctor-fecha-nacimiento').textContent = data.fecha_nacimiento;
                     document.getElementById('doctor-edad').textContent = `${data.edad} años`;
@@ -200,7 +198,7 @@
                     document.getElementById('doctor-especialidad').textContent = data.especialidad
                     document.getElementById('doctor-telefonos').textContent = data.telefonos;
                     document.getElementById('doctor-email').textContent = data.email;
-                    document.getElementById('doctor-horario').textContent = data.horario_atencion;
+                    {#document.getElementById('doctor-horario').textContent = data.horario_atencion;#}
                     document.getElementById('doctor-duracion-cita').textContent = data.duracion_cita;
                     document.getElementById('doctor-curriculum').innerHTML = data.curriculum ? `<a href="${data.curriculum}" target="_blank"><i class="fa-solid fa-eye me-2"></i></a>` : '<i class="fa-solid fa-circle-xmark" style="color: red;"></i>';
                     document.getElementById('doctor-firmaDigital').innerHTML = data.firmaDigital ? `<a href="${data.firmaDigital}" target="_blank"><i class="fa-solid fa-eye me-2"></i></a>` : '<i class="fa-solid fa-circle-xmark" style="color: red;"></i>';
