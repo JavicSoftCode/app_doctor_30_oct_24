@@ -164,9 +164,9 @@
                     // Condicional para cambiar el estado con iconos y colores
                     let estadoHtml = '';
                     if (data.estado === 'S') {
-                        estadoHtml = ' <i class="fa-solid fa-s fa-lg" style="color: #ffffff; background-color: #183153DB; padding: 13px; border-radius: 5px"></i>';
+                        estadoHtml = ' <i class="fa-solid fa-s fa-lg" style="color: #ffffff; background-color: #183153DB; padding: 13px; border-radius: 5px"></i> Solicitado';
                     } else if (data.estado === 'R') {
-                        estadoHtml = '  <i class="fa-solid fa-r fa-lg" style="color: #ffffff ; background-color: #183153DB; padding: 13px; border-radius: 5px"></i>';
+                        estadoHtml = '  <i class="fa-solid fa-r fa-lg" style="color: #ffffff ; background-color: #183153DB; padding: 13px; border-radius: 5px"></i> Realizado';
                     }
                     document.getElementById('examenSolicitado-estado').innerHTML = estadoHtml;
                     const modal = new bootstrap.Modal(document.getElementById('modal'));

@@ -66,7 +66,7 @@
                         <tbody>
                         {% for item in doctores %}
                             <tr>
-                            <td>{{ item.id }}</td>
+                                <td>{{ item.id }}</td>
                                 <td><img src="{{ item.get_image }}" class="rounded-circle" width="50px" alt="">
                                 </td>
                                 <td>
@@ -110,7 +110,10 @@
                                         <i class="fas fa-envelope fa-lg" style="color: #3498DB"></i>
                                     </a>
                                 </td>
-                                <td>{{ item.horario_atencion|striptags|truncatechars:100 }}</td>
+                                {#                                <td>{{ item.horario_atencion|striptags|truncatechars:100 }}</td>#}
+                                <td><a href="{% url 'core:doctorHorario_detail' item.pk %}" class="btn btn-info btn-sm">
+                                    <i class="fas fa-clock"></i> Ver Horario
+                                </a></td>
                                 <td>{{ item.duracion_cita }} Min</td>
                                 <td>
                                     {% if item.activo %}
@@ -184,8 +187,9 @@
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('doctor-id').textContent = data.id;
-                    document.getElementById('doctor-nombres').textContent = data.nombres;
-                    document.getElementById('doctor-apellidos').textContent = data.apellidos;
+                    document.getElementById('doctor-doctor').textContent = data.doctor;
+                    {#document.getElementById('doctor-nombres').textContent = data.nombres;#}
+                    {#document.getElementById('doctor-apellidos').textContent = data.apellidos;#}
                     document.getElementById('doctor-cedula').textContent = data.cedula;
                     document.getElementById('doctor-fecha-nacimiento').textContent = data.fecha_nacimiento;
                     document.getElementById('doctor-edad').textContent = `${data.edad} años`;

@@ -84,11 +84,11 @@
                                 {#                                <td>{{ item.estado }}</td>#}
                                 <td>
                                     {% if item.estado == 'P' %}
-                                        <i class="fa-brands fa-product-hunt fa-lg" style="color: #e1e102;"></i>
+                                        <i class="fa-brands fa-product-hunt fa-lg" style="color: #dfdf02;"></i>
                                     {% elif item.estado == 'C' %}
                                         <i class="fa-solid fa-copyright fa-lg" style="color: red;"></i>
                                     {% elif item.estado == 'R' %}
-                                        <i class="fa-solid fa-registered fa-lg" style="color: greenyellow;"></i>
+                                        <i class="fa-solid fa-registered fa-lg" style="color: green;"></i>
                                     {% else %}
                                         Estado desconocido
                                     {% endif %}
@@ -166,11 +166,11 @@
                     // Condicional para cambiar el estado con iconos y colores
                     let estadoHtml = '';
                     if (data.estado === 'Programada') {
-                        estadoHtml = '<i class="fa-brands fa-product-hunt" style="color: yellow"></i> Programada';
+                        estadoHtml = '<i class="fa-brands fa-product-hunt" style="color: #dfdf02"></i> Programada';
                     } else if (data.estado === 'Cancelada') {
                         estadoHtml = '<i class="fa-solid fa-registered" style="color: red"></i> Cancelada';
                     } else if (data.estado === 'Realizada') {
-                        estadoHtml = '<i class="fa-solid fa-copyright" style="color: greenyellow"></i> Realizada';
+                        estadoHtml = '<i class="fa-solid fa-registered fa-lg" style="color: green"></i> Realizada';
                     }
                     document.getElementById('citaMedica-estado').innerHTML = estadoHtml;
 

@@ -37,14 +37,6 @@ class CitaMedicaForm(ModelForm):
                                       "id": "id_fecha",
                                       "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"},
                                format='%Y-%m-%d'),
-      # "fecha": forms.DateInput(
-      #   attrs={
-      #     "placeholder": "Seleccionar la fecha de la cita",
-      #     "id": "id_fecha",
-      #     "type": "date",  # Este tipo permite el selector de fechas en navegadores modernos
-      #     "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-12 dark:bg-principal dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light",
-      #   }
-      # ),
 
       "hora_cita": forms.TimeInput(
         attrs={

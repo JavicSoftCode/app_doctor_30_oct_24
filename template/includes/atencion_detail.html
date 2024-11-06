@@ -1,143 +1,17 @@
-{#<div class="modal fade" id="modal-detalle-atencion" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">#}
-{#    <div class="modal-dialog modal-lg">#}
-{#        <div class="modal-content">#}
-{#            <div class="modal-header bg-primary bg-opacity-75">#}
-{#                <h5 class="modal-title text-white fw-bold" id="ModalLabel">#}
-{#                    <i class="fa-solid fa-file-medical me-2"></i> Detalles de la Atención#}
-{#                </h5>#}
-{#                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>#}
-{#            </div>#}
-{#            <div class="modal-body">#}
-{#                <div class="row">#}
-{#                    <!-- Columna izquierda: Información del paciente -->#}
-{#                    <div class="col-md-7">#}
-{#                        <img id="paciente-foto" src="" alt="Foto del Paciente" class="img-fluid rounded shadow-sm"#}
-{#                             style="max-height: 200px; width: auto;">#}
-{#                        <div class="mt-3">#}
-{#                            <p><strong><i class="fa-solid fa-hashtag fa-lg"></i> ID:</strong> <span id="paciente-id"></span></p>#}
-{#                            <p><strong><i class="fa-solid fa-user fa-lg"></i> foto:</strong> <span id="paciente-foto"></span></p>#}
-{#                            <p><strong><i class="fa-solid fa-user fa-lg"></i> Nombre:</strong> <span id="paciente-nombre"></span></p>#}
-{#                            <p><strong><i class="fa-solid fa-user-tie fa-lg"></i> Apellido:</strong> <span id="paciente-apellido"></span></p>#}
-{#                            <p><strong><i class="fa-solid fa-id-card fa-lg"></i> Cédula:</strong> <span id="paciente-cedula"></span></p>#}
-{#                            <p><strong><i class="fa-solid fa-envelope fa-lg"></i> Email:</strong> <span id="paciente-email"></span></p>#}
-{#                            <p><strong><i class="fa-solid fa-venus-mars fa-lg"></i> Sexo:</strong> <span id="paciente-sexo"></span></p>#}
-{#                            <p><strong><i class="fa-solid fa-calendar-alt fa-lg"></i> Fecha de Nacimiento:</strong> <span id="paciente-fecha-nacimiento"></span></p>#}
-{#                            <p><strong><i class="fas fa-birthday-cake me-2"></i> Edad:</strong> <span id="paciente-edad"></span></p>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <!-- Columna derecha: Información de la atención y diagnóstico -->#}
-{#                    <div class="col-md-5">#}
-{#                        <p><strong><i class="fa-solid fa-stethoscope fa-lg"></i> ID:</strong> <span id="atencion-id"></span></p>#}
-{#                        <p><strong><i class="fa-solid fa-stethoscope fa-lg"></i> Motivo de Consulta:</strong> <span id="atencion-motivo"></span></p>#}
-{#                        <p><strong><i class="fa-solid fa-file-medical fa-lg"></i> Tratamiento:</strong> <span id="atencion-tratamiento"></span></p>#}
-{#                        <p><strong><i class="fa-solid fa-comment-medical fa-lg"></i> Comentario:</strong> <span id="atencion-comentario"></span></p>#}
-{#                        <p><strong><i class="fa-solid fa-calendar-check fa-lg"></i> Fecha de Atención:</strong> <span id="atencion-fecha"></span></p>#}
-{#                        <p><strong><i class="fa-solid fa-notes-medical fa-lg"></i> Diagnóstico:</strong> <span id="atencion-diagnostico"></span></p>#}
-{#                    </div>#}
-{#                </div>#}
-{##}
-{#                <!-- Detalles de Medicamentos Recetados -->#}
-{#                <div class="mt-4">#}
-{#                    <h6><i class="fa-solid fa-pills fa-lg"></i> Medicamentos Recetados</h6>#}
-{#                    <div id="detalles-medicamentos">#}
-{#                        <!-- Aquí se agregarán los detalles de los medicamentos mediante JavaScript -->#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="modal-footer">#}
-{#                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">#}
-{#                    <i class="fas fa-times fa-lg"></i> Cerrar#}
-{#                </button>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{#</div>#}
-{##}
-{##}
-{#<div class="modal fade" id="modal-detalle-atencion" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">#}
-{#    <div class="modal-dialog modal-lg">#}
-{#        <div class="modal-content">#}
-{#            <!-- Encabezado del modal -->#}
-{#            <div class="modal-header bg-primary bg-opacity-75">#}
-{#                <h5 class="modal-title text-white fw-bold" id="ModalLabel">#}
-{#                    <i class="fa-solid fa-file-medical me-2"></i> Detalles de la Atención#}
-{#                </h5>#}
-{#                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>#}
-{#            </div>#}
-{##}
-{#            <!-- Cuerpo del modal -->#}
-{#            <div class="modal-body">#}
-{#                <!-- Información del Paciente y la Atención (Encabezado) -->#}
-{#                <div class="row mb-4 border-bottom pb-2">#}
-{#                    <div class="col-md-6">#}
-{#                        <style>p{margin-bottom: 10px}</style>#}
-{#                        <h6 class="fw-bold" style="margin-bottom: 12px"><i class="fa-solid fa-user me-2"></i>Información del Paciente</h6>#}
-{#                        <img id="paciente-foto" src="" alt="Foto del Paciente"#}
-{#                             class="img-fluid rounded shadow-sm" style="max-height: 200px; width: auto;">#}
-{#                        <p><strong>ID:</strong> <span id="paciente-id"></span></p>#}
-{#                        <p><strong>Nombre:</strong> <span id="paciente-nombre"></span></p>#}
-{#                        <p><strong>Apellido:</strong> <span id="paciente-apellido"></span></p>#}
-{#                        <p><strong>Cédula:</strong> <span id="paciente-cedula"></span></p>#}
-{#                        <p><strong>Email:</strong> <span id="paciente-email"></span></p>#}
-{#                        <p><strong>Sexo:</strong> <span id="paciente-sexo"></span></p>#}
-{#                        <p><strong>Fecha de Nacimiento:</strong> <span id="paciente-fecha-nacimiento"></span></p>#}
-{#                        <p><strong>Edad:</strong> <span id="paciente-edad"></span></p>#}
-{#                    </div>#}
-{##}
-{#                    <div class="col-md-6">#}
-{#                        <h6 class="fw-bold" style="margin-bottom: 12px"><i class="fa-solid fa-file-medical me-2"></i>Información de la Atención</h6>#}
-{#                        <p><strong>ID de Atención:</strong> <span id="atencion-id"></span></p>#}
-{#                        <p><strong>Fecha de Atención:</strong> <span id="atencion-fecha"></span></p>#}
-{#                        <p><strong>Motivo de Consulta:</strong> <span id="atencion-motivo"></span></p>#}
-{#                        <p><strong>Tratamiento:</strong> <span id="atencion-tratamiento"></span></p>#}
-{#                        <p><strong>Comentario:</strong> <span id="atencion-comentario"></span></p>#}
-{#                        <p><strong>Diagnóstico:</strong> <span id="atencion-diagnostico"></span></p>#}
-{#                    </div>#}
-{#                </div>#}
-{##}
-{#                <!-- Detalles de Medicamentos Recetados (Tabla de Detalles) -->#}
-{#                <div class="mt-4">#}
-{#                    <h6 class="fw-bold"><i class="fa-solid fa-pills fa-lg me-2"></i>Medicamentos Recetados</h6>#}
-{#                    <table class="table table-striped">#}
-{#                        <thead>#}
-{#                            <tr>#}
-{#                                <th>Medicamento</th>#}
-{#                                <th>Concentración</th>#}
-{#                                <th>Descripción</th>#}
-{#                                <th>Precio</th>#}
-{#                                <th>Cantidad</th>#}
-{#                                <th>Prescripción</th>#}
-{#                                <th>Duración</th>#}
-{#                                <th>Imagen</th>#}
-{#                            </tr>#}
-{#                        </thead>#}
-{#                        <tbody id="detalles-medicamentos">#}
-{#                            <!-- Aquí se agregarán los detalles de los medicamentos mediante JavaScript -->#}
-{#                        </tbody>#}
-{#                    </table>#}
-{#                </div>#}
-{#            </div>#}
-{##}
-{#            <!-- Pie del modal -->#}
-{#            <div class="modal-footer">#}
-{#                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">#}
-{#                    <i class="fas fa-times fa-lg"></i> Cerrar#}
-{#                </button>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{#</div>#}
+<style>
+    .scrollAtencion::-webkit-scrollbar {
+        width: 0;
+    }
 
-
-           <style>
-        .scrollAtencion::-webkit-scrollbar { width: 0; }
-                                                    p{
-                                                        margin-bottom: 5px;
-                                                    }
+    p {
+        margin-bottom: 5px;
+    }
 </style>
-<div class="modal fade " id="modal-detalle-atencion" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true" style="max-height: 100%; overflow-y: auto;" >
+<div class="modal fade " id="modal-detalle-atencion" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true"
+     style="max-height: 100%; overflow-y: auto;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content" style="width: 158.5%; margin-left: -14%">
+
             <!-- Encabezado del modal -->
             <div class="modal-header bg-primary bg-opacity-75">
                 <h5 class="modal-title text-white fw-bold" id="ModalLabel">
@@ -150,34 +24,49 @@
             <div class="modal-body">
                 <!-- Información del Paciente y la Atención (Encabezado) -->
                 <div class="row mb-4 border-bottom pb-2">
+
                     <!-- Columna izquierda: Foto del Paciente -->
                     <div class="col-md-4 text-center">
                         <img id="paciente-foto" src="" alt="Foto del Paciente"
-                             class="img-fluid rounded shadow-sm" style="max-height: 250px; width: auto;">
+                             class="img-fluid rounded shadow-sm" style="width: 350px; height: 250px; margin-left: 7%">
                     </div>
 
                     <!-- Columna central: Información del Paciente -->
                     <div class="col-md-4">
-                        <h6 class="fw-bold" style="margin-bottom: 12px"><i class="fa-solid fa-user me-2"></i>Información del Paciente</h6>
-                        <p><strong>Paciente ID:</strong> <span id="paciente-id"></span></p>
-                        <p><strong>Cédula:</strong> <span id="paciente-cedula"></span></p>
-                        <p><strong>Nombre:</strong> <span id="paciente-nombre"></span></p>
-                        <p><strong>Apellido:</strong> <span id="paciente-apellido"></span></p>
-                        <p><strong>Email:</strong> <span id="paciente-email"></span></p>
-                        <p><strong>Fecha de Nacimiento:</strong> <span id="paciente-fecha-nacimiento"></span></p>
-                        <p><strong>Edad:</strong> <span id="paciente-edad"></span></p>
-                        <p><strong>Sexo:</strong> <span id="paciente-sexo"></span></p>
+                        <h6 class="fw-bold" style="margin-bottom: 12px"><i class="fa-solid fa-user me-2"></i>Información
+                            del Paciente</h6>
+                        <p><strong><i class="fas fa-id-badge fa-lg me-2"></i>Paciente ID:</strong> <span
+                                id="paciente-id"></span></p>
+                        <p><strong><i class="fas fa-id-card fa-lg me-2"></i>Cédula:</strong> <span
+                                id="paciente-cedula"></span></p>
+                        <p><strong><i class="fa-solid fa-hospital-user fa-lg me-2"></i>Paciente:</strong> <span
+                                id="paciente-paciente"></span></p>
+                        <p><strong><i class="fas fa-envelope fa-lg me-2"></i>Email:</strong> <span
+                                id="paciente-email"></span></p>
+                        <p><strong><i class="fas fa-birthday-cake fa-lg me-2"></i>Fecha de Nacimiento:</strong> <span
+                                id="paciente-fecha-nacimiento"></span></p>
+                        <p><strong><i class="fas fa-calendar-alt fa-lg me-2"></i>Edad:</strong> <span
+                                id="paciente-edad"></span></p>
+                        <p><strong><i class="fas fa-venus-mars fa-lg me-2"></i>Sexo:</strong> <span
+                                id="paciente-sexo"></span></p>
                     </div>
 
                     <!-- Columna derecha: Información de la Atención -->
-                    <div class="col-md-4">
-                        <h6 class="fw-bold" style="margin-bottom: 12px"><i class="fa-solid fa-file-medical me-2"></i>Información de la Atención</h6>
-                        <p><strong>Atención ID:</strong> <span id="atencion-id"></span></p>
-                        <p><strong>Fecha de Atención:</strong> <span id="atencion-fecha"></span></p>
-                        <p><strong>Motivo de Consulta:</strong> <span id="atencion-motivo"></span></p>
-                        <p><strong>Tratamiento:</strong> <span id="atencion-tratamiento"></span></p>
-                        <p><strong>Comentario:</strong> <span id="atencion-comentario"></span></p>
-                        <p><strong>Diagnóstico:</strong> <span id="atencion-diagnostico"></span></p>
+                    <div class="col-md-4" style="margin-left: -7%">
+                        <h6 class="fw-bold" style="margin-bottom: 12px"><i class="fa-solid fa-circle-info fa-lg me-2"></i>Información
+                            de la Atención</h6>
+                        <p><strong><i class="fas fa-file-medical fa-lg me-2"></i>Atención ID:</strong> <span
+                                id="atencion-id"></span></p>
+                        <p><strong><i class="fas fa-calendar-day fa-lg me-2"></i>Fecha de Atención:</strong> <span
+                                id="atencion-fecha"></span></p>
+                        <p><strong><i class="fas fa-notes-medical fa-lg me-2"></i>Motivo de Consulta:</strong> <span
+                                id="atencion-motivo"></span></p>
+                        <p><strong><i class="fa-solid fa-stethoscope fa-lg me-2"></i>Tratamiento:</strong> <span
+                                id="atencion-tratamiento"></span></p>
+                        <p><strong><i class="fas fa-comment-medical fa-lg me-2"></i>Comentario:</strong> <span
+                                id="atencion-comentario"></span></p>
+                        <p><strong><i class="fas fa-diagnoses fa-lg me-2"></i>Diagnóstico:</strong> <span
+                                id="atencion-diagnostico"></span></p>
                     </div>
                 </div>
 
@@ -186,19 +75,19 @@
                     <h6 class="fw-bold"><i class="fa-solid fa-pills fa-lg me-2"></i>Medicamentos Recetados</h6>
                     <table class="table table-striped text-center">
                         <thead>
-                            <tr>
-                                <th>Imagen</th>
-                                <th>Medicamento</th>
-                                <th>Concentración</th>
-                                <th>Descripción</th>
-                                <th>Precio</th>
-                                <th>Cantidad</th>
-                                <th>Prescripción</th>
-                                <th>Duración</th>
-                            </tr>
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Medicamento</th>
+                            <th>Concentración</th>
+                            <th>Descripción</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Prescripción</th>
+                            <th>Duración</th>
+                        </tr>
                         </thead>
-                        <tbody id="detalles-medicamentos" >
-                            <!-- Aquí se agregarán los detalles de los medicamentos mediante JavaScript -->
+                        <tbody id="detalles-medicamentos">
+                        <!-- Aquí se agregarán los detalles de los medicamentos mediante JavaScript -->
                         </tbody>
                     </table>
                 </div>

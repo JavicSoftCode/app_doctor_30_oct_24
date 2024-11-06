@@ -150,7 +150,7 @@ class CitaMedicaDetailView(DetailView):
     citaMedica = self.get_object()
     data = {
       'id': citaMedica.id,
-      'paciente': citaMedica.paciente,
+      'paciente': citaMedica.paciente.nombre_completo,
       'fecha': citaMedica.fecha,
       'hora_cita': citaMedica.hora_cita,
       'estado': citaMedica.get_estado_display(),  # Muestra "Programada", "Cancelada" o "Realizada"

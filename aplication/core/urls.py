@@ -47,6 +47,7 @@ urlpatterns = [
   path('doctor_create/', DoctorCreateView.as_view(), name="doctor_create"),
   path('doctor_update/<int:pk>/', DoctorUpdateView.as_view(), name='doctor_update'),
   path('doctor_delete/<int:pk>/', DoctorDeleteView.as_view(), name='doctor_delete'),
+  path('doctorHorario_detail/<int:pk>/', DoctorHorarioDetailView.as_view(), name='doctorHorario_detail'),
   path('doctor_detail/<int:pk>/', DoctorDetailView.as_view(), name='doctor_detail'),
 
   # URLs de cargos
