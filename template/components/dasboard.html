@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/logo.webp' %}" type="image/x-icon">
+    <title>{{ title1 }}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <style>
+        .sidebar {
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            background: #0b5ed7;
+            font-weight: bold;
+            color: #ffffff;
+            transition: all 0.3s;
+            width: 245px;
+            scroll-behavior: smooth;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 0;
+        }
+
+        .sidebar .nav-link {
+            color: #ffffff;
+            padding: 10px 15px;
+            transition: all 0.3s;
+        }
+
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background: #3498db;
+        }
+
+        .content {
+            margin-left: 210px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 col-lg-2 px-0 sidebar">
+            <div class="text-center py-4">
+                <div class="d-flex flex-row justify-content-center align-items-center text-center">
+                    <img src="{% static 'img/logo.webp' %}" alt="Logo" class="mb-3 rounded-circle logoDashboard"
+                         width="30px">
+                </div>
+                <h3 class="title1">SaludSync</h3>
+                <h4 class="title2">Sistema Médico</h4>
+            </div>
+            <nav class="nav flex-column mt-3">
+                <a class="nav-link active" href="/"><i class="fas fa-home me-2"></i> Dashboard</a>
+
+                <!-- Sección Atención Médica -->
+                <a class="nav-link" href="{% url 'attention:atencion_list' %}"><i class="fas fa-procedures me-2"></i>
+                    Atención</a>
+                <a class="nav-link" href="{% url 'attention:citaMedica_list' %}"><i
+                        class="fas fa-calendar-check me-2"></i> Citas</a>
+
+                <!-- Sección Pacientes y Doctores -->
+                <a class="nav-link" href="{% url 'core:patient_list' %}"><i class="fas fa-user-injured me-2"></i>
+                    Pacientes</a>
+                <a class="nav-link" href="{% url 'core:doctor_list' %}"><i class="fa-solid fa-user-doctor me-2"></i>
+                    Doctores</a>
+
+                <!-- Sección Diagnósticos y Medicamentos -->
+                <a class="nav-link" href="{% url 'core:diagnosis_list' %}"><i
+                        class="fa-solid fa-notes-medical me-2"></i> Diagnósticos</a>
+                <a class="nav-link" href="{% url 'core:marcaMedicamento_list' %}"><i class="fa-solid fa-pills me-2"></i>
+                    Marca Medicamento</a>
+                <a class="nav-link" href="{% url 'core:medicine_list' %}"><i
+                        class="fa-solid fa-prescription-bottle me-2"></i> Medicamentos</a>
+                <a class="nav-link" href="{% url 'core:medicineType_list' %}"><i class="fa-solid fa-syringe me-2"></i>
+                    Tipo Medicamento</a>
+
+                <!-- Sección Especialidades y Otros -->
+                <a class="nav-link" href="{% url 'core:specialty_list' %}"><i class="fa-solid fa-stethoscope me-2"></i>
+                    Especialidades</a>
+                <a class="nav-link" href="{% url 'core:bloodType_list' %}"><i class="fas fa-tint me-2"></i> Tipo Sangre</a>
+                <a class="nav-link" href="{% url 'core:cargo_list' %}"><i class="fa-solid fa-user-tag me-2"></i>
+                    Cargo</a>
+                <a class="nav-link" href="{% url 'core:empleado_list' %}"><i class="fa-solid fa-user-tie me-2"></i>
+                    Empleado</a>
+
+                <!-- Sección Exámenes -->
+                <a class="nav-link" href="{% url 'core:categoryExamen_list' %}"><i class="fa-solid fa-vial me-2"></i>
+                    Categoría Examen</a>
+                <a class="nav-link" href="{% url 'attention:examenSolicitado_list' %}"><i
+                        class="fa-solid fa-microscope me-2"></i> Examen Solicitado</a>
+                <a class="nav-link" href="{% url 'core:categoryType_list' %}"><i class="fa-solid fa-tags me-2"></i> Tipo
+                    Categoría</a>
+                <a class="nav-link" href="{% url 'attention:serviciosAdicionales_list' %}"><i
+                        class="fa-solid fa-plus-square me-2"></i> Servicios Adicionales</a>
+
+                <!-- Sección Auditoría -->
+                <a class="nav-link" href="{% url 'core:auditUser_list' %}"><i class="fa-solid fa-user-shield me-2"></i>
+                    Auditoría Usuario</a>
+
+                <!-- Sección de Mantenimiento -->
+                <a class="nav-link" href="#"><i class="fas fa-tools me-2"></i> Mantenimiento</a>
+                <a class="nav-link" href="#">____________</a>
+            </nav>
+
+        </div>
+
+        {% block content %}
+
+        {% endblock content %}
+    </div>
+</div>
+
+<footer class="footer">
+    <span>© 2024 JavicSoftCode.</span>
+</footer>
+
+<script>
+    // Función para manejar la posición del dashboard
+    function handleDashboardPosition() {
+        // Obtener todos los enlaces del dashboard
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        // Obtener la última posición guardada
+        const lastClickedLink = localStorage.getItem('lastClickedDashboardLink');
+
+        // Si hay una posición guardada, encontrar y hacer scroll hasta ese elemento
+        if (lastClickedLink) {
+            const targetLink = document.querySelector(`a[href="${lastClickedLink}"]`);
+            if (targetLink) {
+                // Remover la clase active de todos los enlaces
+                navLinks.forEach(link => link.classList.remove('active'));
+                // Añadir la clase active al enlace guardado
+                targetLink.classList.add('active');
+                // Hacer scroll hasta el elemento
+                targetLink.scrollIntoView({behavior: 'instant', block: 'center'});
+            }
+        }
+
+        // Añadir event listeners a todos los enlaces
+        navLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                // Guardar la URL del enlace clickeado
+                localStorage.setItem('lastClickedDashboardLink', this.getAttribute('href'));
+
+                // Remover la clase active de todos los enlaces
+                navLinks.forEach(l => l.classList.remove('active'));
+                // Añadir la clase active al enlace clickeado
+                this.classList.add('active');
+            });
+        });
+    }
+
+    // Ejecutar cuando el DOM esté completamente cargado
+    document.addEventListener('DOMContentLoaded', handleDashboardPosition);
+
+    // Manejar la navegación del historial del navegador
+    window.addEventListener('popstate', handleDashboardPosition);
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

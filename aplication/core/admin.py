@@ -1,103 +1,119 @@
 from django.contrib import admin
+
 from aplication.core.models import (
-    MarcaMedicamento, TipoSangre, Paciente, Especialidad, Doctor, Cargo, Empleado, TipoMedicamento, 
-    Medicamento, Diagnostico, CategoriaExamen, TipoCategoria
+  TipoSangre, Paciente, Especialidad, Doctor, Cargo, Empleado, TipoMedicamento,
+  Medicamento, Diagnostico, CategoriaExamen, TipoCategoria, MarcaMedicamento, AuditUser
 )
+
+
+admin.site.register(AuditUser)
+
+
+# @admin.register(MarcaMedicamento)
+# class MarcaMedicamentoAdmin(admin.ModelAdmin):
+#   list_display = ('nombre', 'descripcion', 'activo')  # Muestra el nombre, la descripción y el estado activo en la lista
+#   search_fields = ('nombre',)  # Permite buscar por nombre
+#   list_filter = ('activo',)  # Agrega un filtro para el campo 'activo'
+#   list_editable = ('activo',)  # Permite editar el campo 'activo' directamente en la lista
+#   ordering = ('nombre',)  # Ordena por nombre de forma ascendente
+#   prepopulated_fields = {'descripcion': ('nombre',)}  # Prellena el campo de descripción con el nombre si es necesario
+#
 
 # Registro de TipoSangre
 @admin.register(TipoSangre)
 class TipoSangreAdmin(admin.ModelAdmin):
-    list_display = ('tipo', 'descripcion')
-    search_fields = ('tipo',)
+  list_display = ('tipo', 'descripcion')
+  search_fields = ('tipo',)
 
 
 # Registro de Paciente
 @admin.register(Paciente)
 class PacienteAdmin(admin.ModelAdmin):
-    list_display = ('nombres', 'apellidos', 'cedula', 'fecha_nacimiento', 'sexo', 'estado_civil')
-    search_fields = ('nombres', 'apellidos', 'cedula')
-    list_filter = ('sexo', 'estado_civil', 'tipo_sangre')
-    ordering = ['apellidos']
+  list_display = ('nombres', 'apellidos', 'cedula', 'fecha_nacimiento', 'sexo', 'estado_civil')
+  search_fields = ('nombres', 'apellidos', 'cedula')
+  list_filter = ('sexo', 'estado_civil', 'tipo_sangre')
+  ordering = ['apellidos']
 
-    
 
 # Registro de Especialidad
 @admin.register(Especialidad)
 class EspecialidadAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'descripcion')
-    search_fields = ('nombre',)
+  list_display = ('nombre', 'descripcion')
+  search_fields = ('nombre',)
 
 
 # Registro de Doctor
 @admin.register(Doctor)
 class DoctorAdmin(admin.ModelAdmin):
-    list_display = ('nombre_completo', 'cedula', 'codigoUnicoDoctor')
-    search_fields = ('nombres', 'apellidos', 'cedula', 'codigoUnicoDoctor')
-    list_filter = ('especialidad',)
-    
-    def nombre_completo(self, obj):
-        return obj.nombre_completo()
-    nombre_completo.short_description = "Nombre Completo"
+  list_display = ('nombre_completo', 'cedula', 'codigoUnicoDoctor')
+  search_fields = ('nombres', 'apellidos', 'cedula', 'codigoUnicoDoctor')
+  list_filter = ('especialidad',)
+
+  def nombre_completo(self, obj):
+    return obj.nombre_completo()
+
+  nombre_completo.short_description = "Nombre Completo"
 
 
 # Registro de Cargo
 @admin.register(Cargo)
 class CargoAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'descripcion')
-    search_fields = ('nombre',)
+  list_display = ('nombre', 'descripcion')
+  search_fields = ('nombre',)
 
 
 # Registro de Empleado
 @admin.register(Empleado)
 class EmpleadoAdmin(admin.ModelAdmin):
-    list_display = ('nombre_completo', 'cedula', 'cargo', 'sueldo')
-    search_fields = ('nombres', 'apellidos', 'cedula')
-    list_filter = ('cargo',)
-    
-    def nombre_completo(self, obj):
-        return obj.nombre_completo()
-    nombre_completo.short_description = "Nombre Completo"
+  list_display = ('nombre_completo', 'cedula', 'cargo', 'sueldo')
+  search_fields = ('nombres', 'apellidos', 'cedula')
+  list_filter = ('cargo',)
+
+  def nombre_completo(self, obj):
+    return obj.nombre_completo()
+
+  nombre_completo.short_description = "Nombre Completo"
 
 
 # Registro de TipoMedicamento
 @admin.register(TipoMedicamento)
 class TipoMedicamentoAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'descripcion')
-    search_fields = ('nombre',)
+  list_display = ('nombre', 'descripcion')
+  search_fields = ('nombre',)
 
 
 # Registro de Medicamento
 @admin.register(Medicamento)
 class MedicamentoAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'tipo', 'cantidad', 'precio', 'comercial')
-    search_fields = ('nombre', 'tipo__nombre')
-    list_filter = ('comercial', 'tipo')
+  list_display = ('nombre', 'tipo', 'cantidad', 'precio', 'comercial')
+  search_fields = ('nombre', 'tipo__nombre')
+  list_filter = ('comercial', 'tipo')
 
 
 # Registro de Diagnostico
 @admin.register(Diagnostico)
 class DiagnosticoAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'descripcion')
-    search_fields = ('codigo', 'descripcion')
-
-# Registro de Diagnostico
-@admin.register(MarcaMedicamento)
-class MarcaMedicamentoAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'descripcion')
-    search_fields = ('nombre',)
+  list_display = ('codigo', 'descripcion')
+  search_fields = ('codigo', 'descripcion')
 
 
 # Registro de CategoriaExamen
 @admin.register(CategoriaExamen)
 class CategoriaExamenAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'descripcion')
-    search_fields = ('nombre',)
+  list_display = ('nombre', 'descripcion')
+  search_fields = ('nombre',)
 
 
 # Registro de TipoCategoria
 @admin.register(TipoCategoria)
 class TipoCategoriaAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'categoria_examen')
-    search_fields = ('nombre', 'categoria_examen__nombre')
-    list_filter = ('categoria_examen',)
+  list_display = ('nombre', 'categoria_examen')
+  search_fields = ('nombre', 'categoria_examen__nombre')
+  list_filter = ('categoria_examen',)
 
+
+# Segundo registro de MarcaMedicamento (eliminando este bloque)
+@admin.register(MarcaMedicamento)
+class MarcaMedicamentoAdmin(admin.ModelAdmin):
+  list_display = ('nombre', 'descripcion')
+  search_fields = ('nombre',)

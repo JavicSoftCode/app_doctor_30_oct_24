@@ -1,0 +1,218 @@
+{% extends 'components/dasboard.html' %}
+{% block content %}
+    <div class="col-md-9 col-lg-10 px-md-4 main-content">
+        {% include 'includes/top.html' %}
+        {% include 'includes/errosForms.html' %}
+        <div class="card mb-4">
+            <div class="card-body">
+
+                <form method="POST" enctype="multipart/form-data" id="atencionForm">
+                    {% csrf_token %}
+                    <h1 class="text-center text-primary mb-4" style="font-weight: bold;font-size: 25px">
+                        {{ title1 }}
+                    </h1>
+
+                    <div class="row mb-4">
+                        <div class="col-md-3 form-group">
+                            <label for="{{ form.paciente.id_for_label }}" class="form-label fw-bold">
+                                {{ form.paciente.label }}
+                            </label>
+                            {{ form.paciente }}
+                            {% if form.paciente.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.paciente.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-2 form-group">
+                            <label for="{{ form.motivo_consulta.id_for_label }}" class="form-label fw-bold">
+                                {{ form.motivo_consulta.label }}
+                            </label>
+                            {{ form.motivo_consulta }}
+                            {% if form.motivo_consulta.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.motivo_consulta.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-2 form-group">
+                            <label for="{{ form.tratamiento.id_for_label }}" class="form-label fw-bold">
+                                {{ form.tratamiento.label }}
+                            </label>
+                            {{ form.tratamiento }}
+                            {% if form.tratamiento.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.tratamiento.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-2 form-group">
+                            <label for="{{ form.comentario.id_for_label }}" class="form-label fw-bold">
+                                {{ form.comentario.label }}
+                            </label>
+                            {{ form.comentario }}
+                            {% if form.comentario.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.comentario.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-3 form-group">
+                            <label for="{{ form.diagnostico.id_for_label }}" class="form-label fw-bold">
+                                {{ form.diagnostico.label }}
+                            </label>
+                            <div class="especialidadMultiple" style="max-height: 270px; overflow-y: auto; ">
+                                {{ form.diagnostico }}
+                            </div>
+                            {% if form.diagnostico.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.diagnostico.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="contenedorTABLA" style="width: 74%; margin-top: -15%">
+                        <div class="table-responsive">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h2 class="h5 fw-bold m-0">Detalles de Atención</h2>
+                                <button type="button" class="btn btn-success btn-sm" id="addDetail">
+                                    <i class="fas fa-plus"></i> Agregar Detalle
+                                </button>
+                            </div>
+                            {{ formset.management_form }}
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Medicamento</th>
+                                    <th>Cantidad</th>
+                                    <th>Descripción</th>
+                                    <th>Duración (días)</th>
+                                    <th width="50">Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody id="detalleContainer">
+                                {% for form in formset %}
+                                    {% if not form.DELETE.value %}
+                                        {{ form.id }}
+                                        <tr class="detalle-item">
+                                            <td>
+                                                {{ form.medicamento }}
+                                                {% if form.medicamento.errors %}
+                                                    <div class="invalid-feedback d-block">
+                                                        {{ form.medicamento.errors }}
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {{ form.cantidad }}
+                                                {% if form.cantidad.errors %}
+                                                    <div class="invalid-feedback d-block">
+                                                        {{ form.cantidad.errors }}
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {{ form.prescripcion }}
+                                                {% if form.prescripcion.errors %}
+                                                    <div class="invalid-feedback d-block">
+                                                        {{ form.prescripcion.errors }}
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {{ form.duracion_tratamiento }}
+                                                {% if form.duracion_tratamiento.errors %}
+                                                    <div class="invalid-feedback d-block">
+                                                        {{ form.duracion_tratamiento.errors }}
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-danger btn-sm remove-detail">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                            </td>
+                                            <td style="display: none;">{{ form.DELETE }}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <template id="row-template">
+                                <tr class="detalle-item">
+                                    <td>{{ formset.empty_form.medicamento }}</td>
+                                    <td>{{ formset.empty_form.cantidad }}</td>
+                                    <td>{{ formset.empty_form.prescripcion }}</td>
+                                    <td>{{ formset.empty_form.duracion_tratamiento }}</td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-danger btn-sm remove-detail">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-4">
+                        <button class="btn btn-primary me-2" type="submit">{{ grabar }}</button>
+                        <a class="btn btn-secondary" href="{{ back_url }}">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const addDetailBtn = document.getElementById('addDetail');
+            const detalleContainer = document.getElementById('detalleContainer');
+            const rowTemplate = document.getElementById('row-template');
+            const totalFormsInput = document.querySelector('[name$="-TOTAL_FORMS"]');
+            let formCount = parseInt(totalFormsInput.value);
+
+            function addNewRow() {
+                const newRow = rowTemplate.content.cloneNode(true);
+                newRow.querySelectorAll('input, select').forEach(element => {
+                    element.name = element.name.replace('__prefix__', formCount);
+                    element.id = element.id.replace('__prefix__', formCount);
+                });
+                detalleContainer.appendChild(newRow);
+                formCount++;
+                totalFormsInput.value = formCount;
+            }
+
+            addDetailBtn.addEventListener('click', addNewRow);
+
+            detalleContainer.addEventListener('click', function (e) {
+                if (e.target.closest('.remove-detail')) {
+                    const row = e.target.closest('.detalle-item');
+                    const deleteCheckbox = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
+                    if (deleteCheckbox) {
+                        deleteCheckbox.checked = true;
+                        row.style.display = 'none';
+                    } else {
+                        row.remove();
+                        formCount--;
+                        totalFormsInput.value = formCount;
+                    }
+                }
+            });
+
+            // Limpiar errores al cambiar valores
+            const form = document.getElementById('atencionForm');
+            form.querySelectorAll('input, select, textarea').forEach(element => {
+                element.addEventListener('change', function () {
+                    const errorDiv = this.parentElement.querySelector('.invalid-feedback');
+                    if (errorDiv) {
+                        errorDiv.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock content %}

@@ -1,0 +1,865 @@
+{% extends 'components/dasboard.html' %}
+{% block content %}
+    {% load static %}
+
+    <!-- Main Content -->
+    <div class="col-md-9 col-lg-10 px-md-4 main-content">
+
+        <!-- Top Navbar -->
+        {% include 'includes/top.html' %}
+
+        <!-- Mensajes de ERRORES -->
+        {% include 'includes/errosForms.html' %}
+        <div class="card mb-4">
+
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data" class="row">
+                    {% csrf_token %}
+
+                    <h1 class="text-center text-primary mb-4"
+                        style="font-weight: bold;font-size: 25px">{{ title1 }}</h1>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ form.paciente.id_for_label }}"
+                                   class="form-label fw-bold">{{ form.paciente.label }}</label>
+                            {{ form.paciente }}
+                            {{ form.paciente.errors }}
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.fecha.id_for_label }}"
+                                   class="form-label fw-bold">{{ form.fecha.label }}</label>
+                            {{ form.fecha }}
+                            {{ form.fecha.errors }}
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ form.hora_cita.id_for_label }}"
+                                   class="form-label fw-bold">{{ form.hora_cita.label }}</label>
+                            {{ form.hora_cita }}
+                            {{ form.hora_cita.errors }}
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ form.estado.id_for_label }}"
+                                   class="form-label fw-bold">{{ form.estado.label }}</label>
+                            {{ form.estado }}
+                            {{ form.estado.errors }}
+                        </div>
+
+                        <div class="d-flex justify-content-end mt-4">
+                            <button class="btn me-2 grabar" type="submit">{{ grabar }}</button>
+                            <a class="btn btn-secondary cancelar" href="{{ back_url }}">Cancelar</a>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock content %}
+
+
+{#-------------------------------------------------------------------------------------------------#}
+{#{% extends 'components/dasboard.html' %}#}
+{#{% block content %}#}
+{#    {% load static %}#}
+{##}
+{#    <!-- Main Content -->#}
+{#    <div class="col-md-9 col-lg-10 px-md-4 main-content">#}
+{##}
+{#        <!-- Top Navbar -->#}
+{#        {% include 'includes/top.html' %}#}
+{##}
+{#        <!-- Mensajes de ERRORES -->#}
+{#        {% include 'includes/errosForms.html' %}#}
+{#        <div class="card mb-4">#}
+{##}
+{#            <div class="card-body">#}
+{#                <form method="POST" enctype="multipart/form-data" class="row" id="citaForm">#}
+{#                    {% csrf_token %}#}
+{##}
+{#                    <h1 class="text-center text-primary mb-4"#}
+{#                        style="font-weight: bold;font-size: 25px">{{ title1 }}</h1>#}
+{##}
+{#                    <div class="col-md-6">#}
+{#                        <div class="form-group">#}
+{#                            <label for="{{ form.paciente.id_for_label }}"#}
+{#                                   class="form-label fw-bold">{{ form.paciente.label }}</label>#}
+{#                            {{ form.paciente }}#}
+{#                            {{ form.paciente.errors }}#}
+{#                        </div>#}
+{##}
+{#                        <!-- Cabecera dinámica del calendario -->#}
+{#                        <div class="calendar-header d-flex justify-content-between my-3">#}
+{#                            <span id="currentMonth"></span>#}
+{#                            <span id="currentTime"></span>#}
+{#                        </div>#}
+{##}
+{#                        <h2 class="text-center mt-4">Ingresar Cita</h2>#}
+{##}
+{#                        <!-- Tabla de selección de días y horas -->#}
+{#                        <table class="calendar-table w-100 table-bordered text-center">#}
+{#                            <thead>#}
+{#                                <tr>#}
+{#                                    <th>Horas</th>#}
+{#                                    <th>Lunes</th>#}
+{#                                    <th>Martes</th>#}
+{#                                    <th>Miércoles</th>#}
+{#                                    <th>Jueves</th>#}
+{#                                    <th>Viernes</th>#}
+{#                                    <th>Sábado</th>#}
+{#                                </tr>#}
+{#                            </thead>#}
+{#                            <tbody id="timeSlots">#}
+{#                                <!-- Filas de horas generadas con JavaScript -->#}
+{#                            </tbody>#}
+{#                        </table>#}
+{##}
+{#                        <!-- Campo oculto para almacenar el día y hora seleccionados -->#}
+{#                        <input type="hidden" name="fecha" id="selectedDate">#}
+{#                        <input type="hidden" name="hora_cita" id="selectedTime">#}
+{##}
+{#                    </div>#}
+{##}
+{#                    <div class="col-md-6">#}
+{#                        <div class="form-group">#}
+{#                            <label for="{{ form.estado.id_for_label }}"#}
+{#                                   class="form-label fw-bold">{{ form.estado.label }}</label>#}
+{#                            {{ form.estado }}#}
+{#                            {{ form.estado.errors }}#}
+{#                        </div>#}
+{##}
+{#                        <div class="d-flex justify-content-end mt-4">#}
+{#                            <button class="btn btn-primary me-2 grabar" type="button" onclick="guardarCita()">{{ grabar }}</button>#}
+{#                            <a class="btn btn-secondary cancelar" href="{{ back_url }}">Cancelar</a>#}
+{#                        </div>#}
+{#                    </div>#}
+{##}
+{#                </form>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <style>#}
+{#        .calendar-table {#}
+{#            border-collapse: collapse;#}
+{#            margin-top: 10px;#}
+{#        }#}
+{#        .calendar-table th, .calendar-table td {#}
+{#            padding: 10px;#}
+{#        }#}
+{#        .calendar-table th {#}
+{#            background-color: #f4f4f4;#}
+{#        }#}
+{#        .calendar-table td {#}
+{#            background-color: #e8f0fe;#}
+{#        }#}
+{#        .calendar-table input[type="checkbox"] {#}
+{#            transform: scale(1.2);#}
+{#        }#}
+{#        .selected-cell {#}
+{#            background-color: #4CAF50;#}
+{#            color: white;#}
+{#        }#}
+{#    </style>#}
+{##}
+{#    <script>#}
+{#    // Actualización de la cabecera con el mes y hora actual en tiempo real#}
+{#    function updateHeader() {#}
+{#        const now = new Date();#}
+{#        const month = now.toLocaleString('es-ES', { month: 'long', year: 'numeric' });#}
+{#        const time = now.toLocaleTimeString('es-ES');#}
+{#        document.getElementById('currentMonth').textContent = `Mes actual: ${month}`;#}
+{#        document.getElementById('currentTime').textContent = `Hora actual: ${time}`;#}
+{#    }#}
+{#    setInterval(updateHeader, 1000);#}
+{##}
+{#    // Generar las filas de horas en la tabla con checkboxes#}
+{#    const hours = [#}
+{#        { label: "8AM-9AM", value: "08:00" },#}
+{#        { label: "9AM-10AM", value: "09:00" },#}
+{#        { label: "10AM-11AM", value: "10:00" },#}
+{#        { label: "11AM-12PM", value: "11:00" },#}
+{#        { label: "1PM-2PM", value: "13:00" },#}
+{#        { label: "2PM-3PM", value: "14:00" },#}
+{#        { label: "3PM-4PM", value: "15:00" },#}
+{#        { label: "4PM-5PM", value: "16:00" }#}
+{#    ];#}
+{#    const timeSlots = document.getElementById('timeSlots');#}
+{##}
+{#    hours.forEach(hour => {#}
+{#        const row = document.createElement('tr');#}
+{##}
+{#        // Columna de horas#}
+{#        const hourCell = document.createElement('td');#}
+{#        hourCell.textContent = hour.label;#}
+{#        row.appendChild(hourCell);#}
+{##}
+{#        // Generar celdas con checkbox para cada día#}
+{#        for (let day = 0; day < 6; day++) {  // Seis días de lunes a sábado#}
+{#            const cell = document.createElement('td');#}
+{#            const checkbox = document.createElement('input');#}
+{#            checkbox.type = 'checkbox';#}
+{#            checkbox.dataset.day = day;#}
+{#            checkbox.dataset.hour = hour.value; // Hora en formato 24h#}
+{#            checkbox.onclick = () => selectSlot(checkbox);#}
+{#            cell.appendChild(checkbox);#}
+{#            row.appendChild(cell);#}
+{#        }#}
+{#        timeSlots.appendChild(row);#}
+{#    });#}
+{##}
+{#    // Variables para controlar la selección#}
+{#    let selectedCheckbox = null;#}
+{##}
+{#    // Función para manejar la selección de un intervalo de tiempo#}
+{#    function selectSlot(checkbox) {#}
+{#        if (selectedCheckbox && selectedCheckbox !== checkbox) {#}
+{#            selectedCheckbox.checked = false;#}
+{#        }#}
+{#        selectedCheckbox = checkbox.checked ? checkbox : null;#}
+{##}
+{#        if (selectedCheckbox) {#}
+{#            const selectedDate = new Date();#}
+{#            selectedDate.setDate(selectedDate.getDate() + (selectedCheckbox.dataset.day - selectedDate.getDay()));#}
+{#            document.getElementById("selectedDate").value = selectedDate.toISOString().split('T')[0];#}
+{#            document.getElementById("selectedTime").value = selectedCheckbox.dataset.hour;#}
+{#        } else {#}
+{#            document.getElementById("selectedDate").value = "";#}
+{#            document.getElementById("selectedTime").value = "";#}
+{#        }#}
+{#    }#}
+{##}
+{#    // Función para guardar la cita seleccionada#}
+{#    function guardarCita() {#}
+{#        const selectedDate = document.getElementById("selectedDate").value;#}
+{#        const selectedTime = document.getElementById("selectedTime").value;#}
+{##}
+{#        if (selectedDate && selectedTime) {#}
+{#            alert(`Cita guardada para el día ${selectedDate} a la hora ${selectedTime}.`);#}
+{#            document.getElementById("citaForm").submit();#}
+{#        } else {#}
+{#            alert("Selecciona un día y una hora antes de guardar.");#}
+{#        }#}
+{#    }#}
+{#    </script>#}
+{#{% endblock content %}#}
+
+{#----------------------------------------------------------------------#}
+{##}
+{#{% extends 'components/dasboard.html' %}#}
+{#{% block content %}#}
+{#    {% load static %}#}
+{##}
+{#    <!-- Main Content -->#}
+{#    <div class="col-md-9 col-lg-10 px-md-4 main-content">#}
+{##}
+{#        <!-- Top Navbar -->#}
+{#        {% include 'includes/top.html' %}#}
+{##}
+{#        <!-- Mensajes de ERRORES -->#}
+{#        {% include 'includes/errosForms.html' %}#}
+{#        <div class="card mb-4">#}
+{##}
+{#            <div class="card-body">#}
+{#                <form method="POST" enctype="multipart/form-data" class="row" id="citaForm">#}
+{#                    {% csrf_token %}#}
+{##}
+{#                    <h1 class="text-center text-primary mb-4"#}
+{#                        style="font-weight: bold;font-size: 25px">{{ title1 }}</h1>#}
+{##}
+{#                    <div class="col-md-6">#}
+{#                        <div class="form-group">#}
+{#                            <label for="{{ form.paciente.id_for_label }}"#}
+{#                                   class="form-label fw-bold">{{ form.paciente.label }}</label>#}
+{#                            {{ form.paciente }}#}
+{#                            {{ form.paciente.errors }}#}
+{#                        </div>#}
+{##}
+{#                        <!-- Cabecera dinámica del calendario -->#}
+{#                        <div class="calendar-header d-flex justify-content-between my-3">#}
+{#                            <div>#}
+{#                                <label for="monthSelect">Mes:</label>#}
+{#                                <select id="monthSelect" onchange="updateSelectedDate()"></select>#}
+{#                            </div>#}
+{#                            <div>#}
+{#                                <label for="yearSelect">Año:</label>#}
+{#                                <select id="yearSelect" onchange="updateSelectedDate()"></select>#}
+{#                            </div>#}
+{#                            <span id="currentTime"></span>#}
+{#                        </div>#}
+{##}
+{#                        <h2 class="text-center mt-4">Ingresar Cita</h2>#}
+{##}
+{#                        <!-- Tabla de selección de días y horas -->#}
+{#                        <table class="calendar-table w-100 table-bordered text-center">#}
+{#                            <thead>#}
+{#                                <tr>#}
+{#                                    <th>Horas</th>#}
+{#                                    <th>Lunes</th>#}
+{#                                    <th>Martes</th>#}
+{#                                    <th>Miércoles</th>#}
+{#                                    <th>Jueves</th>#}
+{#                                    <th>Viernes</th>#}
+{#                                    <th>Sábado</th>#}
+{#                                </tr>#}
+{#                            </thead>#}
+{#                            <tbody id="timeSlots">#}
+{#                                <!-- Filas de horas generadas con JavaScript -->#}
+{#                            </tbody>#}
+{#                        </table>#}
+{##}
+{#                        <!-- Campo oculto para almacenar el día y hora seleccionados -->#}
+{#                        <input type="hidden" name="fecha" id="selectedDate">#}
+{#                        <input type="hidden" name="hora_cita" id="selectedTime">#}
+{##}
+{#                    </div>#}
+{##}
+{#                    <div class="col-md-6">#}
+{#                        <div class="form-group">#}
+{#                            <label for="{{ form.estado.id_for_label }}"#}
+{#                                   class="form-label fw-bold">{{ form.estado.label }}</label>#}
+{#                            {{ form.estado }}#}
+{#                            {{ form.estado.errors }}#}
+{#                        </div>#}
+{##}
+{#                        <div class="d-flex justify-content-end mt-4">#}
+{#                            <button class="btn btn-primary me-2 grabar" type="button" onclick="guardarCita()">{{ grabar }}</button>#}
+{#                            <a class="btn btn-secondary cancelar" href="{{ back_url }}">Cancelar</a>#}
+{#                        </div>#}
+{#                    </div>#}
+{##}
+{#                </form>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <style>#}
+{#        .calendar-table {#}
+{#            border-collapse: collapse;#}
+{#            margin-top: 10px;#}
+{#        }#}
+{#        .calendar-table th, .calendar-table td {#}
+{#            padding: 10px;#}
+{#        }#}
+{#        .calendar-table th {#}
+{#            background-color: #f4f4f4;#}
+{#        }#}
+{#        .calendar-table td {#}
+{#            background-color: #e8f0fe;#}
+{#        }#}
+{#        .calendar-table input[type="checkbox"] {#}
+{#            transform: scale(1.2);#}
+{#        }#}
+{#        .selected-cell {#}
+{#            background-color: #4CAF50;#}
+{#            color: white;#}
+{#        }#}
+{#    </style>#}
+{##}
+{#    <script>#}
+{#    // Función para inicializar selects de mes y año con valores predeterminados#}
+{#    function initializeDateSelects() {#}
+{#        const monthSelect = document.getElementById('monthSelect');#}
+{#        const yearSelect = document.getElementById('yearSelect');#}
+{#        const now = new Date();#}
+{#        const currentMonth = now.getMonth(); // 0 = Enero, 11 = Diciembre#}
+{#        const currentYear = now.getFullYear();#}
+{##}
+{#        // Opciones de meses#}
+{#        const months = [#}
+{#            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",#}
+{#            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"#}
+{#        ];#}
+{#        months.forEach((month, index) => {#}
+{#            const option = document.createElement('option');#}
+{#            option.value = index;#}
+{#            option.textContent = month;#}
+{#            if (index === currentMonth) option.selected = true;#}
+{#            monthSelect.appendChild(option);#}
+{#        });#}
+{##}
+{#        // Opciones de años (5 años antes y 5 años después del actual)#}
+{#        for (let i = currentYear - 5; i <= currentYear + 5; i++) {#}
+{#            const option = document.createElement('option');#}
+{#            option.value = i;#}
+{#            option.textContent = i;#}
+{#            if (i === currentYear) option.selected = true;#}
+{#            yearSelect.appendChild(option);#}
+{#        }#}
+{#    }#}
+{##}
+{#    // Actualización de la cabecera de la hora en tiempo real#}
+{#    function updateHeader() {#}
+{#        const time = new Date().toLocaleTimeString('es-ES');#}
+{#        document.getElementById('currentTime').textContent = `Hora actual: ${time}`;#}
+{#    }#}
+{#    setInterval(updateHeader, 1000);#}
+{##}
+{#    // Generar las filas de horas en la tabla con checkboxes#}
+{#    const hours = [#}
+{#        { label: "8AM-9AM", value: "08:00" },#}
+{#        { label: "9AM-10AM", value: "09:00" },#}
+{#        { label: "10AM-11AM", value: "10:00" },#}
+{#        { label: "11AM-12PM", value: "11:00" },#}
+{#        { label: "1PM-2PM", value: "13:00" },#}
+{#        { label: "2PM-3PM", value: "14:00" },#}
+{#        { label: "3PM-4PM", value: "15:00" },#}
+{#        { label: "4PM-5PM", value: "16:00" }#}
+{#    ];#}
+{#    const timeSlots = document.getElementById('timeSlots');#}
+{##}
+{#    hours.forEach(hour => {#}
+{#        const row = document.createElement('tr');#}
+{##}
+{#        // Columna de horas#}
+{#        const hourCell = document.createElement('td');#}
+{#        hourCell.textContent = hour.label;#}
+{#        row.appendChild(hourCell);#}
+{##}
+{#        // Generar celdas con checkbox para cada día#}
+{#        for (let day = 0; day < 6; day++) {  // Seis días de lunes a sábado#}
+{#            const cell = document.createElement('td');#}
+{#            const checkbox = document.createElement('input');#}
+{#            checkbox.type = 'checkbox';#}
+{#            checkbox.dataset.day = day;#}
+{#            checkbox.dataset.hour = hour.value; // Hora en formato 24h#}
+{#            checkbox.onclick = () => selectSlot(checkbox);#}
+{#            cell.appendChild(checkbox);#}
+{#            row.appendChild(cell);#}
+{#        }#}
+{#        timeSlots.appendChild(row);#}
+{#    });#}
+{##}
+{#    // Variables para controlar la selección#}
+{#    let selectedCheckbox = null;#}
+{##}
+{#    // Función para manejar la selección de un intervalo de tiempo#}
+{#    function selectSlot(checkbox) {#}
+{#        if (selectedCheckbox && selectedCheckbox !== checkbox) {#}
+{#            selectedCheckbox.checked = false;#}
+{#        }#}
+{#        selectedCheckbox = checkbox.checked ? checkbox : null;#}
+{##}
+{#        if (selectedCheckbox) {#}
+{#            const selectedMonth = document.getElementById("monthSelect").value;#}
+{#            const selectedYear = document.getElementById("yearSelect").value;#}
+{#            const selectedDate = new Date(selectedYear, selectedMonth, new Date().getDate());#}
+{#            selectedDate.setDate(selectedDate.getDate() + (selectedCheckbox.dataset.day - selectedDate.getDay()));#}
+{#            document.getElementById("selectedDate").value = selectedDate.toISOString().split('T')[0];#}
+{#            document.getElementById("selectedTime").value = selectedCheckbox.dataset.hour;#}
+{#        } else {#}
+{#            document.getElementById("selectedDate").value = "";#}
+{#            document.getElementById("selectedTime").value = "";#}
+{#        }#}
+{#    }#}
+{##}
+{#    // Función para guardar la cita seleccionada#}
+{#    function guardarCita() {#}
+{#        const selectedDate = document.getElementById("selectedDate").value;#}
+{#        const selectedTime = document.getElementById("selectedTime").value;#}
+{##}
+{#        if (selectedDate && selectedTime) {#}
+{#            alert(`Cita guardada para el día ${selectedDate} a la hora ${selectedTime}.`);#}
+{#            document.getElementById("citaForm").submit();#}
+{#        } else {#}
+{#            alert("Selecciona un día y una hora antes de guardar.");#}
+{#        }#}
+{#    }#}
+{##}
+{#    // Llamada inicial para configurar los selects#}
+{#    initializeDateSelects();#}
+{#    </script>#}
+{#{% endblock content %}#}
+
+{#<style>#}
+{#    select#daySelect::-webkit-scrollbar {#}
+{#        width: 0;#}
+{#    }#}
+{#</style>#}
+{#{% extends 'components/dasboard.html' %}#}
+{#{% block content %}#}
+{#    {% load static %}#}
+{##}
+{#    <!-- Main Content -->#}
+{#    <div class="col-md-9 col-lg-10 px-md-4 main-content">#}
+{##}
+{#        <!-- Top Navbar -->#}
+{#        {% include 'includes/top.html' %}#}
+{##}
+{#        <!-- Mensajes de ERRORES -->#}
+{#        {% include 'includes/errosForms.html' %}#}
+{#        <div class="card mb-4">#}
+{##}
+{#            <div class="card-body">#}
+{#                <form method="POST" enctype="multipart/form-data" class="row" id="citaForm">#}
+{#                    {% csrf_token %}#}
+{##}
+{#                    <h1 class="text-center text-primary mb-4"#}
+{#                        style="font-weight: bold;font-size: 25px">{{ title1 }}</h1>#}
+{##}
+{#                    <div class="col-md-6">#}
+{#                        <div class="form-group">#}
+{#                            <label for="{{ form.paciente.id_for_label }}"#}
+{#                                   class="form-label fw-bold">{{ form.paciente.label }}</label>#}
+{#                            {{ form.paciente }}#}
+{#                            {{ form.paciente.errors }}#}
+{#                        </div>#}
+{##}
+{#                        <!-- Título y tabla para seleccionar horas de atención -->#}
+{#                        <h2 class="text-center mt-4" style="font-size: 22px; font-weight: bold">Horas de Atención</h2>#}
+{##}
+{#                        <table class="calendar-table w-100 table-bordered text-center">#}
+{#                            <thead>#}
+{#                            <tr>#}
+{#                                <th>Horas</th>#}
+{#                                <th>#}
+{#                                    <div class="mb-2">#}
+{#                                        <label for="yearSelect">Año:</label>#}
+{#                                        <select id="yearSelect" onchange="updateDays()"></select>#}
+{#                                    </div>#}
+{#                                </th>#}
+{#                                <th>#}
+{#                                    <div class="mb-2">#}
+{#                                        <label for="monthSelect">Mes:</label>#}
+{#                                        <select id="monthSelect" onchange="updateDays()"></select>#}
+{#                                    </div>#}
+{#                                </th>#}
+{#                                <th>#}
+{#                                    <div class="mb-2">#}
+{#                                        <label for="daySelect">Día:</label>#}
+{#                                        <select id="daySelect"></select>#}
+{#                                    </div>#}
+{#                                </th>#}
+{#                            </tr>#}
+{#                            </thead>#}
+{#                            <tbody id="timeSlots">#}
+{#                            <!-- Filas de horas generadas con JavaScript -->#}
+{#                            </tbody>#}
+{#                        </table>#}
+{##}
+{#                        <!-- Campo oculto para almacenar el día y hora seleccionados -->#}
+{#                        <input type="hidden" name="fecha" id="selectedDate">#}
+{#                        <input type="hidden" name="hora_cita" id="selectedTime">#}
+{##}
+{#                    </div>#}
+{##}
+{#                    <div class="col-md-6">#}
+{#                        <div class="form-group">#}
+{#                            <label for="{{ form.estado.id_for_label }}"#}
+{#                                   class="form-label fw-bold">{{ form.estado.label }}</label>#}
+{#                            {{ form.estado }}#}
+{#                            {{ form.estado.errors }}#}
+{#                        </div>#}
+{##}
+{#                        <div class="d-flex justify-content-end mt-4">#}
+{#                            <button class="btn btn-primary me-2 grabar" type="button"#}
+{#                                    onclick="guardarCita()">{{ grabar }}</button>#}
+{#                            <a class="btn btn-secondary cancelar" href="{{ back_url }}">Cancelar</a>#}
+{#                        </div>#}
+{#                    </div>#}
+{##}
+{#                </form>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    <style>#}
+{#        .calendar-table {#}
+{#            border-collapse: collapse;#}
+{#            margin-top: 10px;#}
+{#        }#}
+{##}
+{#        .calendar-table th, .calendar-table td {#}
+{#            padding: 10px;#}
+{#        }#}
+{##}
+{#        .calendar-table th {#}
+{#            background-color: #f4f4f4;#}
+{#        }#}
+{##}
+{#        .calendar-table td {#}
+{#            background-color: #e8f0fe;#}
+{#        }#}
+{##}
+{#        .calendar-table input[type="checkbox"] {#}
+{#            transform: scale(1.2);#}
+{#        }#}
+{##}
+{#        .selected-cell {#}
+{#            background-color: #4CAF50;#}
+{#            color: white;#}
+{#        }#}
+{#    </style>#}
+{##}
+{#    <script>#}
+{#        // Inicializar selects de año, mes y día#}
+{#        function initializeDateSelects() {#}
+{#            const monthSelect = document.getElementById('monthSelect');#}
+{#            const yearSelect = document.getElementById('yearSelect');#}
+{#            const now = new Date();#}
+{#            const currentMonth = now.getMonth();#}
+{#            const currentYear = now.getFullYear();#}
+{##}
+{#            // Opciones de meses#}
+{#            const months = [#}
+{#                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",#}
+{#                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"#}
+{#            ];#}
+{#            months.forEach((month, index) => {#}
+{#                const option = document.createElement('option');#}
+{#                option.value = index;#}
+{#                option.textContent = month;#}
+{#                if (index === currentMonth) option.selected = true;#}
+{#                monthSelect.appendChild(option);#}
+{#            });#}
+{##}
+{#            // Opciones de años (5 años antes y 5 años después del actual)#}
+{#            for (let i = currentYear - 5; i <= currentYear + 5; i++) {#}
+{#                const option = document.createElement('option');#}
+{#                option.value = i;#}
+{#                option.textContent = i;#}
+{#                if (i === currentYear) option.selected = true;#}
+{#                yearSelect.appendChild(option);#}
+{#            }#}
+{##}
+{#            // Actualizar días disponibles del mes actual#}
+{#            updateDays();#}
+{#        }#}
+{##}
+{#        // Actualizar el select de días según el mes y año seleccionados#}
+{#        function updateDays() {#}
+{#            const year = parseInt(document.getElementById('yearSelect').value);#}
+{#            const month = parseInt(document.getElementById('monthSelect').value);#}
+{#            const daySelect = document.getElementById('daySelect');#}
+{##}
+{#            // Limpiar opciones actuales#}
+{#            daySelect.innerHTML = '';#}
+{##}
+{#            // Calcular el número de días en el mes seleccionado#}
+{#            const daysInMonth = new Date(year, month + 1, 0).getDate();#}
+{#            const now = new Date();#}
+{#            const currentDay = now.getDate();#}
+{##}
+{#            // Establecer el día actual si está dentro del rango del mes#}
+{#            for (let day = 1; day <= daysInMonth; day++) {#}
+{#                const option = document.createElement('option');#}
+{#                option.value = day;#}
+{#                option.textContent = day;#}
+{##}
+{#                // Si el día actual está dentro del mes seleccionado, se marca como seleccionado#}
+{#                if (day === currentDay && now.getMonth() === month && now.getFullYear() === year) {#}
+{#                    option.selected = true;#}
+{#                }#}
+{#                daySelect.appendChild(option);#}
+{#            }#}
+{#        }#}
+{##}
+{##}
+{#        // Generar las filas de horas en la tabla con checkboxes#}
+{#        const hours = [#}
+{#            {label: "8AM-9AM ", value: "08:00"},#}
+{#            {label: "9AM-10AM ", value: "09:00"},#}
+{#            {label: "10AM-11AM ", value: "10:00"},#}
+{#            {label: "11AM-12PM ", value: "11:00"},#}
+{#            {label: "1PM-2PM ", value: "13:00"},#}
+{#            {label: "2PM-3PM ", value: "14:00"},#}
+{#            {label: "3PM-4PM ", value: "15:00"},#}
+{#            {label: "4PM-5PM ", value: "16:00"}#}
+{#        ];#}
+{#        const timeSlots = document.getElementById('timeSlots');#}
+{##}
+{#        hours.forEach(hour => {#}
+{#            const row = document.createElement('tr');#}
+{#            const cell = document.createElement('td');#}
+{#            const checkbox = document.createElement('input');#}
+{##}
+{#            cell.textContent = hour.label;#}
+{#            checkbox.type = 'checkbox';#}
+{#            checkbox.dataset.hour = hour.value;#}
+{#            checkbox.onclick = () => selectSlot(checkbox);#}
+{##}
+{#            row.appendChild(cell);#}
+{#            cell.appendChild(checkbox);#}
+{#            timeSlots.appendChild(row);#}
+{#        });#}
+{##}
+{#        // Variables para controlar la selección#}
+{#        let selectedCheckbox = null;#}
+{##}
+{#        // Función para manejar la selección de una hora de atención#}
+{#        function selectSlot(checkbox) {#}
+{#            if (selectedCheckbox && selectedCheckbox !== checkbox) {#}
+{#                selectedCheckbox.checked = false;#}
+{#            }#}
+{#            selectedCheckbox = checkbox.checked ? checkbox : null;#}
+{##}
+{#            if (selectedCheckbox) {#}
+{#                const selectedYear = document.getElementById("yearSelect").value;#}
+{#                const selectedMonth = document.getElementById("monthSelect").value;#}
+{#                const selectedDay = document.getElementById("daySelect").value;#}
+{#                const selectedDate = new Date(selectedYear, selectedMonth, selectedDay);#}
+{##}
+{#                document.getElementById("selectedDate").value = selectedDate.toISOString().split('T')[0];#}
+{#                document.getElementById("selectedTime").value = selectedCheckbox.dataset.hour;#}
+{#            } else {#}
+{#                document.getElementById("selectedDate").value = "";#}
+{#                document.getElementById("selectedTime").value = "";#}
+{#            }#}
+{#        }#}
+{##}
+{#        // Función para guardar la cita seleccionada#}
+{#        function guardarCita() {#}
+{#            const selectedDate = document.getElementById("selectedDate").value;#}
+{#            const selectedTime = document.getElementById("selectedTime").value;#}
+{##}
+{#            if (selectedDate && selectedTime) {#}
+{#                alert(`Cita guardada para el día ${selectedDate} a la hora ${selectedTime}.`);#}
+{#                document.getElementById("citaForm").submit();#}
+{#            } else {#}
+{#                alert("Selecciona un día y una hora antes de guardar.");#}
+{#            }#}
+{#        }#}
+{##}
+{#        // Inicializar selects de fecha#}
+{#        initializeDateSelects();#}
+{#    </script>#}
+{#    <script>#}
+{#    // Inicializar selects de año, mes y día#}
+{#    function initializeDateSelects() {#}
+{#        const monthSelect = document.getElementById('monthSelect');#}
+{#        const yearSelect = document.getElementById('yearSelect');#}
+{#        const now = new Date();#}
+{#        const currentMonth = now.getMonth();#}
+{#        const currentYear = now.getFullYear();#}
+{##}
+{#        // Opciones de meses#}
+{#        const months = [#}
+{#            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",#}
+{#            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"#}
+{#        ];#}
+{#        months.forEach((month, index) => {#}
+{#            const option = document.createElement('option');#}
+{#            option.value = index;#}
+{#            option.textContent = month;#}
+{#            if (index === currentMonth) option.selected = true;#}
+{#            monthSelect.appendChild(option);#}
+{#        });#}
+{##}
+{#        // Opciones de años (5 años antes y 5 años después del actual)#}
+{#        for (let i = currentYear - 5; i <= currentYear + 5; i++) {#}
+{#            const option = document.createElement('option');#}
+{#            option.value = i;#}
+{#            option.textContent = i;#}
+{#            if (i === currentYear) option.selected = true;#}
+{#            yearSelect.appendChild(option);#}
+{#        }#}
+{##}
+{#        // Actualizar días disponibles del mes actual#}
+{#        updateDays();#}
+{#    }#}
+{##}
+{#    // Actualizar el select de días según el mes y año seleccionados#}
+{#    function updateDays() {#}
+{#        const year = parseInt(document.getElementById('yearSelect').value);#}
+{#        const month = parseInt(document.getElementById('monthSelect').value);#}
+{#        const daySelect = document.getElementById('daySelect');#}
+{##}
+{#        // Limpiar opciones actuales#}
+{#        daySelect.innerHTML = '';#}
+{##}
+{#        // Calcular el número de días en el mes seleccionado#}
+{#        const daysInMonth = new Date(year, month + 1, 0).getDate();#}
+{#        const now = new Date();#}
+{#        const currentDay = now.getDate();#}
+{##}
+{#        // Establecer el día actual si está dentro del rango del mes#}
+{#        for (let day = 1; day <= daysInMonth; day++) {#}
+{#            const option = document.createElement('option');#}
+{#            option.value = day;#}
+{#            option.textContent = day;#}
+{##}
+{#            // Si el día actual está dentro del mes seleccionado, se marca como seleccionado#}
+{#            if (day === currentDay && now.getMonth() === month && now.getFullYear() === year) {#}
+{#                option.selected = true;#}
+{#            }#}
+{#            daySelect.appendChild(option);#}
+{#        }#}
+{#    }#}
+{##}
+{#    // Generar las filas de horas en la tabla con checkboxes#}
+{#    const hours = [#}
+{#        {label: "8AM-9AM ", value: "08:00"},#}
+{#        {label: "9AM-10AM ", value: "09:00"},#}
+{#        {label: "10AM-11AM ", value: "10:00"},#}
+{#        {label: "11AM-12PM ", value: "11:00"},#}
+{#        {label: "1PM-2PM ", value: "13:00"},#}
+{#        {label: "2PM-3PM ", value: "14:00"},#}
+{#        {label: "3PM-4PM ", value: "15:00"},#}
+{#        {label: "4PM-5PM ", value: "16:00"}#}
+{#    ];#}
+{#    const timeSlots = document.getElementById('timeSlots');#}
+{##}
+{#    hours.forEach((hour, index) => {#}
+{#        const row = document.createElement('tr');#}
+{#        const cell = document.createElement('td');#}
+{#        const checkbox = document.createElement('input');#}
+{#        const infoCell = document.createElement('td');#}
+{##}
+{#        cell.textContent = hour.label;#}
+{#        checkbox.type = 'checkbox';#}
+{#        checkbox.dataset.hour = hour.value;#}
+{#        checkbox.dataset.row = index;#}
+{#        checkbox.onclick = () => selectSlot(checkbox);#}
+{##}
+{#        row.appendChild(cell);#}
+{#        row.appendChild(infoCell); // Agregar la celda para mostrar la información#}
+{#        cell.appendChild(checkbox);#}
+{#        timeSlots.appendChild(row);#}
+{#    });#}
+{##}
+{#    // Función para manejar la selección de una hora de atención#}
+{#    function selectSlot(checkbox) {#}
+{#        const selectedYear = document.getElementById("yearSelect").value;#}
+{#        const selectedMonth = document.getElementById("monthSelect").value;#}
+{#        const selectedDay = document.getElementById("daySelect").value;#}
+{#        const selectedDate = new Date(selectedYear, selectedMonth, selectedDay);#}
+{#        const infoCell = checkbox.parentElement.nextElementSibling; // La celda que contiene la información de la hora#}
+{##}
+{#        if (checkbox.checked) {#}
+{#            // Actualizar la celda con la fecha y hora seleccionada#}
+{#            infoCell.textContent = `Fecha: ${selectedDate.toISOString().split('T')[0]} - Hora: ${checkbox.dataset.hour}`;#}
+{#            // Actualizar los campos ocultos con la fecha y hora#}
+{#            document.getElementById("selectedDate").value = selectedDate.toISOString().split('T')[0];#}
+{#            document.getElementById("selectedTime").value = checkbox.dataset.hour;#}
+{#        } else {#}
+{#            // Limpiar la celda de información y los campos ocultos cuando se desactiva el checkbox#}
+{#            infoCell.textContent = '';#}
+{#            document.getElementById("selectedDate").value = '';#}
+{#            document.getElementById("selectedTime").value = '';#}
+{#        }#}
+{#    }#}
+{##}
+{#    // Función para guardar la cita seleccionada#}
+{#    function guardarCita() {#}
+{#        const selectedDate = document.getElementById("selectedDate").value;#}
+{#        const selectedTime = document.getElementById("selectedTime").value;#}
+{##}
+{#        if (selectedDate && selectedTime) {#}
+{#            alert(`Cita guardada para el día ${selectedDate} a la hora ${selectedTime}.`);#}
+{#            document.getElementById("citaForm").submit();#}
+{#        } else {#}
+{#            alert("Selecciona un día y una hora antes de guardar.");#}
+{#        }#}
+{#    }#}
+{##}
+{#    // Inicializar selects de fecha#}
+{#    initializeDateSelects();#}
+{#</script>#}
+{##}
+{#{% endblock content %}#}
