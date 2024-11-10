@@ -88,7 +88,7 @@ class Paciente(models.Model):
   # Antecedentes médicos familiares del paciente (enfermedades hereditarias, condiciones genéticas)
   antecedentes_familiares = models.TextField(verbose_name="Antecedentes Familiares", null=True, blank=True)
   activo = models.BooleanField(default=True, verbose_name="Activo")
-
+  fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Creación")
   objects = models.Manager()  # Manager predeterminado
   active_patient = ActivePatientManager()  # Manager Personalizado
 
@@ -100,20 +100,8 @@ class Paciente(models.Model):
     verbose_name = "Paciente"
     verbose_name_plural = "Pacientes"
 
-  @property
-  def nombre_completo(self):
-    return f"{self.apellidos} {self.nombres}"
+    # Método estático para calcular la edad del paciente
 
-  def __str__(self):
-    return f"{self.apellidos} {self.nombres}"
-
-  def get_image(self):
-    if self.foto:
-      return self.foto.url
-    else:
-      return '/static/img/paciente_avatar.png'
-
-  # Método estático para calcular la edad del paciente
   @staticmethod
   def calcular_edad(fecha_nacimiento):
     today = date.today()  # Obtener la fecha actual
@@ -126,6 +114,23 @@ class Paciente(models.Model):
   @staticmethod
   def cantidad_pacientes():
     return Paciente.objects.all().count()
+
+  def get_image(self):
+    if self.foto:
+      return self.foto.url
+    else:
+      return '/static/img/paciente_avatar.png'
+
+  @property
+  def nombre_completo(self):
+    return f"{self.apellidos} {self.nombres}"
+
+  @property
+  def tiene_relaciones(self):
+    return self.doctores_atencion.exists() or self.pacientes_examenes.exists()
+
+  def __str__(self):
+    return f"{self.apellidos} {self.nombres}"
 
 
 """
@@ -233,6 +238,9 @@ class Cargo(models.Model):
 
   activo = models.BooleanField(default=True, verbose_name="Activo")
 
+  def tiene_relaciones(self):
+    return self.cargos.exists()
+
   def __str__(self):
     return self.nombre
 
@@ -313,6 +321,9 @@ class TipoMedicamento(models.Model):
 
   activo = models.BooleanField(default=True, verbose_name="Activo")
 
+  def tiene_relaciones(self):
+    return self.tipos_medicamentos.exists()
+
   def __str__(self):
     return self.nombre
 
@@ -329,6 +340,9 @@ class MarcaMedicamento(models.Model):
   descripcion = models.TextField(verbose_name="Descripción", null=True, blank=True)
 
   activo = models.BooleanField(default=True, verbose_name="Activo")
+
+  def tiene_relaciones(self):
+    return self.marca_medicamentos.exists()
 
   def __str__(self):
     return self.nombre

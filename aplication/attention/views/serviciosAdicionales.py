@@ -18,8 +18,8 @@ class ServiciosAdicionalesListView(ListView):
 
   def get_queryset(self):
     self.query = Q()
-    q1 = self.request.GET.get('q')  # Texto de búsqueda
-    specialty = self.request.GET.get('estado')  # Estado activo o inactivo
+    q1 = self.request.GET.get('q')
+    specialty = self.request.GET.get('estado')
 
     if q1:
       if q1.isdigit():
@@ -116,31 +116,7 @@ class ServiciosAdicionalesDeleteView(DeleteView):
     success_message = f"Éxito al eliminar lógicamente el Servicio Adicional {servicio}."
     messages.success(self.request, success_message)
 
-    # Cambiar el estado de eliminado lógico (si es necesario)
-    # self.object.deleted = True
-    # self.object.save()
-
     return super().delete(request, *args, **kwargs)
-
-
-# class SpecialtyDeleteView(DeleteView):
-#   model = Especialidad
-#   success_url = reverse_lazy('core:specialty_list')
-#
-#   def get_context_data(self, **kwargs):
-#     context = super().get_context_data()
-#     context['grabar'] = 'Eliminar Especialidad'
-#     context['description'] = f"¿Desea Eliminar la Especialidad: {self.object.nombre}?"
-#     return context
-#
-#   def delete(self, request, *args, **kwargs):
-#     self.object = self.get_object()
-#     success_message = f"Éxito al eliminar lógicamente la Especialidad {self.object.nombre}."
-#     messages.success(self.request, success_message)
-#     # Cambiar el estado de eliminado lógico
-#     # self.object.deleted = True
-#     # self.object.save()
-#     return super().delete(request, *args, **kwargs)
 
 
 class ServiciosAdicionalesDetailView(DetailView):

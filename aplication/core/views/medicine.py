@@ -23,19 +23,15 @@ class MedicineListView(ListView):
     is_commercial = self.request.GET.get('comercial')
     is_active = self.request.GET.get('activo')
 
-    # Filtrado por nombre o descripción
     if search_query:
       if search_query.isdigit():
         self.query.add(Q(id=search_query), Q.AND)
-
       else:
         self.query.add(Q(nombre__icontains=search_query) | Q(descripcion__icontains=search_query), Q.AND)
 
-    # Filtrado por el campo 'comercial'
     if is_commercial in ["True", "False"]:
       self.query.add(Q(comercial=(is_commercial == "True")), Q.AND)
 
-    # Filtrado por el campo 'activo'
     if is_active in ["True", "False"]:
       self.query.add(Q(activo=(is_active == "True")), Q.AND)
 
@@ -69,14 +65,6 @@ class MedicineCreateView(CreateView):
     messages.success(self.request, f"Éxito al Crear el Medicamento {objAudit.nombre}.")
     return response
 
-  # def form_valid(self, form):
-  #   if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-  #     form.instance.usuario = self.request.user
-  #   else:
-  #     form.instance.usuario = None
-  #   messages.success(self.request, f"Éxito al crear el Medicamento {form.instance.nombre}.")
-  #   return super().form_valid(form)
-
   def form_invalid(self, form):
     messages.error(self.request, "Error al enviar el formulario. Corrige los errores.")
     return self.render_to_response(self.get_context_data(form=form))
@@ -103,14 +91,6 @@ class MedicineUpdateView(UpdateView):
     save_audit(self.request, objAudit, action='M')
     messages.success(self.request, f"Éxito al Modificar el Medicamento {objAudit.nombre}.")
     return response
-
-  # def form_valid(self, form):
-  #   if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-  #     form.instance.usuario = self.request.user
-  #   else:
-  #     form.instance.usuario = None
-  #   messages.success(self.request, f"Éxito al modificar el Medicamento {form.instance.nombre}.")
-  #   return super().form_valid(form)
 
   def form_invalid(self, form):
     messages.error(self.request, "Error al actualizar el formulario. Corrige los errores.")

@@ -44,7 +44,6 @@
                     <table class="table table-hover align-middle text-center">
                         <thead class="table-light">
                         <tr>
-                            {#                            <th><i class="fa-solid fa-hashtag fa-lg"></i></th>#}
                             <th>ID</th>
                             <th>Especialidad</th>
                             <th>Descripción</th>
@@ -55,7 +54,6 @@
                         <tbody>
                         {% for item in especialidades %}
                             <tr>
-                                {#                                <th scope="row">{{ forloop.counter }}</th>#}
                                 <td>{{ item.id }}</td>
                                 <td>{{ item.nombre }}</td>
                                 <td>{{ item.descripcion | striptags | truncatechars:100 }}</td>
@@ -131,7 +129,6 @@
                     document.getElementById('especialidad-id').textContent = data.id;
                     document.getElementById('especialidad-nombre').textContent = data.nombre;
                     document.getElementById('especialidad-descripcion').textContent = data.descripcion;
-                    {#document.getElementById('especialidad-activo').textContent = data.activo;#}
                     if (data.activo) {
                         document.getElementById('especialidad-activo').innerHTML = '<i class="fa-solid fa-circle-check" style="color: #3cff3c;"></i>';
                     } else {

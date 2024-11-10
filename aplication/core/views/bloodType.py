@@ -18,12 +18,11 @@ class BloodTypeListView(ListView):
 
   def get_queryset(self):
     self.query = Q()
-    q1 = self.request.GET.get('q')  # ver
+    q1 = self.request.GET.get('q')
     tipoSangre = self.request.GET.get('tip')
     if q1 is not None:
       if q1.isdigit():
         self.query.add(Q(id=q1), Q.AND)
-
       else:
         self.query.add(Q(tipo__icontains=q1), Q.OR)
     if tipoSangre == "+" or tipoSangre == "-": self.query.add(Q(tipo__icontains=tipoSangre), Q.AND)
@@ -50,22 +49,11 @@ class BloodTypeCreateView(CreateView):
     return context
 
   def form_valid(self, form):
-    # print("entro al form_valid")
     response = super().form_valid(form)
     bloodType = self.object
     save_audit(self.request, bloodType, action='A')
     messages.success(self.request, f"Éxito al crear el Tipo de Sangre {bloodType.tipo}.")
     return response
-
-    # def form_valid(self, form):
-    #   if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-    #     form.instance.usuario = self.request.user
-    #   else:
-    #     # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
-    #     form.instance.usuario = None  # O el valor que consideres adecuado
-    #     messages.success(self.request, f"Éxito al Crear el Tipo de Sangre.")
-
-    # return super().form_valid(form)
 
   def form_invalid(self, form):
     messages.error(self.request, "Error al enviar el formulario. Corrige los errores.")
@@ -94,17 +82,6 @@ class BloodTypeUpdateView(UpdateView):
     print("mande mensaje")
     return response
 
-  # def form_valid(self, form):
-  #   bloodType = self.object
-  #   if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-  #     form.instance.usuario = self.request.user
-  #   else:
-  #     # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
-  #     form.instance.usuario = None  # O el valor que consideres adecuado
-  #     messages.success(self.request, f"Éxito al Modificar el Tipo de Sangre {bloodType.tipo}.")
-  #
-  #   return super().form_valid(form)
-
   def form_invalid(self, form):
     messages.error(self.request, "Error al Modificar el formulario. Corrige los errores.")
     print(form.errors)
@@ -125,9 +102,6 @@ class BloodTypeDeleteView(DeleteView):
     self.object = self.get_object()
     success_message = f"Éxito al eliminar lógicamente el Tipo de Sangre {self.object.descripcion}."
     messages.success(self.request, success_message)
-    # Cambiar el estado de eliminado lógico
-    # self.object.deleted = True
-    # self.object.save()
     return super().delete(request, *args, **kwargs), bloodType
 
 

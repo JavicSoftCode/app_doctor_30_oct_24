@@ -54,56 +54,58 @@ class DoctorForm(ModelForm):
       "cedula": forms.TextInput(
         attrs={
           "id": "id_cedula",
-
           "placeholder": "Ingrese la cédula",
           "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        }
+        },
       ),
       "nombres": forms.TextInput(
         attrs={
           "placeholder": "Ingrese los nombres",
           "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        }
+        },
       ),
       "apellidos": forms.TextInput(
         attrs={
           "placeholder": "Ingrese los apellidos",
           "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        }
+        },
       ),
-      "fecha_nacimiento": forms.DateInput(attrs={"type": "date",
-                                                 "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"},
-                                          format='%Y-%m-%d'),
+      "fecha_nacimiento": forms.DateInput(
+        attrs={"type": "date",
+               "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+               },
+        format='%Y-%m-%d'
+      ),
       "direccion": forms.TextInput(
         attrs={
           "placeholder": "Ingrese la dirección de trabajo",
           "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        }
+        },
       ),
       "latitud": forms.NumberInput(
         attrs={
           "placeholder": "Latitud",
           "step": "0.000001",
           "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        }
+        },
       ),
       "longitud": forms.NumberInput(
         attrs={
           "placeholder": "Longitud",
           "step": "0.000001",
           "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        }
+        },
       ),
       "codigoUnicoDoctor": forms.TextInput(
         attrs={
           "placeholder": "Código Único del Doctor",
           "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        }
+        },
       ),
       "especialidad": forms.SelectMultiple(
         attrs={
           "class": "especialidadMultiple shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        }
+        },
       ),
 
       # "especialidad": forms.CheckboxSelectMultiple(),          NO OLVIDARLA
@@ -112,53 +114,45 @@ class DoctorForm(ModelForm):
         attrs={
           "placeholder": "Ingrese los teléfonos",
           "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        }
+        },
       ),
       "email": forms.EmailInput(
         attrs={
           "placeholder": "Correo electrónico",
           "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        }
+        },
       ),
-      # "horario_atencion": forms.TextInput(
-      #   attrs={
-      #     "placeholder": "Horario de atención",
-      #     "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-      #   }
-      # ),
-
       "duracion_cita": forms.NumberInput(
         attrs={
           "placeholder": "Duración de cita (minutos)",
           "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        }
+        },
       ),
       "curriculum": forms.ClearableFileInput(
         attrs={
           "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        }
+        },
       ),
       "firmaDigital": forms.ClearableFileInput(
         attrs={
           "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        }
+        },
       ),
       "foto": forms.ClearableFileInput(
         attrs={
           "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        }
+        },
       ),
       "imagen_receta": forms.ClearableFileInput(
         attrs={
           "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        }
+        },
       ),
       "activo": forms.CheckboxInput(
         attrs={
-          # "placeholder": "Ingresar la descripción",
           "id": "id_activo",
           "class": "checkox shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-12 dark:bg-principal dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light",
-        }
+        },
       ),
     }
 

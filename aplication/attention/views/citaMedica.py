@@ -1,12 +1,12 @@
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.http import JsonResponse
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
+from django.views.generic import ListView, DeleteView, DetailView, CreateView, UpdateView
 
 from aplication.attention.forms.citaMedica import CitaMedicaForm
 from aplication.attention.models import CitaMedica
-from doctor.utils import save_audit
 
 
 class CitaMedicaListView(ListView):
@@ -59,26 +59,17 @@ class CitaMedicaCreateView(CreateView):
     return context
 
   def form_valid(self, form):
-    # print("entro al form_valid")
-    response = super().form_valid(form)
-    citaMedica = self.object
-    save_audit(self.request, citaMedica, action='A')
-    messages.success(self.request, f"Éxito al Crear la Cita Médica {citaMedica.paciente} - {citaMedica.estado}.")
-    return response
-
-  # def form_valid(self, form):
-  #   if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-  #     form.instance.usuario = self.request.user
-  #   else:
-  #     # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
-  #     form.instance.usuario = None  # O el valor que consideres adecuado
-  #     messages.success(self.request, f"Éxito al Crear la Especialidad.")
-  #
-  #   return super().form_valid(form)
+    try:
+      response = super().form_valid(form)
+      citaMedica = self.object
+      messages.success(self.request, f"Éxito al Crear la Cita Médica {citaMedica.paciente} - {citaMedica.estado}.")
+      return response
+    except ValidationError as e:
+      form.add_error(None, e.message)
+      return self.form_invalid(form)
 
   def form_invalid(self, form):
     messages.error(self.request, "Error al enviar el formulario. Corrige los errores.")
-    print(form.errors)
     return self.render_to_response(self.get_context_data(form=form))
 
 
@@ -96,28 +87,71 @@ class CitaMedicaUpdateView(UpdateView):
     return context
 
   def form_valid(self, form):
-    response = super().form_valid(form)
-    citaMedica = self.object
-    save_audit(self.request, citaMedica, action='M')
-    messages.success(self.request, f"Éxito al Modificar la Especialidad {citaMedica.paciente} - {citaMedica.estado}.")
-    print("mande mensaje")
-    return response
-
-  # def form_valid(self, form):
-  #   bloodType = self.object
-  #   if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-  #     form.instance.usuario = self.request.user
-  #   else:
-  #     # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
-  #     form.instance.usuario = None  # O el valor que consideres adecuado
-  #     messages.success(self.request, f"Éxito al Modificar la Especialidad {bloodType.nombre}.")
-  #
-  #   return super().form_valid(form)
+    try:
+      response = super().form_valid(form)
+      citaMedica = self.object
+      messages.success(self.request, f"Éxito al Modificar la Cita Médica {citaMedica.paciente} - {citaMedica.estado}.")
+      return response
+    except ValidationError as e:
+      form.add_error(None, e.message)
+      return self.form_invalid(form)
 
   def form_invalid(self, form):
     messages.error(self.request, "Error al Modificar el formulario. Corrige los errores.")
-    print(form.errors)
     return self.render_to_response(self.get_context_data(form=form))
+
+
+# class CitaMedicaCreateView(CreateView):
+#   model = CitaMedica
+#   template_name = 'attention/citaMedica/form.html'
+#   form_class = CitaMedicaForm
+#   success_url = reverse_lazy('attention:citaMedica_list')
+#
+#   def get_context_data(self, **kwargs):
+#     context = super().get_context_data()
+#     context['title1'] = 'Crear Cita Médica'
+#     context['grabar'] = 'Grabar Cita Médica'
+#     context['back_url'] = self.success_url
+#     return context
+#
+#   def form_valid(self, form):
+#     response = super().form_valid(form)
+#     citaMedica = self.object
+#     save_audit(self.request, citaMedica, action='A')
+#     messages.success(self.request, f"Éxito al Crear la Cita Médica {citaMedica.paciente} - {citaMedica.estado}.")
+#     return response
+#
+#   def form_invalid(self, form):
+#     messages.error(self.request, "Error al enviar el formulario. Corrige los errores.")
+#     print(form.errors)
+#     return self.render_to_response(self.get_context_data(form=form))
+#
+#
+# class CitaMedicaUpdateView(UpdateView):
+#   model = CitaMedica
+#   template_name = 'attention/citaMedica/form.html'
+#   form_class = CitaMedicaForm
+#   success_url = reverse_lazy('attention:citaMedica_list')
+#
+#   def get_context_data(self, **kwargs):
+#     context = super().get_context_data()
+#     context['title1'] = 'Actualizar Cita Médica'
+#     context['grabar'] = 'Actualizar Cita Médica'
+#     context['back_url'] = self.success_url
+#     return context
+#
+#   def form_valid(self, form):
+#     response = super().form_valid(form)
+#     citaMedica = self.object
+#     save_audit(self.request, citaMedica, action='M')
+#     messages.success(self.request, f"Éxito al Modificar la Especialidad {citaMedica.paciente} - {citaMedica.estado}.")
+#     print("mande mensaje")
+#     return response
+#
+#   def form_invalid(self, form):
+#     messages.error(self.request, "Error al Modificar el formulario. Corrige los errores.")
+#     print(form.errors)
+#     return self.render_to_response(self.get_context_data(form=form))
 
 
 class CitaMedicaDeleteView(DeleteView):
@@ -153,6 +187,6 @@ class CitaMedicaDetailView(DetailView):
       'paciente': citaMedica.paciente.nombre_completo,
       'fecha': citaMedica.fecha,
       'hora_cita': citaMedica.hora_cita,
-      'estado': citaMedica.get_estado_display(),  # Muestra "Programada", "Cancelada" o "Realizada"
+      'estado': citaMedica.get_estado_display(),
     }
     return JsonResponse(data)

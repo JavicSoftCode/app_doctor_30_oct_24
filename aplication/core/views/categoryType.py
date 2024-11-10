@@ -18,21 +18,17 @@ class CategoryTypeListView(ListView):
 
     def get_queryset(self):
         self.query = Q()
-        q1 = self.request.GET.get('q')  # Texto de búsqueda
-        is_active = self.request.GET.get('activo')  # Estado activo o inactivo
+        q1 = self.request.GET.get('q')
+        is_active = self.request.GET.get('activo')
 
         if q1:
             if q1.isdigit():
                 self.query.add(Q(id=q1), Q.AND)
-
             else:
-                # Filtra por nombre que contenga el valor ingresado en 'q'
                 self.query.add(Q(nombre__icontains=q1), Q.AND)
 
         if is_active in ["True", "False"]:
-            # Filtra por el valor booleano de activo
             self.query.add(Q(activo=(is_active == "True")), Q.AND)
-
         return self.model.objects.filter(self.query).order_by('nombre')
 
     def get_context_data(self, **kwargs):
@@ -61,14 +57,6 @@ class CategoryTypeCreateView(CreateView):
         save_audit(self.request, objAudit, action='A')
         messages.success(self.request, f"Éxito al Crear el Tipo Categoria {objAudit.nombre}.")
         return response
-
-    # def form_valid(self, form):
-    #     if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-    #         form.instance.usuario = self.request.user
-    #     else:
-    #         form.instance.usuario = None
-    #     messages.success(self.request, "Éxito al crear el Tipo de Examen.")
-    #     return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.error(self.request, "Error al enviar el formulario. Corrige los errores.")
@@ -129,7 +117,7 @@ class CategoryTypeDetailView(DetailView):
         tipo_categoria = self.get_object()
         data = {
             'id': tipo_categoria.id,
-            'categoria_examen': tipo_categoria.categoria_examen.nombre,  # assuming CategoriaExamen has 'nombre' attribute
+            'categoria_examen': tipo_categoria.categoria_examen.nombre,
             'nombre': tipo_categoria.nombre,
             'descripcion': tipo_categoria.descripcion,
             'valor_minimo': tipo_categoria.valor_minimo,

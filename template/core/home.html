@@ -38,7 +38,6 @@
                         </div>
                         <div>
                             <h6 class="card-title mb-0">Citas Hoy</h6>
-                            {#                            <h3 class="mb-0">24</h3>#}
                             <h3 class="mb-0">{{ can_citas }}</h3>
                         </div>
                     </div>
@@ -65,7 +64,6 @@
                         </div>
                         <div>
                             <h6 class="card-title mb-0">Atenciones</h6>
-                            {#                            <h3 class="mb-0">85</h3>#}
                             <h3 class="mb-0">{{ can_atencion }}</h3>
                         </div>
                     </div>
@@ -99,7 +97,7 @@
                                 <i class="fas fa-calendar-check me-2"></i> Nueva Cita
                             </a>
                             <a class="btn text-white d-inline-flex align-items-center"
-                               href="{% url 'core:patient_list' %}" style="background-color: #29B866">
+                               href="{% url 'core:patient_create' %}" style="background-color: #29B866">
                                 <i class="fas fa-user-plus me-2"></i> Nuevo Paciente
                             </a>
                             <button class="btn text-white" style="background-color: #944db1"><i
@@ -115,66 +113,78 @@
         </div>
 
         <!-- Recent Activity & Upcoming Appointments -->
-                <div class="row">
-                    <div class="col-md-6 mb-4">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title mb-4">Actividad Reciente</h5>
-                                <div class="activity-item d-flex align-items-center py-3 border-bottom">
-                                    <div class="bg-primary text-white p-2 rounded me-3">
-                                        <i class="fas fa-user-plus"></i>
-                                    </div>
-                                    <div>
-                                        <p class="mb-0 fw-bold">Nuevo paciente registrado</p>
-                                        <small class="text-muted">Hace 5 minutos</small>
-                                    </div>
+        <div class="row">
+            <!-- Actividad Reciente -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Actividad Reciente</h5>
+                        {% if ultimo_paciente %}
+                            <div class="activity-item d-flex align-items-center py-3 border-bottom">
+                                <div class="bg-primary text-white p-2 rounded me-3">
+                                    <i class="fas fa-user-plus"></i>
                                 </div>
-                                <div class="activity-item d-flex align-items-center py-3 border-bottom">
-                                    <div class="bg-success text-white p-2 rounded me-3">
-                                        <i class="fas fa-calendar-check"></i>
-                                    </div>
-                                    <div>
-                                        <p class="mb-0 fw-bold">Cita completada</p>
-                                        <small class="text-muted">Hace 15 minutos</small>
-                                    </div>
-                                </div>
-                                <div class="activity-item d-flex align-items-center py-3">
-                                    <div class="bg-info text-white p-2 rounded me-3">
-                                        <i class="fas fa-file-medical"></i>
-                                    </div>
-                                    <div>
-                                        <p class="mb-0 fw-bold">Nueva consulta registrada</p>
-                                        <small class="text-muted">Hace 30 minutos</small>
-                                    </div>
+                                <div>
+                                    <p class="mb-0 fw-bold">Nuevo paciente
+                                        registrado: {{ ultimo_paciente.nombre_completo }}</p>
+                                    <small class="text-muted">Registrado hace {{ tiempo_desde_ultimo_paciente }}</small>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        {% endif %}
+                        {% if ultima_cita_realizada %}
+                            <div class="activity-item d-flex align-items-center py-3 border-bottom">
+                                <div class="bg-success text-white p-2 rounded me-3">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0 fw-bold">Última Cita
+                                        Realizada: {{ ultima_cita_realizada.paciente.nombre_completo }}</p>
+                                    <small class="text-muted">Cita realizada hace {{ tiempo_desde_ultima_cita }}</small>
+                                </div>
+                            </div>
 
-        <div class="col-md-6 mb-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title mb-4">Próximas Citas</h5>
-                    {% for cita in proximas_citas %}
-                        <div class="appointment-item d-flex align-items-center py-3 border-bottom">
-                            <img src="{{ cita.paciente.get_image }}" alt="Patient"
-                                 class="rounded-circle me-3 pruebaAnoni">
-                            <div>
-                                <p class="mb-0 fw-bold">{{ cita.paciente.nombre_completo }}</p>
-                                <small class="text-muted">{{ cita.fecha }} - {{ cita.hora_cita|time:"g:i A" }}</small>
+                            <div class="activity-item d-flex align-items-center py-3">
+                                <div class="bg-info text-white p-2 rounded me-3">
+                                    <i class="fas fa-file-medical"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0 fw-bold">Nueva consulta registrada</p>
+                                    <small class="text-muted">Hace 30 minutos</small>
+                                </div>
                             </div>
-                        </div>
-                    {% empty %}
-                        <div class="py-3">
-                            <p class="mb-0 text-muted">No hay citas programadas.</p>
-                        </div>
-                    {% endfor %}
+
+                        {% else %}
+                            <p class="text-muted">No hay actividad reciente</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Próximas Citas -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Próximas Citas</h5>
+                        {% for cita in proximas_citas %}
+                            <div class="appointment-item d-flex align-items-center py-3 border-bottom">
+                                <img src="{{ cita.paciente.get_image }}" alt="Patient"
+                                     class="rounded-circle me-3 pruebaAnoni">
+                                <div>
+                                    <p class="mb-0 fw-bold">{{ cita.paciente.nombre_completo }}</p>
+                                    <small class="text-muted">{{ cita.fecha }}
+                                        - {{ cita.hora_cita|time:"g:i A" }}</small>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <div class="py-3">
+                                <p class="mb-0 text-muted">No hay citas programadas.</p>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
-
-                </div>
-
     </div>
 
 {% endblock content %}

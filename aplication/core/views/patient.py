@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.db.models import Q
 from django.http import JsonResponse, Http404
+from django.shortcuts import redirect
 from django.templatetags.static import static
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
@@ -19,7 +20,7 @@ class PatientListView(ListView):
 
   def get_queryset(self):
     self.query = Q()
-    q1 = self.request.GET.get('q')  # ver
+    q1 = self.request.GET.get('q')
     sex = self.request.GET.get('sex')
     if q1 is not None:
       self.query.add(Q(nombres__icontains=q1), Q.OR)
@@ -41,11 +42,9 @@ class PatientCreateView(CreateView):
   form_class = PatientForm
   success_url = reverse_lazy('core:patient_list')
 
-  # permission_required = 'add_supplier' # en PermissionMixn se verfica si un grupo tiene el permiso
-
   def get_context_data(self, **kwargs):
     context = super().get_context_data()
-    context['title1'] = 'Crear Paciente?'
+    context['title1'] = 'Crear Paciente'
     context['grabar'] = 'Grabar Paciente'
     context['default_image_url'] = static('img/paciente_avatar.png')
 
@@ -53,7 +52,6 @@ class PatientCreateView(CreateView):
     return context
 
   def form_valid(self, form):
-    # print("entro al form_valid")
     response = super().form_valid(form)
     patient = self.object
     save_audit(self.request, patient, action='A')
@@ -71,8 +69,6 @@ class PatientUpdateView(UpdateView):
   template_name = 'core/patient/form.html'
   form_class = PatientForm
   success_url = reverse_lazy('core:patient_list')
-
-  # permission_required = 'change_patient'
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data()
@@ -99,34 +95,49 @@ class PatientUpdateView(UpdateView):
 
 class PatientDeleteView(DeleteView):
   model = Paciente
-  # template_name = 'core/patient/form.html'
   success_url = reverse_lazy('core:patient_list')
 
   def get_context_data(self, **kwargs):
-    context = super().get_context_data()
+    context = super().get_context_data(**kwargs)
     context['grabar'] = 'Eliminar paciente'
-    context['description'] = f"¿Desea Eliminar al paciente: {self.object.nombre_completo}?"
+    context['description'] = f"¿Desea eliminar al paciente: {self.object.nombre_completo}?"
     context['back_url'] = self.success_url
     return context
 
   def delete(self, request, *args, **kwargs):
     self.object = self.get_object()
-    if self.object.doctores_atencion.exists():  # related name
-      messages.error(self.request, "No se puede eliminar el paciente porque tiene una atención Médica.")
-      return self.get(request, *args, **kwargs)  # Retorna a la misma página sin eliminar
 
-    success_message = f"Éxito al eliminar lógicamente al Paciente {self.object.nombre_completo}."
+    # Verifica si el paciente tiene relaciones en `doctores_atencion` o `pacientes_examenes`
+    if self.object.tiene_relaciones:
+      messages.error(self.request,
+                     "No se puede eliminar el paciente porque tiene atención médica o exámenes solicitados.")
+      return redirect(self.success_url)
+
+    success_message = f"Éxito al eliminar lógicamente al paciente {self.object.nombre_completo}."
     messages.success(self.request, success_message)
     return super().delete(request, *args, **kwargs)
 
-  # def delete(self, request, *args, **kwargs):
-  #   self.object = self.get_object()
-  #   success_message = f"Éxito al eliminar lógicamente al paciente {self.object.name}."
-  #   messages.success(self.request, success_message)
-  #   # Cambiar el estado de eliminado lógico
-  #   # self.object.deleted = True
-  #   # self.object.save()
-  #   return super().delete(request, *args, **kwargs)
+
+# class PatientDeleteView(DeleteView):
+#   model = Paciente
+#   success_url = reverse_lazy('core:patient_list')
+#
+#   def get_context_data(self, **kwargs):
+#     context = super().get_context_data()
+#     context['grabar'] = 'Eliminar paciente'
+#     context['description'] = f"¿Desea Eliminar al paciente: {self.object.nombre_completo}?"
+#     context['back_url'] = self.success_url
+#     return context
+#
+#   def delete(self, request, *args, **kwargs):
+#     self.object = self.get_object()
+#     if self.object.doctores_atencion.exists():
+#       messages.error(self.request, "No se puede eliminar el paciente porque tiene una atención Médica.")
+#       return self.get(request, *args, **kwargs)
+#
+#     success_message = f"Éxito al eliminar lógicamente al Paciente {self.object.nombre_completo}."
+#     messages.success(self.request, success_message)
+#     return super().delete(request, *args, **kwargs)
 
 
 class PatientDetailView(DetailView):
@@ -138,8 +149,6 @@ class PatientDetailView(DetailView):
       data = {
         'id': pacient.id,
         'paciente': pacient.nombre_completo,
-        # 'nombres': pacient.nombres,
-        # 'apellidos': pacient.apellidos,
         'foto': pacient.get_image(),
         'fecha_nacimiento': pacient.fecha_nacimiento,
         'edad': pacient.calcular_edad(pacient.fecha_nacimiento),

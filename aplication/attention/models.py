@@ -1,6 +1,7 @@
 import datetime
 
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 from aplication.core.models import *
 from doctor.const import DIA_SEMANA_CHOICES, EXAMEN_CHOICES, CITA_CHOICES
@@ -31,50 +32,16 @@ class HorarioAtencion(models.Model):
     verbose_name = "Horario de Atenciónl Doctor"
     verbose_name_plural = "Horarios de Atención de los Doctores"
 
-  # class CitaMedica(models.Model):
-  #   # Relación con el modelo Paciente, indica qué paciente ha reservado la cita
-  #   paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, verbose_name="Paciente",
-  #                                related_name="pacientes_citas")
-  #   # Fecha de la cita médica
-  #   fecha = models.DateField(verbose_name="Fecha de la Cita")
-  #   # Hora de la cita médica
-  #   hora_cita = models.TimeField(verbose_name="Hora de la Cita")
-  #   # Estado de la cita (ej. Programada, Cancelada, Realizada)
-  #   estado = models.CharField(
-  #     max_length=1,
-  #     choices=CITA_CHOICES,
-  #     verbose_name="Estado de la Cita"
-  #   )
-  #
-  #   def __str__(self):
-  #     return f"Cita {self.paciente} el {self.fecha} a las {self.hora_cita}"
-  #
-  #   class Meta:
-  #     ordering = ['fecha', 'hora_cita']
-  #     indexes = [
-  #       models.Index(fields=['fecha', 'hora_cita'], name='idx_fecha_hora'),
-  #     ]
-  #     verbose_name = "Cita Médica"
-  #     verbose_name_plural = "Citas Médicas"
-  #
-  #   @staticmethod
-  #   def cantidad_disponible_hoy():
-  #     return CitaMedica.objects.all().count()
-
 
 class CitaMedica(models.Model):
-  # Relación con el modelo Paciente, indica qué paciente ha reservado la cita
   paciente = models.ForeignKey(
     Paciente,
     on_delete=models.CASCADE,
     verbose_name="Paciente",
     related_name="pacientes_citas"
   )
-  # Fecha de la cita médica
   fecha = models.DateField(verbose_name="Fecha de la Cita")
-  # Hora de la cita médica
   hora_cita = models.TimeField(verbose_name="Hora de la Cita")
-  # Estado de la cita (ej. Programada, Cancelada, Realizada)
   estado = models.CharField(
     max_length=1,
     choices=CITA_CHOICES,
@@ -94,32 +61,34 @@ class CitaMedica(models.Model):
 
   @staticmethod
   def cantidad_disponible_hoy():
-    return CitaMedica.objects.all().count()
+    hoy = timezone.now().date()
+    return CitaMedica.objects.filter(fecha=hoy).count()
 
   def clean(self):
     super().clean()
-
     errors = {}
 
-    Fecha = ['fecha']
-    Hora = ['hora_cita']
-    # Verifica que la fecha no sea un domingo
-    if self.fecha.weekday() == 6:  # 6 representa el domingo
-      errors['Fecha'] = "Domingos no se trabaja. CLINICA CERRADA."
+    # Verificar solapamiento de citas
+    cita_existente = CitaMedica.objects.filter(
+      fecha=self.fecha,
+      hora_cita=self.hora_cita
+    ).exclude(id=self.id).exists()
 
-    # Verifica que la hora esté dentro del horario permitido
-    hora_minima = datetime.time(8, 0)  # 8:00 AM
-    hora_maxima = datetime.time(17, 0)  # 5:00 PM
-    if self.hora_cita < hora_minima or self.hora_cita > hora_maxima:
-      errors['Hora'] = "CLINICA CERRADA. Horario permitido es de 8AM a 5PM de Lunes a Sábado."
+    if cita_existente:
+      siguiente_hora = (datetime.datetime.combine(self.fecha, self.hora_cita) + datetime.timedelta(minutes=30)).time()
+      errors[
+        'hora_cita'] = f"Ya existe una consulta a esta hora. La siguiente cita debe ser después de {siguiente_hora}."
+
+    if self.fecha.weekday() == 6:  # Domingo
+      errors['fecha'] = "Domingos no se trabaja. CLINICA CERRADA."
+
+    hora_minima = datetime.time(8, 0)
+    hora_maxima = datetime.time(17, 0)
+    if not (hora_minima <= self.hora_cita <= hora_maxima):
+      errors['hora_cita'] = "CLINICA CERRADA. Horario permitido es de 8AM a 5PM de Lunes a Sábado."
 
     if errors:
       raise ValidationError(errors)
-
-  def save(self, *args, **kwargs):
-    # Llama a clean() antes de guardar para asegurar la validación
-    self.clean()
-    super().save(*args, **kwargs)
 
 
 # Modelo que representa la cabecera de una atención médica.
@@ -152,6 +121,9 @@ class Atencion(models.Model):
   @staticmethod
   def cantidad():
     return Atencion.objects.all().count()
+
+  def tiene_relaciones(self):
+    return self.costos_atencion.exists()
 
 
 # Modelo que representa el detalle de una atención médica.

@@ -59,9 +59,7 @@
                         {% for item in pacientes %}
 
                             <tr>
-                                <td>
-                                    {{ item.id }}
-                                </td>
+                                <td>{{ item.id }}</td>
 
                                 <td>
                                     <div class="d-flex align-items-center">
@@ -71,6 +69,7 @@
                                         </div>
                                     </div>
                                 </td>
+
                                 <td>{{ item.get_sexo_display }}</td>
                                 <td>{{ item.alergias }}</td>
                                 <td>{{ item.enfermedades_cronicas }}</td>
@@ -84,6 +83,7 @@
                                         <i class="fa-solid fa-circle-xmark fa-lg" style="color: red;"></i>
                                     {% endif %}
                                 </td>
+
                                 <td>
                                     <div class="action-buttons d-flex gap-2">
                                         <button class="btn btn-info btn-sm" title="Detalle Paciente"
@@ -94,25 +94,34 @@
                                            class="btn btn-info btn-sm text-white" title="Editar">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        {#                                        {% with id=item.id name=item.nombre_completo msg="Esta seguro de elimnar al paciente:" %}#}
-                                        {#                                            <button class="btn btn-danger"#}
-                                        {#                                                    onclick="confirmDelete('{{ id }}','{{ name }}','{{ msg|escapejs }}');">#}
-                                        {#                                                <i class="fa-solid fa-trash"></i></button>#}
-                                        {#                                        {% endwith %}#}
-                                        {% if item.doctores_atencion.exists %}
-                                            <button class="btn btn-danger btn-sm" disabled
-                                            >
+
+                                        {% if item.tiene_relaciones %}
+                                            <button class="btn btn-danger btn-sm" disabled>
                                                 <i class="fa-solid fa-trash"
-                                                   title="No se puede eliminar al Paciente tiene una atención Médica."></i>
+                                                   title="No se puede eliminar al paciente porque tiene atención médica o exámenes solicitados."></i>
                                             </button>
                                         {% else %}
-                                            {% with id=item.id name=item.nombre_completo msg="¿Está seguro de eliminar este Paciente?" %}
+                                            {% with id=item.id name=item.nombre_completo msg="¿Está seguro de eliminar este paciente?" %}
                                                 <button class="btn btn-danger btn-sm"
                                                         onclick="confirmDelete('{{ id }}', '{{ name }}', '{{ msg|escapejs }}');">
                                                     <i class="fa-solid fa-trash"></i>
                                                 </button>
                                             {% endwith %}
                                         {% endif %}
+
+                                        {#                                        {% if item.doctores_atencion.exists %}#}
+                                        {#                                            <button class="btn btn-danger btn-sm" disabled>#}
+                                        {#                                                <i class="fa-solid fa-trash"#}
+                                        {#                                                   title="No se puede eliminar al Paciente tiene una atención Médica."></i>#}
+                                        {#                                            </button>#}
+                                        {#                                        {% else %}#}
+                                        {#                                            {% with id=item.id name=item.nombre_completo msg="¿Está seguro de eliminar este Paciente?" %}#}
+                                        {#                                                <button class="btn btn-danger btn-sm"#}
+                                        {#                                                        onclick="confirmDelete('{{ id }}', '{{ name }}', '{{ msg|escapejs }}');">#}
+                                        {#                                                    <i class="fa-solid fa-trash"></i>#}
+                                        {#                                                </button>#}
+                                        {#                                            {% endwith %}#}
+                                        {#                                        {% endif %}#}
                                     </div>
                                 </td>
                             </tr>
@@ -128,9 +137,7 @@
         </div>
     </div>
 
-    <!-- llama al modal generico de eliminacion -->
     {% include 'includes/confirm_delete_modal.html' %}
-    <!-- llama al modal de mostrar datos del detalle del paciente -->
     {% include 'includes/patient_detail_modal.html' %}
 
     <script>
@@ -168,8 +175,6 @@
                     // Llenar el modal con los datos
                     document.getElementById('paciente-id').textContent = data.id;
                     document.getElementById('paciente-paciente').textContent = data.paciente;
-                    {#document.getElementById('paciente-nombres').textContent = data.nombres;#}
-                    {#document.getElementById('paciente-apellidos').textContent = data.apellidos;#}
                     document.getElementById('paciente-foto').src = data.foto;
                     document.getElementById('paciente-fecha-nac').textContent = data.fecha_nacimiento;
                     document.getElementById('paciente-edad').textContent = `${data.edad} años`;
@@ -201,8 +206,6 @@
                     alert('Error al cargar los datos del paciente');
                 });
         }
-
-
     </script>
 
 {% endblock content %}

@@ -42,57 +42,6 @@
                 </div>
 
                 <div class="table-responsive">
-
-                    <!-- Tabla -->
-                    {#                    <table class="table table-hover align-middle text-center">#}
-                    {#                        <thead class="table-light">#}
-                    {#                        <tr>#}
-                    {#                            <th><i class="fa-solid fa-hashtag fa-lg"></i></th>#}
-                    {#                            <th>Cargo</th>#}
-                    {#                            <th>Descripción</th>#}
-                    {#                            <th>Estado</th>#}
-                    {#                            <th>Acciones</th>#}
-                    {#                        </tr>#}
-                    {#                        </thead>#}
-                    {#                        <tbody>#}
-                    {#                        {% for item in cargos %}#}
-                    {#                            <tr>#}
-                    {#                                <th scope="row">{{ forloop.counter }}</th>#}
-                    {#                                <td>{{ item.nombre }}</td>#}
-                    {#                                <td>{{ item.descripcion | striptags | truncatechars:100 }}</td>#}
-                    {#                                <td>#}
-                    {#                                    {% if item.activo %}#}
-                    {#                                        <i class="fa-solid fa-circle-check" style="color: #3cff3c;"></i>#}
-                    {#                                    {% else %}#}
-                    {#                                        <i class="fa-solid fa-circle-xmark" style="color: red;"></i>#}
-                    {#                                    {% endif %}#}
-                    {#                                </td>#}
-                    {#                                <td>#}
-                    {#                                    <div class="botones right" style="margin-left: 100px">#}
-                    {#                                        <div class="action-buttons d-flex gap-2">#}
-                    {#                                            <button class="btn btn-info btn-sm" title="Detalle Cargo"#}
-                    {#                                                    onclick="verDetalle('{{ item.id }}')">#}
-                    {#                                                <i class="fas fa-eye"></i>#}
-                    {#                                            </button>#}
-                    {##}
-                    {#                                            <a href="{% url 'core:cargo_update' item.id %}"#}
-                    {#                                               class="btn btn-info btn-sm text-white" title="Editar">#}
-                    {#                                                <i class="fas fa-edit"></i>#}
-                    {#                                            </a>#}
-                    {##}
-                    {#                                            {% with id=item.id name=item.nombre msg="Esta seguro de eliminar este Cargo:" %}#}
-                    {#                                                <button class="btn btn-danger"#}
-                    {#                                                        onclick="confirmDelete('{{ id }}','{{ name }}','{{ msg|escapejs }}');">#}
-                    {#                                                    <i class="fa-solid fa-trash"></i></button>#}
-                    {#                                            {% endwith %}#}
-                    {##}
-                    {#                                        </div>#}
-                    {#                                    </div>#}
-                    {#                                </td>#}
-                    {#                            </tr>#}
-                    {#                        {% endfor %}#}
-                    {#                        </tbody>#}
-                    {#                    </table>#}
                     <table class="table table-hover align-middle text-center">
                         <thead class="table-light">
                         <tr>
@@ -129,7 +78,7 @@
                                                 <i class="fas fa-edit"></i>
                                             </a>
 
-                                            {% if item.cargos.exists %}
+                                            {% if item.tiene_relaciones %}
                                                 <button class="btn btn-danger btn-sm" disabled  onclick="relacionadoConsole()">
                                                     <i class="fa-solid fa-trash"
                                                        title="No se puede eliminar Cargo Relacionado."></i>
@@ -194,7 +143,6 @@
                     document.getElementById('cargo-id').textContent = data.id;
                     document.getElementById('cargo-nombre').textContent = data.nombre;
                     document.getElementById('cargo-descripcion').textContent = data.descripcion;
-                    {#document.getElementById('especialidad-activo').textContent = data.activo;#}
                     if (data.activo) {
                         document.getElementById('cargo-activo').innerHTML = '<i class="fa-solid fa-circle-check" style="color: #3cff3c;"></i>';
                     } else {
