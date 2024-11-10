@@ -65,20 +65,26 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'doctor.wsgi.application'
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db_clinica.sqlite3',  # Usa BASE_DIR para la ruta completa
+    }
+}
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-  "default": {
-    'ENGINE': os.environ.get("DB_ENGINE", "django.db.backends.postgresql"),
-    'NAME': os.environ.get("DB_DATABASE", ""),
-    'USER': os.environ.get("DB_USERNAME", ""),
-    'PASSWORD': os.environ.get("DB_PASSWORD", ""),
-    'HOST': os.environ.get("DB_SOCKET", ""),
-    'PORT': os.environ.get("DB_PORT", "5432"),
-    'ATOMIC_REQUESTS': True
-  }
-}
+#DATABASES = {
+#  "default": {
+#    'ENGINE': os.environ.get("DB_ENGINE", "django.db.backends.postgresql"),
+#    'NAME': os.environ.get("DB_DATABASE", ""),
+#    'USER': os.environ.get("DB_USERNAME", ""),
+#    'PASSWORD': os.environ.get("DB_PASSWORD", ""),
+#    'HOST': os.environ.get("DB_SOCKET", ""),
+#    'PORT': os.environ.get("DB_PORT", "5432"),
+#    'ATOMIC_REQUESTS': True
+#  }
+#}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
