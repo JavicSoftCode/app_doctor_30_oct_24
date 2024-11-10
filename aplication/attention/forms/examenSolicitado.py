@@ -7,7 +7,6 @@ from aplication.attention.models import ExamenSolicitado
 class ExamenSolicitadoForm(ModelForm):
   class Meta:
     model = ExamenSolicitado
-    # fields = ["nombre_examen", "paciente", "fecha_solicitud", "resultado", "comentario", "estado"]
     fields = ["nombre_examen", "paciente", "resultado", "comentario", "estado"]
 
     error_messages = {
@@ -17,9 +16,6 @@ class ExamenSolicitadoForm(ModelForm):
       "paciente": {
         "required": "Selecionar paciente.",
       },
-      # "fecha_solicitud": {
-      #   "required": "Ingresar fecha del exámen.",
-      # },
       "resultado": {
         "required": "Ingresar el exámen en PDF.",
       },

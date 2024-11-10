@@ -18,15 +18,13 @@ class ExamenSolicitadoListView(ListView):
 
   def get_queryset(self):
     self.query = Q()
-    q1 = self.request.GET.get('q')  # Texto de búsqueda
-    estado = self.request.GET.get('estado')  # Estado de la cita
+    q1 = self.request.GET.get('q')
+    estado = self.request.GET.get('estado')
 
     if q1:
-        # Si q1 es un número, filtrar solo por ID sin OR adicional
         if q1.isdigit():
             self.query.add(Q(id=q1), Q.AND)
         else:
-            # Si q1 no es un número, buscar por otros campos
             self.query.add(Q(nombre_examen__icontains=q1), Q.OR)
             # self.query.add(Q(paciente__cedula__icontains=q1), Q.OR)
             self.query.add(Q(paciente__nombres__icontains=q1), Q.OR)
@@ -112,16 +110,12 @@ class ExamenSolicitadoDeleteView(DeleteView):
 
   def delete(self, request, *args, **kwargs):
     self.object = self.get_object()
-    examenSolicitado = self.object.nombre_examen  # Guardamos el nombre de la especialidad
+    examenSolicitado = self.object.nombre_examen
     # Guarda la auditoría de la eliminación
     save_audit(self.request, self.object, action='E')
 
     success_message = f"Éxito al eliminar lógicamente el Examen Solicitado {examenSolicitado}."
     messages.success(self.request, success_message)
-
-    # Cambiar el estado de eliminado lógico (si es necesario)
-    # self.object.deleted = True
-    # self.object.save()
 
     return super().delete(request, *args, **kwargs)
 
@@ -138,15 +132,9 @@ class ExamenSolicitadoDetailView(DetailView):
       'id': examenSolicitado.id,
       'nombre_examen': examenSolicitado.nombre_examen,
       'paciente': examenSolicitado.paciente.nombre_completo,
-      # 'foto': examenSolicitado.paciente.foto,
       'foto': examenSolicitado.paciente.get_image(),
-
-      # 'fecha_solicitud': examenSolicitado.fecha_solicitud,
       'fecha_solicitud': examenSolicitado.fecha_solicitud.isoformat() if examenSolicitado.fecha_solicitud else None,
-
-      # 'resultado': examenSolicitado.resultado,
       'resultado': examenSolicitado.resultado.url if examenSolicitado.resultado else None,
-
       'comentario': examenSolicitado.comentario,
       'estado': examenSolicitado.estado,
     }

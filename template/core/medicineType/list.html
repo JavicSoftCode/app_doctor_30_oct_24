@@ -80,7 +80,7 @@
                                             <i class="fas fa-edit"></i>
                                         </a>
 
-                                        {% if item.tipos_medicamentos.exists %}
+                                        {% if item.tiene_relaciones %}
                                             {#                                    related name#}
                                             <button class="btn btn-danger btn-sm" disabled
                                                     onclick="relacionadoConsole()">
@@ -95,11 +95,6 @@
                                                 </button>
                                             {% endwith %}
                                         {% endif %}
-                                        {#                                        {% with id=item.id name=item.nombre msg="Esta seguro de eliminar este Tipo de Medicina:" %}#}
-                                        {#                                            <button class="btn btn-danger"#}
-                                        {#                                                    onclick="confirmDelete('{{ id }}','{{ name }}','{{ msg|escapejs }}');">#}
-                                        {#                                                <i class="fa-solid fa-trash"></i></button>#}
-                                        {#                                        {% endwith %}#}
                                     </div>
                                 </td>
                             </tr>

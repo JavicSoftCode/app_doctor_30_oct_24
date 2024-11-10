@@ -287,39 +287,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        {#///////////////////////////////////////////////////////////////////////////////////////////////#}
 
-                        {#                        <div class="calendar-container">#}
-                        {#                             {{ form.horario_atencion }}#}
-                        {#                            <div class="calendar">#}
-                        {#                                <div class="header">#}
-                        {#                                    <div class="month"></div>#}
-                        {#                                    <div class="btns">#}
-                        {#                                        <div class="btn today-btn"><i class="fa-solid fa-calendar fa-lg" style="color: #0B5ED7"></i></div>#}
-                        {#                                        <div class="btn prev-btn" style="background-color: #0B5ED7"><i class="fa-solid fa-circle-chevron-left fa-lg"#}
-                        {#                                                                     style="color: #0B5ED7"></i></div>#}
-                        {#                                        <div class="btn next-btn"><i class="fa-solid fa-circle-chevron-right fa-lg"#}
-                        {#                                                                     style="color: #0B5ED7"></i></div>#}
-                        {#                                    </div>#}
-                        {#                                </div>#}
-                        {#                                <div class="weekdays">#}
-                        {#                                    <div class="day">Dom</div>#}
-                        {#                                    <div class="day">Lun</div>#}
-                        {#                                    <div class="day">Mar</div>#}
-                        {#                                    <div class="day">Mié</div>#}
-                        {#                                    <div class="day">Jue</div>#}
-                        {#                                    <div class="day">Vie</div>#}
-                        {#                                    <div class="day">Sáb</div>#}
-                        {#                                </div>#}
-                        {#                                <div class="days"></div>#}
-                        {#                            </div>#}
-                        {##}
-                        {#                            <div class="hours-selection">#}
-                        {#                                <h4>Seleccionar Horas</h4>#}
-                        {#                                <div class="hours-container"></div>#}
-                        {#                                <button class="clear-btn" type="button">Limpiar Selección de Horas</button>#}
-                        {#                            </div>#}
-                        {#                        </div>#}
                         <div class="calendar-container">
                             {{ form.horario_atencion }}
                             <div class="calendar">
@@ -354,9 +322,6 @@
                                 <div class="hours-container"></div>
                                 <button class="clear-btn" type="button">Limpiar Selección de Horas</button>
                             </div>
-{#                                                        <button type="button" class="save-schedule-btn btn btn-primary mt-3">#}
-{#                                                            Guardar Horarios#}
-{#                                                        </button>#}
                         </div>
 
                         {#///////////////////////////////////////////////////////////////////////////////////////////////#}
@@ -388,13 +353,6 @@
                             {{ form.longitud }}
                             {{ form.longitud.errors }}
                         </div>
-
-                        {#                        <div class="form-group">#}
-                        {#                            <label for="{{ form.horario_atencion.id_for_label }}"#}
-                        {#                                   class="form-label fw-bold">{{ form.horario_atencion.label }}</label>#}
-                        {#                            {{ form.horario_atencion }}#}
-                        {#                            {{ form.horario_atencion.errors }}#}
-                        {#                        </div>#}
 
                         <div class="form-group">
                             <label for="{{ form.duracion_cita.id_for_label }}"
@@ -520,7 +478,7 @@
             } else {
                 dayElement.classList.remove("has-hours");
             }
-             updateHorarioInput();
+            updateHorarioInput();
         }
 
         daysContainer.addEventListener("click", (e) => {
@@ -605,24 +563,25 @@
             // Convertimos el objeto selectedDays a string JSON
             horarioInput.value = JSON.stringify(selectedDays);
         }
-                        // Botón de guardar
-saveScheduleBtn.addEventListener("click", () => {
-    updateHorarioInput();
-    // Opcional: Mostrar mensaje de confirmación
-    {#alert('Horarios guardados correctamente');#}
-});
 
-// Al cargar la página, si hay datos existentes
-document.addEventListener('DOMContentLoaded', () => {
-    if (horarioInput.value) {
-        try {
-            selectedDays = JSON.parse(horarioInput.value);
-            renderCalendar();
-        } catch (e) {
-            console.error('Error al cargar horarios existentes:', e);
-        }
-    }
-});
+        // Botón de guardar
+        saveScheduleBtn.addEventListener("click", () => {
+            updateHorarioInput();
+            // Opcional: Mostrar mensaje de confirmación
+            {#alert('Horarios guardados correctamente');#}
+        });
+
+        // Al cargar la página, si hay datos existentes
+        document.addEventListener('DOMContentLoaded', () => {
+            if (horarioInput.value) {
+                try {
+                    selectedDays = JSON.parse(horarioInput.value);
+                    renderCalendar();
+                } catch (e) {
+                    console.error('Error al cargar horarios existentes:', e);
+                }
+            }
+        });
     </script>
 
     <script>

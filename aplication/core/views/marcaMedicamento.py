@@ -18,22 +18,18 @@ class MarcaMedicamentoListView(ListView):
 
   def get_queryset(self):
     self.query = Q()
-    q1 = self.request.GET.get('q')  # Texto de búsqueda
-    activo = self.request.GET.get('activo')  # Estado activo o inactivo
+    q1 = self.request.GET.get('q')
+    activo = self.request.GET.get('activo')
 
     if q1:
       if q1.isdigit():
         self.query.add(Q(id=q1), Q.AND)
-
       else:
-        # Filtra por nombre que contenga el valor ingresado en 'q'
         self.query.add(Q(nombre__icontains=q1), Q.AND)
 
     if activo in ["True", "False"]:
-      # Filtra por el valor booleano de activo
-      is_active = activo == "True"  # Convierte a booleano
+      is_active = activo == "True"
       self.query.add(Q(activo=is_active), Q.AND)
-
     return self.model.objects.filter(self.query).order_by('nombre')
 
   def get_context_data(self, **kwargs):
@@ -57,7 +53,6 @@ class MarcaMedicamentoCreateView(CreateView):
     return context
 
   def form_valid(self, form):
-    # print("entro al form_valid")
     response = super().form_valid(form)
     marcaM = self.object
     save_audit(self.request, marcaM, action='A')
@@ -109,38 +104,15 @@ class MarcaMedicamentoDeleteView(DeleteView):
 
   def delete(self, request, *args, **kwargs):
     self.object = self.get_object()
-    specialty_name = self.object.nombre  # Guardamos el nombre de la
-    # Guarda la auditoría de la eliminación
+    if self.object.tiene_relaciones:
+      messages.error(self.request,
+                     "No se puede eliminar la marca del medicamento porque tiene relación con Medicamentos.")
+      return redirect(self.success_url)
+    specialty_name = self.object.nombres
     save_audit(self.request, self.object, action='E')
-
     success_message = f"Éxito al eliminar lógicamente la Marca Medicamento {specialty_name}."
     messages.success(self.request, success_message)
-
-    # Cambiar el estado de eliminado lógico (si es necesario)
-    # self.object.deleted = True
-    # self.object.save()
-
     return super().delete(request, *args, **kwargs)
-
-
-# class SpecialtyDeleteView(DeleteView):
-#   model = Especialidad
-#   success_url = reverse_lazy('core:specialty_list')
-#
-#   def get_context_data(self, **kwargs):
-#     context = super().get_context_data()
-#     context['grabar'] = 'Eliminar Especialidad'
-#     context['description'] = f"¿Desea Eliminar la Especialidad: {self.object.nombre}?"
-#     return context
-#
-#   def delete(self, request, *args, **kwargs):
-#     self.object = self.get_object()
-#     success_message = f"Éxito al eliminar lógicamente la Especialidad {self.object.nombre}."
-#     messages.success(self.request, success_message)
-#     # Cambiar el estado de eliminado lógico
-#     # self.object.deleted = True
-#     # self.object.save()
-#     return super().delete(request, *args, **kwargs)
 
 
 class MarcaMedicamentoDetailView(DetailView):

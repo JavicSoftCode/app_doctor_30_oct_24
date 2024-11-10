@@ -153,7 +153,7 @@
 
                         <div class="calendar-container" style="margin-left: 50%">
                             <h1 class="text-center text-primary mb-4"
-                        style="font-weight: bold;font-size: 25px">{{ title1 }}</h1>
+                                style="font-weight: bold;font-size: 25px">{{ title1 }}</h1>
 
                             {{ form.horario_atencion }}
                             <div class="calendar">
@@ -186,11 +186,10 @@
                             <div class="hours-selection">
                                 <h4>Seleccionar Horas</h4>
                                 <div class="hours-container"></div>
-                                <button class="clear-btn" type="button" disabled style="display: none">Limpiar Selección de Horas</button>
+                                <button class="clear-btn" type="button" disabled style="display: none">Limpiar Selección
+                                    de Horas
+                                </button>
                             </div>
-                            {#                                                        <button type="button" class="save-schedule-btn btn btn-primary mt-3">#}
-                            {#                                                            Guardar Horarios#}
-                            {#                                                        </button>#}
                         </div>
 
                         {#///////////////////////////////////////////////////////////////////////////////////////////////#}
@@ -265,88 +264,24 @@
             hideTodayBtn();
         }
 
-        {#function renderHours(selectedDayKey) {#}
-        {#    hoursContainer.innerHTML = '';#}
-        {#    workingHours.forEach(hour => {#}
-        {#        const hourDiv = document.createElement("div");#}
-        {#        hourDiv.classList.add("hour-block");#}
-        {#        hourDiv.textContent = hour;#}
-        {##}
-        {#        // Verificar si la hora está seleccionada para este día#}
-        {#        if (selectedDays[selectedDayKey]?.includes(hour)) {#}
-        {#            hourDiv.classList.add("selected");#}
-        {#        }#}
-        {##}
-        {#        hourDiv.addEventListener("click", () => {#}
-        {#            hourDiv.classList.toggle("selected");#}
-        {#            if (!selectedDays[selectedDayKey]) {#}
-        {#                selectedDays[selectedDayKey] = [];#}
-        {#            }#}
-        {##}
-        {#            if (hourDiv.classList.contains("selected")) {#}
-        {#                selectedDays[selectedDayKey].push(hour);#}
-        {#            } else {#}
-        {#                selectedDays[selectedDayKey] = selectedDays[selectedDayKey].filter(h => h !== hour);#}
-        {#            }#}
-        {##}
-        {#            // Actualizar el estado visual del día#}
-        {#            updateDayVisual(selectedDayKey);#}
-        {#        });#}
-        {##}
-        {#        hoursContainer.appendChild(hourDiv);#}
-        {#    });#}
-        {#}#}
-{#    function renderHours(selectedDayKey) {#}
-{#    hoursContainer.innerHTML = '';#}
-{#    workingHours.forEach(hour => {#}
-{#        const hourDiv = document.createElement("div");#}
-{#        hourDiv.classList.add("hour-block");#}
-{#        hourDiv.textContent = hour;#}
-{##}
-{#        // Si la hora está seleccionada previamente, la mostramos como seleccionada y desactivada#}
-{#        if (selectedDays[selectedDayKey]?.includes(hour)) {#}
-{#            hourDiv.classList.add("selected");#}
-{#            hourDiv.classList.add("disabled-hour");  // Clase para evitar clicks#}
-{#        } else {#}
-{#            // Solo permitimos el evento click en las horas no seleccionadas previamente#}
-{#            hourDiv.addEventListener("click", () => {#}
-{#                hourDiv.classList.toggle("selected");#}
-{#                if (!selectedDays[selectedDayKey]) {#}
-{#                    selectedDays[selectedDayKey] = [];#}
-{#                }#}
-{##}
-{#                if (hourDiv.classList.contains("selected")) {#}
-{#                    selectedDays[selectedDayKey].push(hour);#}
-{#                } else {#}
-{#                    selectedDays[selectedDayKey] = selectedDays[selectedDayKey].filter(h => h !== hour);#}
-{#                }#}
-{##}
-{#                // Actualizar el estado visual del día#}
-{#                updateDayVisual(selectedDayKey);#}
-{#            });#}
-{#        }#}
-{##}
-{#        hoursContainer.appendChild(hourDiv);#}
-{#    });#}
-{#}#}
-               function renderHours(selectedDayKey) {
-    hoursContainer.innerHTML = '';
-    workingHours.forEach(hour => {
-        const hourDiv = document.createElement("div");
-        hourDiv.classList.add("hour-block");
-        hourDiv.textContent = hour;
+        function renderHours(selectedDayKey) {
+            hoursContainer.innerHTML = '';
+            workingHours.forEach(hour => {
+                const hourDiv = document.createElement("div");
+                hourDiv.classList.add("hour-block");
+                hourDiv.textContent = hour;
 
-        // Mostrar solo las horas seleccionadas sin permitir clic
-        if (selectedDays[selectedDayKey]?.includes(hour)) {
-            hourDiv.classList.add("selected");
-        } else {
-            // Si la hora no fue seleccionada, se desactiva visualmente
-            hourDiv.classList.add("disabled");
+                // Mostrar solo las horas seleccionadas sin permitir clic
+                if (selectedDays[selectedDayKey]?.includes(hour)) {
+                    hourDiv.classList.add("selected");
+                } else {
+                    // Si la hora no fue seleccionada, se desactiva visualmente
+                    hourDiv.classList.add("disabled");
+                }
+
+                hoursContainer.appendChild(hourDiv);
+            });
         }
-
-        hoursContainer.appendChild(hourDiv);
-    });
-}
 
         function updateDayVisual(dateKey) {
             const day = parseInt(dateKey.split("-")[2]);

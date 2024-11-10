@@ -30,7 +30,7 @@ class EmpleadoListView(ListView):
       self.query.add(Q(cedula__icontains=q1), Q.OR)
       self.query.add(Q(email__icontains=q1), Q.OR)
       if empleado in ["True", "False"]:
-        is_active = empleado == "True"  # Convierte a booleano
+        is_active = empleado == "True"
         self.query.add(Q(activo=is_active), Q.AND)
     return self.model.objects.filter(self.query).order_by('apellidos')
 
@@ -52,7 +52,6 @@ class EmpleadoCreateView(CreateView):
     context['title1'] = 'Crear Empleado'
     context['grabar'] = 'Grabar Empleado'
     context['default_image_url'] = static('img/avatar_empleado.png')
-    # context['default_image_url'] = static('img/doctor_avatar.png')
     context['back_url'] = self.success_url
     return context
 
@@ -62,16 +61,6 @@ class EmpleadoCreateView(CreateView):
     save_audit(self.request, objAudit, action='A')
     messages.success(self.request, f"Éxito al Crear al Empleado {objAudit.nombre_completo}.")
     return response
-
-  # def form_valid(self, form):
-  #   if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-  #     form.instance.usuario = self.request.user
-  #   else:
-  #     # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
-  #     form.instance.usuario = None  # O el valor que consideres adecuado
-  #     messages.success(self.request, f"Éxito al Crear al Empleado.")
-  #
-  #   return super().form_valid(form)
 
   def form_invalid(self, form):
     messages.error(self.request, "Error al enviar el formulario. Corrige los errores.")
@@ -89,10 +78,8 @@ class EmpleadoUpdateView(UpdateView):
     context = super().get_context_data()
     context['title1'] = 'Actualizar Empleado'
     context['grabar'] = 'Actualizar Empleado'
-    # context['default_image_url'] = static('img/doctor_avatar.png')
     context['default_image_url'] = static('img/avatar_empleado.png')
     context['current_image_url'] = self.object.foto.url if self.object.foto else static('img/avatar_empleado.png')
-    # context['current_image_url'] = self.object.foto.url if self.object.foto else static('img/doctor_avatar.png')
     context['back_url'] = self.success_url
     return context
 
@@ -102,17 +89,6 @@ class EmpleadoUpdateView(UpdateView):
     save_audit(self.request, objAudit, action='M')
     messages.success(self.request, f"Éxito al Modificar al Empleado {objAudit.nombre_completo}.")
     return response
-
-  # def form_valid(self, form):
-  #   empleado = self.object
-  #   if hasattr(self.request, 'user') and self.request.user.is_authenticated:
-  #     form.instance.usuario = self.request.user
-  #   else:
-  #     # Asigna un valor alternativo o evita la asignación si el usuario no está autenticado
-  #     form.instance.usuario = None  # O el valor que consideres adecuado
-  #     messages.success(self.request, f"Éxito al Modificar al Empleado {empleado.nombre_completo}.")
-  #
-  #   return super().form_valid(form)
 
   def form_invalid(self, form):
     messages.error(self.request, "Error al Modificar el formulario. Corrige los errores.")
@@ -134,9 +110,6 @@ class EmpleadoDeleteView(DeleteView):
     self.object = self.get_object()
     success_message = f"Éxito al eliminar lógicamente al Empleado {self.object.nombre_completo}."
     messages.success(self.request, success_message)
-    # Cambiar el estado de eliminado lógico
-    # self.object.deleted = True
-    # self.object.save()
     return super().delete(request, *args, **kwargs)
 
 
@@ -151,8 +124,6 @@ class EmpleadoDetailView(DetailView):
     data = {
       'id': empleado.id,
       'empleado': empleado.nombre_completo,
-      # 'nombres': empleado.nombres,
-      # 'apellidos': empleado.apellidos,
       'cedula': empleado.cedula,
       'fecha_nacimiento': empleado.fecha_nacimiento.isoformat() if empleado.fecha_nacimiento else None,
       'edad': empleado.calcular_edad(empleado.fecha_nacimiento),

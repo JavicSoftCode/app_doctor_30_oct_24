@@ -21,7 +21,7 @@ class DoctorListView(ListView):
 
   def get_queryset(self):
     self.query = Q()
-    q1 = self.request.GET.get('q')  # ver
+    q1 = self.request.GET.get('q')
     doct = self.request.GET.get('doctor')
     if q1 is not None:
       if q1.isdigit():
@@ -33,7 +33,7 @@ class DoctorListView(ListView):
       self.query.add(Q(codigoUnicoDoctor__icontains=q1), Q.OR)
       self.query.add(Q(email__icontains=q1), Q.OR)
       if doct in ["True", "False"]:
-        is_active = doct == "True"  # Convierte a booleano
+        is_active = doct == "True"
         self.query.add(Q(activo=is_active), Q.AND)
     return self.model.objects.filter(self.query).order_by('apellidos')
 
@@ -43,8 +43,6 @@ class DoctorListView(ListView):
     context['title2'] = "Nuevo Doctor"
     return context
 
-
-# ORIGINAL
 
 class DoctorCreateView(CreateView):
   model = Doctor
@@ -70,72 +68,8 @@ class DoctorCreateView(CreateView):
   def form_invalid(self, form):
     messages.error(self.request, "Error al enviar el formulario. Corrige los errores.")
     print(form.errors)
-    return self.render_to_response(self.get_context_data(form=form))  # ORIGI  P
+    return self.render_to_response(self.get_context_data(form=form))
 
-
-# class DoctorCreateView(CreateView):
-#   model = Doctor
-#   template_name = 'core/doctor/form.html'
-#   form_class = DoctorForm
-#   success_url = reverse_lazy('core:doctor_list')
-#
-#   def get_context_data(self, **kwargs):
-#     context = super().get_context_data()
-#     context['title1'] = 'Crear Doctor'
-#     context['grabar'] = 'Grabar Doctor'
-#     context['default_image_url'] = static('img/doctor_avatar.webp')
-#     context['back_url'] = self.success_url
-#     context['is_edit_mode'] = True  # Para habilitar edición en el calendario
-#     return context
-#
-#   def form_valid(self, form):
-#     # Procesamos el horario_atencion antes de guardar
-#     horario_data = form.cleaned_data.get('horario_atencion')
-#     try:
-#       # Validamos que sea JSON válido
-#       if horario_data:
-#         json.loads(horario_data)
-#     except json.JSONDecodeError:
-#       messages.error(self.request, "Error en el formato del horario de atención")
-#       return self.form_invalid(form)
-#
-#     response = super().form_valid(form)
-#     objAudit = self.object
-#     save_audit(self.request, objAudit, action='A')
-#     messages.success(self.request, f"Éxito al Crear al Doctor {objAudit.nombre_completo}.")
-#     return response
-
-
-# class DoctorUpdateView(UpdateView):                 ORIGINAL
-#   model = Doctor
-#   template_name = 'core/doctor/form.html'
-#   form_class = DoctorForm
-#   success_url = reverse_lazy('core:doctor_list')
-#
-#   def get_context_data(self, **kwargs):
-#     context = super().get_context_data()
-#     context['title1'] = 'Actualizar Doctor'
-#     context['grabar'] = 'Actualizar Doctor'
-#     # context['default_image_url'] = static('img/doctor_avatar.png')
-#     context['default_image_url'] = static('img/doctor_avatar.webp')
-#     context['current_image_url'] = self.object.foto.url if self.object.foto else static('img/doctor_avatar.webp')
-#     # context['current_image_url'] = self.object.foto.url if self.object.foto else static('img/doctor_avatar.png')
-#     context['back_url'] = self.success_url
-#     return context
-#
-#   def form_valid(self, form):
-#     response = super().form_valid(form)
-#     objAudit = self.object
-#     save_audit(self.request, objAudit, action='M')
-#     messages.success(self.request, f"Éxito al Modificar al Doctor {objAudit.nombre_completo}.")
-#     return response
-#
-#   def form_invalid(self, form):
-#     messages.error(self.request, "Error al Modificar el formulario. Corrige los errores.")
-#     print(form.errors)
-#     return self.render_to_response(self.get_context_data(form=form))
-
-# /////////////////////////////////////////////////////////////////////////////////////////////
 
 class DoctorUpdateView(UpdateView):
   model = Doctor
@@ -154,7 +88,6 @@ class DoctorUpdateView(UpdateView):
     return context
 
   def form_valid(self, form):
-    # Procesamos el horario_atencion antes de guardar
     horario_data = form.cleaned_data.get('horario_atencion')
     try:
       if horario_data:
@@ -168,45 +101,6 @@ class DoctorUpdateView(UpdateView):
     save_audit(self.request, objAudit, action='M')
     messages.success(self.request, f"Éxito al Modificar al Doctor {objAudit.nombre_completo}.")
     return response
-
-
-# class DoctorHorarioDetailView(DetailView):
-#   model = Doctor
-#   template_name = 'core/doctor/horario_detail.html'
-#   success_url = reverse_lazy('core:doctor_list')
-#
-#   def get_context_data(self, **kwargs):
-#     context = super().get_context_data(**kwargs)
-#     context['title1'] = 'Horario del Doctor'
-#     context['back_url'] = self.success_url
-#     context['is_edit_mode'] = False  # Para deshabilitar edición en el calendario
-#     return context
-#
-#   # def get(self, request, *args, **kwargs):
-#   #   # Si es una petición AJAX, devolvemos los horarios en JSON
-#   #   if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-#   #     doctor = self.get_object()
-#   #     return JsonResponse(doctor.horario_atencion)
-#   #   return super().get(request, *args, **kwargs)
-#
-#   def get(self, request, *args, **kwargs):
-#     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-#       doctor = self.get_object()
-#       # Convierte el string JSON a un objeto Python y luego lo envías
-#       horario_atencion = json.loads(doctor.horario_atencion)
-#       return JsonResponse(horario_atencion)
-#     return super().get(request, *args, **kwargs)
-#
-#   # def get(self, request, *args, **kwargs):
-#   #   doctor = self.get_object()
-#   #   data = {
-#   #     'id': doctor.id,
-#   #     'doctor': doctor.nombre_completo,
-#   #     # 'apellidos': doctor.apellidos,
-#   #     # 'apellidos': doctor.apellidos,
-#   #     'horario_atencion': doctor.horario_atencion,
-#   #   }
-#   #   return JsonResponse(data)
 
 
 class DoctorDeleteView(DeleteView):
@@ -223,9 +117,6 @@ class DoctorDeleteView(DeleteView):
     self.object = self.get_object()
     success_message = f"Éxito al eliminar lógicamente al Doctor {self.object.nombre_completo}."
     messages.success(self.request, success_message)
-    # Cambiar el estado de eliminado lógico
-    # self.object.deleted = True
-    # self.object.save()
     return super().delete(request, *args, **kwargs)
 
 
@@ -240,8 +131,6 @@ class DoctorDetailView(DetailView):
     data = {
       'id': doctor.id,
       'doctor': doctor.nombre_completo,
-      # 'apellidos': doctor.apellidos,
-      # 'apellidos': doctor.apellidos,
       'cedula': doctor.cedula,
       'fecha_nacimiento': doctor.fecha_nacimiento.isoformat() if doctor.fecha_nacimiento else None,
       'edad': doctor.calcular_edad(doctor.fecha_nacimiento),
@@ -252,7 +141,6 @@ class DoctorDetailView(DetailView):
       'especialidad': [especialidad.nombre for especialidad in doctor.especialidad.all()],
       'telefonos': doctor.telefonos,
       'email': doctor.email,
-      # 'horario_atencion': doctor.horario_atencion,
       'duracion_cita': doctor.duracion_cita,
       'curriculum': doctor.curriculum.url if doctor.curriculum else None,
       'firmaDigital': doctor.firmaDigital.url if doctor.firmaDigital else None,
@@ -272,15 +160,13 @@ class DoctorHorarioDetailView(UpdateView):
   def get_context_data(self, **kwargs):
     context = super().get_context_data()
     context['title1'] = 'Calendario del Doctor'
-    # context['grabar'] = 'Actualizar Doctor'
     context['default_image_url'] = static('img/doctor_avatar.webp')
     context['current_image_url'] = self.object.foto.url if self.object.foto else static('img/doctor_avatar.webp')
     context['back_url'] = self.success_url
-    context['is_edit_mode'] = True  # Para habilitar edición en el calendario
+    context['is_edit_mode'] = True
     return context
 
   def form_valid(self, form):
-    # Procesamos el horario_atencion antes de guardar
     horario_data = form.cleaned_data.get('horario_atencion')
     try:
       if horario_data:
